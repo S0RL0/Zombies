@@ -18,7 +18,13 @@ public class SpawnManager : MonoBehaviour
     [Header("Round End")]
 
     public bool AllZombiesSpawned;
-    public float RoundEndTimer; 
+    public float RoundEndTimer;
+
+    [Header("spawning Logic")]
+    public Transform goal;
+
+    //
+    
     
     
 
@@ -40,6 +46,7 @@ public class SpawnManager : MonoBehaviour
     {
         for (int i = 0; i < zombiespawns; i++)
         {
+            
 
             GameObject zombie = (GameObject)Instantiate(Zombies[Random.Range(0,Zombies.Length)], Spawnpoints[Random.Range(0,Spawnpoints.Length)].position, transform.rotation);
             yield return new WaitForSeconds(Random.Range(0.5f, 2f));
