@@ -1,78 +1,9 @@
 Name: Human-Custom
 Species: 1
-Parts:
-- Name: SK_HUMN_BASE_01_01HEAD_HU01
-  PartType: Head
-  PartVersion: 1
-- Name: SK_HUMN_BASE_05_03EBRL_HU01
-  PartType: EyebrowLeft
-  PartVersion: 1
-- Name: SK_HUMN_BASE_05_04EBRR_HU01
-  PartType: EyebrowRight
-  PartVersion: 1
-- Name: SK_HUMN_BASE_01_05EYEL_HU01
-  PartType: EyeLeft
-  PartVersion: 1
-- Name: SK_HUMN_BASE_01_06EYER_HU01
-  PartType: EyeRight
-  PartVersion: 1
-- Name: SK_HUMN_BASE_06_07EARL_HU01
-  PartType: EarLeft
-  PartVersion: 1
-- Name: SK_HUMN_BASE_06_08EARR_HU01
-  PartType: EarRight
-  PartVersion: 1
-- Name: SK_HUMN_BASE_07_35NOSE_HU01
-  PartType: Nose
-  PartVersion: 1
-- Name: SK_HUMN_BASE_02_36TETH_HU01
-  PartType: Teeth
-  PartVersion: 1
-- Name: SK_HUMN_BASE_01_37TONG_HU01
-  PartType: Tongue
-  PartVersion: 1
-- Name: SK_HUMN_BASE_01_15HNDL_HU01
-  PartType: HandLeft
-  PartVersion: 1
-- Name: SK_MDRN_CIVL_10_14ALWR_HU01
-  PartType: ArmLowerRight
-  PartVersion: 1
-- Name: SK_MDRN_CIVL_03_13ALWL_HU01
-  PartType: ArmLowerLeft
-  PartVersion: 1
-- Name: SK_MDRN_CIVL_07_12AUPR_HU01
-  PartType: ArmUpperRight
-  PartVersion: 1
-- Name: SK_MDRN_CIVL_07_10TORS_HU01
-  PartType: Torso
-  PartVersion: 1
-- Name: SK_MDRN_CIVL_03_11AUPL_HU01
-  PartType: ArmUpperLeft
-  PartVersion: 1
-- Name: SK_HUMN_BASE_01_16HNDR_HU01
-  PartType: HandRight
-  PartVersion: 1
-- Name: SK_SCFI_CIVL_09_19LEGR_HU01
-  PartType: LegRight
-  PartVersion: 1
-- Name: SK_SCFI_CIVL_09_18LEGL_HU01
-  PartType: LegLeft
-  PartVersion: 1
-- Name: SK_MDRN_CIVL_02_21FOTR_HU01
-  PartType: FootRight
-  PartVersion: 1
-- Name: SK_MDRN_CIVL_02_20FOTL_HU01
-  PartType: FootLeft
-  PartVersion: 1
-- Name: SK_MDRN_CIVL_04_17HIPS_HU01
-  PartType: Hips
-  PartVersion: 1
-- Name: SK_MDRN_CIVL_04_02HAIR_HU01
-  PartType: Hair
-  PartVersion: 1
+Parts: []
 ColorSet:
   Species: 1
-  Name: Custom
+  Name: Default
   SourceColorPath: Assets/Synty/Tools/SidekickCharacters/Resources/Textures/T_ColorMap.png
   SourceMetallicPath: Assets/Synty/Tools/SidekickCharacters/Resources/Textures/T_MetallicMap.png
   SourceSmoothnessPath: Assets/Synty/Tools/SidekickCharacters/Resources/Textures/T_SmoothnessMap.png
@@ -368,7 +299,7 @@ ColorRows:
   Emission: FF0000
   Opacity: FF0000
 - ColorProperty: 42
-  MainColor: 35291E
+  MainColor: 724DBD
   Metallic: 545554
   Smoothness: 545554
   Reflection: 000000
@@ -403,7 +334,7 @@ ColorRows:
   Emission: 000000
   Opacity: FFFFFF
 - ColorProperty: 47
-  MainColor: 35291E
+  MainColor: 734DBE
   Metallic: 545554
   Smoothness: 545554
   Reflection: 000000
@@ -438,7 +369,7 @@ ColorRows:
   Emission: 000000
   Opacity: FFFFFF
 - ColorProperty: 52
-  MainColor: 35291E
+  MainColor: 734DBE
   Metallic: 545554
   Smoothness: 545554
   Reflection: 000000
@@ -1475,5 +1406,5 @@ ColorRows:
   Opacity: FFFFFF
 BlendShapes:
   BodyTypeValue: 100
-  BodySizeValue: -39.5999985
-  MuscleValue: -100
+  BodySizeValue: 2.29999995
+  MuscleValue: -50
