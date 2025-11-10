@@ -18,7 +18,8 @@ public class ZombieInRange : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        Debug.Log("Nn");
+        if (other.CompareTag("Zombie"))
         {
             Debug.Log("Dork");
             doorscript.ZombieinRange = true;
@@ -29,7 +30,7 @@ public class ZombieInRange : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Zombie"))
         {
             Debug.Log("Dorker");
             doorscript.ZombieinRange = false;
