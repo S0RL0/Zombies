@@ -20,7 +20,7 @@ public class PlayerInRange : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("ween");
+            //Debug.Log("ween");
             doorscript.PlayerinRange = true; 
             
         }
@@ -30,7 +30,7 @@ public class PlayerInRange : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("weenor");
+            //Debug.Log("weenor");
             doorscript.PlayerinRange = false;
         }
     }
