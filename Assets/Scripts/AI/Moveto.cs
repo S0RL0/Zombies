@@ -14,7 +14,7 @@ public class Moveto : MonoBehaviour
     void Start()
     {
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
-        agent.destination = goal.position;
+        //agent.destination = goal.position;
 
 
         player = GameObject.FindGameObjectWithTag("Player");
@@ -24,7 +24,7 @@ public class Moveto : MonoBehaviour
     void Update()
     {
          
-       // GetComponent<NavMeshAgent>().destination = player.transform.position;
+        GetComponent<NavMeshAgent>().destination = player.transform.position;
         
     }
 
