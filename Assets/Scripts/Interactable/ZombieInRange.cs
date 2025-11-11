@@ -26,6 +26,8 @@ public class ZombieInRange : MonoBehaviour
             doorscript.Fixable = false; 
 
         }
+
+        
     }
 
     void OnTriggerExit(Collider other)

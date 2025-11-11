@@ -25,6 +25,8 @@ public class Moveto : MonoBehaviour
     {
          
         GetComponent<NavMeshAgent>().destination = player.transform.position;
+
+        
         
     }
 
