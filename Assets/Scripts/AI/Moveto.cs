@@ -8,8 +8,7 @@ public class Moveto : MonoBehaviour
     public bool follow;
     private NavMeshAgent agent;
     private GameObject player;
-    private bool reachedGoal = false;
-    public Transform TEMPTESTGOAL;
+    private bool reachedGoal = true; // SET TO FALSE WHEN GOALS ARE IN THE SCENE.
     public float distanceToGoal = 2f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -20,13 +19,13 @@ public class Moveto : MonoBehaviour
 
 
         player = GameObject.FindGameObjectWithTag("Player");
-        Spawn(TEMPTESTGOAL);
+       
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Vector3.Distance(transform.position,goal.position)< distanceToGoal)
+        if(goal != null && Vector3.Distance(transform.position,goal.position)< distanceToGoal)
         {
             reachedGoal = true;
         }

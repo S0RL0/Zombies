@@ -29,7 +29,7 @@ public class MovePanelToPos : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, initialPos, 1F * Time.deltaTime);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, initialRot, 15F * Time.deltaTime);
            
-            if(transform.position == moveFromPos || moveTimer <= 0)
+            if(Vector3.Distance(transform.position,initialPos)<= 0.15)
             {
                 moving = false;
                 fallen = false;
