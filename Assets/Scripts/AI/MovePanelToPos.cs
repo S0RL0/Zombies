@@ -2,19 +2,22 @@ using UnityEngine;
 
 public class MovePanelToPos : MonoBehaviour
 {
-    public Vector3 initialpos;
-    public Quaternion initialrot;
+    public Vector3 initialPos;
+    public Quaternion initialRot;
     private bool moving;
     private bool fallen = false;
-    private Vector3 moveFrompos;
-    private Quaternion moveFromrot;
+    private Vector3 moveFromPos;
+    private Quaternion moveFromRot;
     private float moveTimer = 2f;
     public float moveTimerMax = 2f;
+    private Rigidbody rb;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        initialpos = transform.position;
-        initialrot = transform.rotation;
+        initialPos = transform.position;
+        initialRot = transform.rotation;
+        rb = GetComponent<Rigidbody>();
+
     }
 
     // Update is called once per frame
@@ -23,26 +26,24 @@ public class MovePanelToPos : MonoBehaviour
         if (moving)
         {
             moveTimer -= Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, initialpos, 1F * Time.deltaTime);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, initialrot, 15F * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, initialPos, 1F * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, initialRot, 15F * Time.deltaTime);
            
-            if(transform.position == moveFrompos || moveTimer <= 0)
+            if(transform.position == moveFromPos || moveTimer <= 0)
             {
                 moving = false;
                 fallen = false;
-                transform.position = initialpos;
-                transform.rotation = initialrot;
-                GetComponent<Rigidbody>().isKinematic = true;
+                transform.position = initialPos;
+                transform.rotation = initialRot;
+                rb.isKinematic = true;
             
             }
-        }
-
-        
+        }   
     }
     public void FallDown()
     {
-        GetComponent<Rigidbody>().useGravity = true;
-        GetComponent<Rigidbody>().isKinematic = false;
+        rb.useGravity = true;
+        rb.isKinematic = false;
         fallen = true;
     }
 
@@ -50,10 +51,10 @@ public class MovePanelToPos : MonoBehaviour
     {
         if (!moving && fallen)
         {
-            moveFrompos = transform.position;
-            moveFromrot = transform.rotation;
+            moveFromPos = transform.position;
+            moveFromRot = transform.rotation;
             moving = true;
-            GetComponent<Rigidbody>().useGravity = false;
+            rb.useGravity = false;
             moveTimer = moveTimerMax;
            
         }

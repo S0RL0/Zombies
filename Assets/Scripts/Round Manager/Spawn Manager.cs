@@ -46,9 +46,10 @@ public class SpawnManager : MonoBehaviour
     {
         for (int i = 0; i < zombiespawns; i++)
         {
-            
 
-            GameObject zombie = (GameObject)Instantiate(Zombies[Random.Range(0,Zombies.Length)], Spawnpoints[Random.Range(0,Spawnpoints.Length)].position, transform.rotation);
+            int spawnPointNum = Random.Range(0, Spawnpoints.Length);
+            GameObject zombie = (GameObject)Instantiate(Zombies[Random.Range(0,Zombies.Length)], Spawnpoints[spawnPointNum].position, transform.rotation);
+            zombie.GetComponent<Moveto>().Spawn(Spawnpoints[spawnPointNum].GetComponent<SpawnPointInfo>().GetGoal());
             yield return new WaitForSeconds(Random.Range(0.5f, 2f));
 
             if (i == zombiespawns-1)

@@ -27,7 +27,7 @@ public class SpawnLocation : MonoBehaviour
            
 
             zombie.goal = Goal;
-            zombie.Spawn(); 
+            zombie.Spawn(Goal); 
 
             
         }

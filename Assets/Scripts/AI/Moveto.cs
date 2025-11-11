@@ -8,7 +8,9 @@ public class Moveto : MonoBehaviour
     public bool follow;
     private NavMeshAgent agent;
     private GameObject player;
-    public bool climbing; 
+    private bool reachedGoal = false;
+    public Transform TEMPTESTGOAL;
+    public float distanceToGoal = 2f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,22 +20,26 @@ public class Moveto : MonoBehaviour
 
 
         player = GameObject.FindGameObjectWithTag("Player");
+        Spawn(TEMPTESTGOAL);
     }
 
     // Update is called once per frame
     void Update()
     {
-         
-        GetComponent<NavMeshAgent>().destination = player.transform.position;
-
-        
-        
+        if(Vector3.Distance(transform.position,goal.position)< distanceToGoal)
+        {
+            reachedGoal = true;
+        }
+        if (reachedGoal)
+            GetComponent<NavMeshAgent>().destination = player.transform.position;
+        else
+            GetComponent<NavMeshAgent>().destination = goal.position;
+           
+       
     }
 
-    public void Spawn()
+    public void Spawn(Transform goalToSet)
     {
-       
-        
-
+        goal = goalToSet;
     }
 }
