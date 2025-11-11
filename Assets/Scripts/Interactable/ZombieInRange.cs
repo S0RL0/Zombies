@@ -3,11 +3,14 @@ using UnityEngine;
 public class ZombieInRange : MonoBehaviour
 {
     private DoorFix doorscript;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
 
         doorscript = GetComponentInParent<DoorFix>();
+        
+        
     }
 
     // Update is called once per frame
@@ -18,7 +21,7 @@ public class ZombieInRange : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Nn");
+       
         if (other.CompareTag("Zombie"))
         {
             Debug.Log("Dork");

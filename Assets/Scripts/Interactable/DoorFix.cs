@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class DoorFix : MonoBehaviour
 {
@@ -24,8 +25,9 @@ public class DoorFix : MonoBehaviour
 
     public bool Fixable;
     public bool PlayerinRange;
-    public bool ZombieinRange; 
-    
+    public bool ZombieinRange;
+    public GameObject doorLink;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -55,6 +57,7 @@ public class DoorFix : MonoBehaviour
             if (child.CompareTag("Panel") && child != this.transform)
             {
                 panels[index] = child.gameObject;
+            
                 index++;
             }
         }
@@ -66,6 +69,7 @@ public class DoorFix : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (Fixable && PlayerinRange)
         {
             {
@@ -121,11 +125,31 @@ public class DoorFix : MonoBehaviour
         float healthPercent = (float)currentHealth / maxHealth;
         int panelsToShow = Mathf.CeilToInt(healthPercent * panels.Length);
 
-        for (int i = 0; i < panels.Length; i++)
+       /* for (int i = 0; i < panels.Length; i++)
         {
             if (panels[i] != null) // safety check
                 panels[i].SetActive(i < panelsToShow);
+        }*/
+
+        for (int i = 0; i < panels.Length; i++)
+        {
+            if (panels[i] != null && i < panelsToShow) // safety check
+            {
+                panels[i].GetComponent<MovePanelToPos>().MoveToStart();
+              
+            }
+            else if (panels[i] != null)
+            {
+                panels[i].GetComponent<MovePanelToPos>().FallDown();
+            }
         }
+
+        bool pathActive = false;
+        if(panelsToShow == 0)
+        {
+            pathActive = true;
+        }
+        doorLink.SetActive(pathActive);
     }
 
 }
