@@ -24,15 +24,15 @@ public class PlayerWeaponManager : MonoBehaviour
     {
         controls = new PlayerControls();
 
-        controls.Gameplay.SwapWeapon.performed += ctx => {
+        /*controls.Player.SwapWeapon.performed += ctx => {
             Debug.Log("Swap pressed");
             SwapWeapons();
         };
 
-        controls.Gameplay.DropWeapon.performed += ctx => {
+        controls.Player.DropWeapon.performed += ctx => {
             Debug.Log("Drop pressed");
             DropCurrentWeapon();
-        };
+        };*/
 
     }
 

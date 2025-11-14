@@ -69,11 +69,11 @@ public class Gun : MonoBehaviour
 
         // Input system
         controls = new PlayerControls();
-        controls.Gameplay.Fire.performed += ctx => isFiring = true;
-        controls.Gameplay.Fire.canceled += ctx => isFiring = false;
-        controls.Gameplay.Reload.performed += ctx => Reload();
-        controls.Gameplay.Aim.performed += ctx => isAiming = true;
-        controls.Gameplay.Aim.canceled += ctx => isAiming = false;
+        controls.Player.Fire.performed += ctx => isFiring = true;
+        controls.Player.Fire.canceled += ctx => isFiring = false;
+        controls.Player.Reload.performed += ctx => Reload();
+        controls.Player.Aim.performed += ctx => isAiming = true;
+        controls.Player.Aim.canceled += ctx => isAiming = false;
     }
 
     private void OnEnable() => controls.Enable();
