@@ -4,6 +4,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("References")]
     private CharacterController characterController;
+    private WeaponSystem weaponSystem;
 
     [Header("Stats")]
     [SerializeField] private float lookSpeed = 100f;

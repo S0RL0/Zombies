@@ -1,7 +1,26 @@
+using System.Collections.Generic;
 using UnityEngine;
+using static WeaponSystem;
+
 
 public class WeaponSystem : MonoBehaviour
 {
+    // Gizmo stuct
+    [System.Serializable]
+    public struct ShotGizmo
+    {
+        public Vector3 start;
+        public Vector3 end;
+        public float timeRemaining;
+
+        public ShotGizmo(Vector3 start, Vector3 end, float duration)
+        {
+            this.start = start;
+            this.end = end;
+            this.timeRemaining = duration;
+        }
+    }
+
     // Weapon description
     [Header("Desciptive")]
     public new string name;
@@ -38,39 +57,82 @@ public class WeaponSystem : MonoBehaviour
     //public CamShake camShake;
     public float camShakeMagnitude, camShakeDuraction;
 
+    // Input variables for input handler
+    private bool fireHeld;                // true while button is held
+    private bool firePressedThisFrame;    // true only on the frame it was pressed
+    private bool reloadPressedThisFrame;  // same for reload
+
+    [Header("Gizmo Settings")]
+    [SerializeField] private bool showGizmos = true;
+    [SerializeField] private float shotGizmoDuration = 1f;
+
+    private List<ShotGizmo> shotGizmos = new List<ShotGizmo>();
+
     private void Awake()
     {
         bulletsLeft = magazineSize;
         readyToShoot = true;
+        cam = GetComponentInParent<Camera>();
     }
 
     private void Update()
     {
         updateInput();
 
-         updateUI();
+        updateUI();
+
+        UpdateGizmo();
     }
 
     private void updateInput()
     {
-        if (allowButtonHold) shooting = Input.GetKey(KeyCode.Mouse0);
-        else shooting = Input.GetKeyDown(KeyCode.Mouse0);
+        // Decide if we should be shooting this frame
+        bool shooting = allowButtonHold ? fireHeld : firePressedThisFrame;
 
-        // Reload
-        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading) Reload();
+        // Handle reload
+        if (reloadPressedThisFrame && bulletsLeft < magazineSize && !reloading)
+        {
+            Reload();
+        }
 
-        // Shoot
+        // Handle shooting
         if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
         {
             bulletsShot = 0;
-            if (isProjectile) ShootProjectile();
-            else ShootRaycast();
+
+            if (isProjectile)
+                ShootProjectile();
+            else
+                ShootRaycast();
         }
+
+        // Reset one-frame flags
+        firePressedThisFrame = false;
+        reloadPressedThisFrame = false;
     }
+
+    public void OnFirePerformed()
+    {
+        fireHeld = true;
+        firePressedThisFrame = true;  // one-frame flag
+    }
+
+    public void OnFireCanceled()
+    {
+        fireHeld = false;
+    }
+
+    public void OnReloadPerformed()
+    {
+        reloadPressedThisFrame = true;
+    }
+
+
+
 
     private void updateUI()
     {
-        
+
     }
 
     private void ShootRaycast()
@@ -83,7 +145,7 @@ public class WeaponSystem : MonoBehaviour
         float y = Random.Range(-halfSpread, halfSpread);
 
         // Calculate direction with spread
-        Vector3 direction = cam.transform.forward + new Vector3(x,y,0);
+        Vector3 direction = cam.transform.forward + new Vector3(x, y, 0);
 
         // RayCast
         if (Physics.Raycast(cam.transform.position, direction, out rayHit, range))
@@ -92,18 +154,24 @@ public class WeaponSystem : MonoBehaviour
 
             if (rayHit.collider.CompareTag("Enemy"))
             {
-                //rayHit.collider.GetComponent<Enemy>().TakeDamage(damage);
+                rayHit.collider.GetComponent<Enemy>().TakeDamage(damage);
             }
 
+            CalculateGizmo(cam.transform.position, rayHit.point);
         }
-
-
+        else
+        {
+            CalculateGizmo(cam.transform.position, cam.transform.position + (direction.normalized * range));
+        }
 
         // Camera Shake here
 
         // Particle effects here
-        Instantiate(bulletHit, rayHit.point, Quaternion.Euler(0, 180, 0));
-        Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+        if (bulletHit != null)
+            Instantiate(bulletHit, rayHit.point, Quaternion.Euler(0, 180, 0));
+        if (muzzleFlash != null)
+            Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+
 
         // Sound here
 
@@ -192,5 +260,41 @@ public class WeaponSystem : MonoBehaviour
     {
         bulletsLeft = magazineSize;
         reloading = false;
+    }
+    private void CalculateGizmo(Vector3 position, Vector3 point)
+    {
+        shotGizmos.Add(new ShotGizmo(position, point, shotGizmoDuration));
+    }
+
+    private void UpdateGizmo()
+    {
+        if (!showGizmos) return;
+        for (int i = shotGizmos.Count - 1; i >= 0; i--)
+        {
+            ShotGizmo gizmo = shotGizmos[i];
+            gizmo.timeRemaining -= Time.deltaTime;
+
+            if (gizmo.timeRemaining <= 0f)
+            {
+                shotGizmos.RemoveAt(i);
+            }
+            else
+            {
+                shotGizmos[i] = gizmo;
+            }
+        }
+    }
+    private void OnDrawGizmos()
+    {
+        if(!showGizmos) return;
+
+        Gizmos.color = Color.red;
+
+        foreach (var g in shotGizmos)
+        {
+            Gizmos.DrawLine(g.start, g.end);
+            Gizmos.DrawSphere(g.start, 0.03f);
+            Gizmos.DrawSphere(g.end, 0.06f);
+        }
     }
 }

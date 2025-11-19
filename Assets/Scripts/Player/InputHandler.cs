@@ -6,6 +6,7 @@ public class InputHandler : MonoBehaviour
     private PlayerControls playerControls;
 
     private PlayerController playerController;
+    private WeaponSystem weaponSystem;
 
     void Start()
     {
@@ -16,6 +17,7 @@ public class InputHandler : MonoBehaviour
     {
         playerControls = new PlayerControls();
         playerController = GetComponent<PlayerController>();
+        weaponSystem = GetComponentInChildren<WeaponSystem>();
     }
 
     void OnEnable()
@@ -30,6 +32,31 @@ public class InputHandler : MonoBehaviour
         playerControls.Player.Sprint.performed += ctx => playerController.isSprinting = ctx.ReadValueAsButton();
         playerControls.Player.Sprint.canceled += ctx => playerController.isSprinting = ctx.ReadValueAsButton();
         playerControls.Player.Crouch.performed += ctx => ToggleCrouch(ctx.ReadValueAsButton());
+        if (weaponSystem != null)
+        {
+            // Fire
+            playerControls.Player.Fire.performed += ctx =>
+            {
+                if (ctx.ReadValueAsButton())
+                    weaponSystem.OnFirePerformed();
+            };
+
+            playerControls.Player.Fire.canceled += ctx =>
+            {
+                weaponSystem.OnFireCanceled();
+            };
+
+            // Reload
+            playerControls.Player.Reload.performed += ctx =>
+            {
+                if (ctx.ReadValueAsButton())
+                    weaponSystem.OnReloadPerformed();
+            };
+        }
+        else
+        {
+            Debug.LogWarning("InputHandler: No WeaponSystem found in children.");
+        }
 
 
     }
