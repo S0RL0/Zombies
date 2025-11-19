@@ -13,8 +13,8 @@ public class PlayerWeaponManager : MonoBehaviour
     private Gun primaryGun;
     private Gun secondaryGun;
 
-    private WeaponProfile primaryProfile;
-    private WeaponProfile secondaryProfile;
+    private OldWeaponProfile primaryProfile;
+    private OldWeaponProfile secondaryProfile;
 
     private bool isPrimaryEquipped = true;
 
@@ -47,7 +47,7 @@ public class PlayerWeaponManager : MonoBehaviour
 
     #region Equip Weapon
 
-    public void EquipWeapon(WeaponProfile profile, GameObject prefab)
+    public void EquipWeapon(OldWeaponProfile profile, GameObject prefab)
     {
         // Decide which slot to equip
         bool equipPrimary = (primaryProfile == null);
@@ -81,7 +81,7 @@ public class PlayerWeaponManager : MonoBehaviour
         UpdateWeaponVisibility();
     }
 
-    private void EquipToSlot(ref Gun gunSlot, ref WeaponProfile profileSlot, Transform holder, WeaponProfile profile, GameObject prefab)
+    private void EquipToSlot(ref Gun gunSlot, ref OldWeaponProfile profileSlot, Transform holder, OldWeaponProfile profile, GameObject prefab)
     {
          if (prefab == null)
     {
@@ -145,7 +145,7 @@ public class PlayerWeaponManager : MonoBehaviour
         UpdateWeaponVisibility();
     }
 
-    private void DropWeapon(Gun gun, WeaponProfile profile, ref Gun gunSlot, ref WeaponProfile profileSlot)
+    private void DropWeapon(Gun gun, OldWeaponProfile profile, ref Gun gunSlot, ref OldWeaponProfile profileSlot)
     {
         if (!gun) return;
 

@@ -148,6 +148,7 @@ public class Projectile : MonoBehaviour
 
         for (int i = 0;  i < enemies.Length; i++)
         {
+            // Calculate damage based on distance
             float distance = Vector3.Distance(transform.position, enemies[i].transform.position);
             float calculatedDamage = explosionDamage * 1 - (distance / explosionRange);
             if(calculatedDamage < minimumDamage)
@@ -155,10 +156,17 @@ public class Projectile : MonoBehaviour
                 calculatedDamage = minimumDamage;
             }
 
+            // Apply damage
             Enemy script = enemies[i].GetComponent<Enemy>();
             if (script != null)
             {
                 script.TakeDamage(calculatedDamage);
+            }
+
+            // Apply explosion force
+            if (enemies[i].GetComponent<Rigidbody>() != null)
+            {
+                enemies[i].GetComponent<Rigidbody>().AddExplosionForce(explosionForce, transform.position, explosionRange);
             }
         }
 

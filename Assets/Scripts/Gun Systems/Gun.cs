@@ -6,7 +6,7 @@ using System.Collections;
 public class Gun : MonoBehaviour
 {
     [Header("Weapon Setup")]
-    public WeaponProfile profile;
+    public OldWeaponProfile profile;
     public Transform muzzle;
     public LayerMask hitMask;
 

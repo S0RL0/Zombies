@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ProjectileMode : IFireMode
 {
-    public void Fire(Vector3 origin, Vector3 direction, WeaponProfile profile, LayerMask hitMask)
+    public void Fire(Vector3 origin, Vector3 direction, OldWeaponProfile profile, LayerMask hitMask)
     {
         if (!profile.projectilePrefab) return;
 

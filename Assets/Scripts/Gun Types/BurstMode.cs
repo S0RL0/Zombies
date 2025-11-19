@@ -10,13 +10,13 @@ public class BurstMode : IFireMode
         coroutineHost = host; // Needed to start coroutine
     }
 
-    public void Fire(Vector3 origin, Vector3 direction, WeaponProfile profile, LayerMask hitMask)
+    public void Fire(Vector3 origin, Vector3 direction, OldWeaponProfile profile, LayerMask hitMask)
     {
         if (coroutineHost != null)
             coroutineHost.StartCoroutine(FireBurst(origin, direction, profile, hitMask));
     }
 
-    private IEnumerator FireBurst(Vector3 origin, Vector3 direction, WeaponProfile profile, LayerMask hitMask)
+    private IEnumerator FireBurst(Vector3 origin, Vector3 direction, OldWeaponProfile profile, LayerMask hitMask)
     {
         for (int i = 0; i < profile.burstCount; i++)
         {

@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewWeaponProfile", menuName = "Weapons/Weapon Profile")]
-public class WeaponProfile : ScriptableObject
+[CreateAssetMenu(fileName = "NewWeaponProfile", menuName = "Weapons/Old Weapon Profile")]
+public class OldWeaponProfile : ScriptableObject
 {
     [Header("General Ammo & Fire")]
     [Tooltip("Number of bullets in a single clip.")]
@@ -26,8 +26,7 @@ public class WeaponProfile : ScriptableObject
     [Tooltip("Projectile prefab used for projectile fire modes.")]
     public GameObject projectilePrefab;
 
-    [Tooltip("Speed of the projectile in units per second.")]
-    public float projectileSpeed = 30f;
+    [Tooltip("Speed of the projectile in units per second.")]    public float projectileSpeed = 30f;
 
     [Header("Shotgun Settings")]
     [Tooltip("Spread factor for shotgun pellets.")]

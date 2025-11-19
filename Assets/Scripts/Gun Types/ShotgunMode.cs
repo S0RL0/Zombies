@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ShotgunMode : IFireMode
 {
-    public void Fire(Vector3 origin, Vector3 direction, WeaponProfile profile, LayerMask hitMask)
+    public void Fire(Vector3 origin, Vector3 direction, OldWeaponProfile profile, LayerMask hitMask)
     {
         for (int i = 0; i < profile.pellets; i++)
         {
