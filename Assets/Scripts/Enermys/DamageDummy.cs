@@ -1,18 +1,10 @@
 using UnityEngine;
 
-public class DamageableDummy : MonoBehaviour, IDamageable
+public class DamageableDummy : Enemy
 {
-    public float health = 100f;
-
-    public void TakeDamage(float amount)
+    void Start()
     {
-        health -= amount;
-        Debug.Log($"{gameObject.name} took {amount} damage! Remaining HP: {health}");
-
-        if (health <= 0f)
-        {
-            Destroy(gameObject);
-        }
+        TakeDamage(20);
     }
 }
 

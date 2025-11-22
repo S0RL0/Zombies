@@ -2,7 +2,7 @@ using UnityEngine;
 
 public static class FireModeFactory
 {
-    public static IFireMode Create(WeaponProfile profile, MonoBehaviour host = null)
+    public static IFireMode Create(OldWeaponProfile profile, MonoBehaviour host = null)
     {
         switch (profile.fireModeType)
         {

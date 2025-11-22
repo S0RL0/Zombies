@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HitscanMode : IFireMode
 {
-    public void Fire(Vector3 origin, Vector3 direction, WeaponProfile profile, LayerMask hitMask)
+    public void Fire(Vector3 origin, Vector3 direction, OldWeaponProfile profile, LayerMask hitMask)
     {
         Debug.DrawRay(origin, direction * profile.range, Color.red, 1f);
 

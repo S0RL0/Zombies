@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class WeaponPickup : MonoBehaviour
 {
-    public WeaponProfile weaponProfile;
+    public OldWeaponProfile weaponProfile;
     public GameObject weaponPrefab;
 
     private Gun gunInstance;
