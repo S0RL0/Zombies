@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="ParameterPreset" id="{df44ab54-2862-4f3d-b8b4-a2a8df11552b}">
+		<property name="name">
+			<value>Terrain</value>
+		</property>
+		<relationship name="folder">
+			<destination>{92d2040f-3f7b-44ba-ba19-48fdf085d94d}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{d6239151-cedd-445c-a554-29ade67e3f23}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{d6239151-cedd-445c-a554-29ade67e3f23}">
+		<property name="parameterType">
+			<value>2</value>
+		</property>
+		<property name="maximum">
+			<value>7</value>
+		</property>
+		<property name="enumerationLabels">
+			<value>Grass</value>
+			<value>Wood</value>
+			<value>Stone</value>
+			<value>Carpet</value>
+			<value>Value E</value>
+			<value>Value F</value>
+			<value>Value G</value>
+		</property>
+		<property name="isHeld">
+			<value>true</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+		<relationship name="modulators">
+			<destination>{7c9b3018-b0de-4140-aa07-5e9a6d9a3ea8}</destination>
+		</relationship>
+	</object>
+	<object class="RandomizerModulator" id="{7c9b3018-b0de-4140-aa07-5e9a6d9a3ea8}">
+		<property name="nameOfPropertyBeingModulated">
+			<value>cursorPosition</value>
+		</property>
+	</object>
+</objects>
