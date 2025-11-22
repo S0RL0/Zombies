@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1525f5b596cf647a171e5a9f4d2f55, type: 3}
+  m_Name: Rifle
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponProfile
+  name: Test Rifle
+  description: M4 like test rifle
+  hitDetection: 0
+  weaponType: 3
+  fireMode: 1
+  weaponPrefab: {fileID: 0}
+  damage: 20
+  roundsPerMinute: 600
+  timeBetweenRounds: 0.1
+  shotsPerTriggerPull: 1
+  timeBetweenTriggerPull: 0
+  spread: 0.01
+  maxRange: 50
+  rangeCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reloadType: 0
+  reloadTime: 1
+  roundInsertTime: 0
+  reloadWrapUpTime: 0
+  magazineSize: 30
+  IntialAmmo: 120
+  allowTriggerHold: 1
+  projectilePrefab: {fileID: 0}
+  forwardForce: 0
+  upwardForce: 0
+  muzzleFlash: {fileID: 1743301284569550, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
+  bulletImpact: {fileID: 5643604064675710849, guid: 1826b8e48fc2421489a6db0426769663, type: 3}
+  caseEjection: {fileID: 0}
+  camShakeMagnitude: 0
+  camShakeDuraction: 0

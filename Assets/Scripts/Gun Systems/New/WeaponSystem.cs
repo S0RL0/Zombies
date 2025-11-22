@@ -5,9 +5,34 @@ using static WeaponSystem;
 
 public class WeaponSystem : MonoBehaviour
 {
-    // Gizmo stuct
+
+    public WeaponProfile weapon;
+
+    #region Inputs and calculations
+    // Input variables for input handler
+    private bool fireKeyHeld;                // true while button is held
+    private bool firePressedThisFrame;    // true only on the frame it was pressed
+    private bool reloadPressedThisFrame;  // same for reload
+
+    // Calculations
+    private bool readyToFire;          // true when able to shoot
+    int bulletsLeft;
+    int bulletsShot;
+    private bool reloading;
+    #endregion
+
+    #region References
+    // Refernces
+    [Header("References")]
+    public Camera cam;
+    public Transform attackPoint;
+    public RaycastHit rayHit;
+    public LayerMask enemyLayer;
+    #endregion
+
+    #region Dev Tools
     [System.Serializable]
-    public struct ShotGizmo
+    public struct ShotGizmo     // Gizmo stuct
     {
         public Vector3 start;
         public Vector3 end;
@@ -20,58 +45,18 @@ public class WeaponSystem : MonoBehaviour
             this.timeRemaining = duration;
         }
     }
-
-    // Weapon description
-    [Header("Desciptive")]
-    public new string name;
-    public string description;
-    public string type; // Will be an enum when made into a SO
-
-    // Weapon stats
-    [Header("Stats")]
-    public int damage;
-    public float timeBetweenShooting, spread, range, reloadTime, timeBetweenShots;
-    public int magazineSize, bulletsPerTap;
-    public bool allowButtonHold;
-    int bulletsLeft, bulletsShot;
-
-    // Projectile
-    [Header("Projectile")]
-    public GameObject projectile;
-    public bool isProjectile; // Will be an enum when made into a SO
-    public float shootForce, upwardForce;
-
-
-    // Bools
-    private bool shooting, readyToShoot, reloading;
-
-    // Refernces
-    [Header("References")]
-    public Camera cam;
-    public Transform attackPoint;
-    public RaycastHit rayHit;
-    public LayerMask enemyLayer;
-
-    // Graphics
-    public GameObject muzzleFlash, bulletHit;
-    //public CamShake camShake;
-    public float camShakeMagnitude, camShakeDuraction;
-
-    // Input variables for input handler
-    private bool fireHeld;                // true while button is held
-    private bool firePressedThisFrame;    // true only on the frame it was pressed
-    private bool reloadPressedThisFrame;  // same for reload
-
     [Header("Gizmo Settings")]
     [SerializeField] private bool showGizmos = true;
     [SerializeField] private float shotGizmoDuration = 1f;
 
     private List<ShotGizmo> shotGizmos = new List<ShotGizmo>();
+    #endregion
+
 
     private void Awake()
     {
-        bulletsLeft = magazineSize;
-        readyToShoot = true;
+        bulletsLeft = weapon.magazineSize;
+        readyToFire = true;
         cam = GetComponentInParent<Camera>();
     }
 
@@ -87,20 +72,20 @@ public class WeaponSystem : MonoBehaviour
     private void updateInput()
     {
         // Decide if we should be shooting this frame
-        bool shooting = allowButtonHold ? fireHeld : firePressedThisFrame;
+        bool shooting = weapon.allowTriggerHold ? fireKeyHeld : firePressedThisFrame;
 
         // Handle reload
-        if (reloadPressedThisFrame && bulletsLeft < magazineSize && !reloading)
+        if (reloadPressedThisFrame && bulletsLeft < weapon.magazineSize && !reloading)
         {
             Reload();
         }
 
         // Handle shooting
-        if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
+        if (readyToFire && shooting && !reloading && bulletsLeft > 0)
         {
             bulletsShot = 0;
 
-            if (isProjectile)
+            if (weapon.hitDetection == HitDetectionModel.Projectile)
                 ShootProjectile();
             else
                 ShootRaycast();
@@ -113,13 +98,13 @@ public class WeaponSystem : MonoBehaviour
 
     public void OnFirePerformed()
     {
-        fireHeld = true;
+        fireKeyHeld = true;
         firePressedThisFrame = true;  // one-frame flag
     }
 
     public void OnFireCanceled()
     {
-        fireHeld = false;
+        fireKeyHeld = false;
     }
 
     public void OnReloadPerformed()
@@ -137,10 +122,10 @@ public class WeaponSystem : MonoBehaviour
 
     private void ShootRaycast()
     {
-        readyToShoot = false;
+        readyToFire = false;
 
         // Spread
-        float halfSpread = 0.5f * spread;
+        float halfSpread = 0.5f * weapon.spread;
         float x = Random.Range(-halfSpread, halfSpread);
         float y = Random.Range(-halfSpread, halfSpread);
 
@@ -148,29 +133,29 @@ public class WeaponSystem : MonoBehaviour
         Vector3 direction = cam.transform.forward + new Vector3(x, y, 0);
 
         // RayCast
-        if (Physics.Raycast(cam.transform.position, direction, out rayHit, range))
+        if (Physics.Raycast(cam.transform.position, direction, out rayHit, weapon.maxRange))
         {
             Debug.Log(rayHit.collider.name);
 
             if (rayHit.collider.CompareTag("Enemy"))
             {
-                rayHit.collider.GetComponent<Enemy>().TakeDamage(damage);
+                rayHit.collider.GetComponent<Enemy>().TakeDamage(weapon.damage);
             }
 
             CalculateGizmo(cam.transform.position, rayHit.point);
         }
         else
         {
-            CalculateGizmo(cam.transform.position, cam.transform.position + (direction.normalized * range));
+            CalculateGizmo(cam.transform.position, cam.transform.position + (direction.normalized * weapon.maxRange));
         }
 
         // Camera Shake here
 
         // Particle effects here
-        if (bulletHit != null)
-            Instantiate(bulletHit, rayHit.point, Quaternion.Euler(0, 180, 0));
-        if (muzzleFlash != null)
-            Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+        if (weapon.bulletImpact != null)
+            Instantiate(weapon.bulletImpact, rayHit.point, Quaternion.Euler(0, 180, 0));
+        if (weapon.muzzleFlash != null)
+            Instantiate(weapon.muzzleFlash, attackPoint.position, Quaternion.identity);
 
 
         // Sound here
@@ -180,18 +165,18 @@ public class WeaponSystem : MonoBehaviour
         bulletsShot++;
 
         // Invoke resetShot
-        Invoke("ResetShot", timeBetweenShooting);
+        Invoke("ResetShot", weapon.timeBetweenTriggerPull);
 
-        // Shoot again if more bulletsPerTap
-        if (bulletsShot <= bulletsPerTap && bulletsLeft > 0)
+        // Shoot again if more shotsPerTriggerPull
+        if (bulletsShot <= weapon.shotsPerTriggerPull && bulletsLeft > 0)
         {
-            Invoke("ShootRaycast", timeBetweenShots);
+            Invoke("ShootRaycast", weapon.timeBetweenRounds);
         }
     }
 
     private void ShootProjectile()
     {
-        readyToShoot = false;
+        readyToFire = false;
 
         // Find the hit position using raycast
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -212,7 +197,7 @@ public class WeaponSystem : MonoBehaviour
         Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
 
         // Calculate spread
-        float halfSpread = 0.5f * spread;
+        float halfSpread = 0.5f * weapon.spread;
         float x = Random.Range(-halfSpread, halfSpread);
         float y = Random.Range(-halfSpread, halfSpread);
 
@@ -220,14 +205,14 @@ public class WeaponSystem : MonoBehaviour
         Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0);
 
         // Instantiate projectile
-        GameObject currentProjectile = Instantiate(projectile, attackPoint.position, Quaternion.identity);
+        GameObject currentProjectile = Instantiate(weapon.projectilePrefab, attackPoint.position, Quaternion.identity);
 
         // Rotate projectile to face the target
         currentProjectile.transform.forward = directionWithSpread.normalized;
 
         // Add forces to projectile
-        currentProjectile.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
-        currentProjectile.GetComponent<Rigidbody>().AddForce(attackPoint.up * upwardForce, ForceMode.Impulse);
+        currentProjectile.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * weapon.forwardForce, ForceMode.Impulse);
+        currentProjectile.GetComponent<Rigidbody>().AddForce(attackPoint.up * weapon.upwardForce, ForceMode.Impulse);
 
 
         // Adjust ammo
@@ -235,18 +220,18 @@ public class WeaponSystem : MonoBehaviour
         bulletsShot++;
 
         // Invoke resetShot
-        Invoke("ResetShot", timeBetweenShooting);
+        Invoke("ResetShot", weapon.timeBetweenTriggerPull);
 
-        // Shoot again if more bulletsPerTap
-        if (bulletsShot <= bulletsPerTap && bulletsLeft > 0)
+        // Shoot again if more shotsPerTriggerPull
+        if (bulletsShot <= weapon.shotsPerTriggerPull && bulletsLeft > 0)
         {
-            Invoke("ShootProjectile", timeBetweenShots);
+            Invoke("ShootProjectile", weapon.timeBetweenRounds);
         }
     }
 
     private void ResetShot()
     {
-        readyToShoot = true;
+        readyToFire = true;
     }
 
     private void Reload()
@@ -254,13 +239,14 @@ public class WeaponSystem : MonoBehaviour
         // Animation here
 
         reloading = true;
-        Invoke("ReloadFinish", reloadTime);
+        Invoke("ReloadFinish", weapon.reloadTime);
     }
     private void ReloadFinish()
     {
-        bulletsLeft = magazineSize;
+        bulletsLeft = weapon.magazineSize;
         reloading = false;
     }
+
     private void CalculateGizmo(Vector3 position, Vector3 point)
     {
         shotGizmos.Add(new ShotGizmo(position, point, shotGizmoDuration));

@@ -13584,31 +13584,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6055adb2b72ad644ab8e7b17cc7ce9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponSystem
-  name: Rifle
-  description: Average rifle
-  type: Assault Rifle
-  damage: 20
-  timeBetweenShooting: 0.1
-  spread: 0.05
-  range: 50
-  reloadTime: 2
-  timeBetweenShots: 0.1
-  magazineSize: 30
-  bulletsPerTap: 1
-  allowButtonHold: 1
-  projectile: {fileID: 0}
-  isProjectile: 0
-  shootForce: 0
-  upwardForce: 0
+  weapon: {fileID: 11400000, guid: 8af42353eab59a540a478220bdca143b, type: 2}
   cam: {fileID: 0}
   attackPoint: {fileID: 129385434}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 8
-  muzzleFlash: {fileID: 0}
-  bulletHit: {fileID: 1450638143650814, guid: 9fe1ddc0da27cb44ebeeb8c2befa68bd, type: 3}
-  camShakeMagnitude: 0
-  camShakeDuraction: 0
   showGizmos: 1
   shotGizmoDuration: 1
 --- !u!1 &6118245841985209056
