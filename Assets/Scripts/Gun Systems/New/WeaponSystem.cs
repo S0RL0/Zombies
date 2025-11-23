@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static WeaponSystem;
+using FMOD.Studio;
+using FMODUnity;
 
 
 public class WeaponSystem : MonoBehaviour
@@ -28,6 +30,10 @@ public class WeaponSystem : MonoBehaviour
     public Transform attackPoint;
     public RaycastHit rayHit;
     public LayerMask enemyLayer;
+
+    private EventInstance Reloadintance;
+    [SerializeField] private EventReference ReloadEvent;
+
     #endregion
 
     #region Dev Tools
@@ -237,6 +243,12 @@ public class WeaponSystem : MonoBehaviour
     private void Reload()
     {
         // Animation here
+        // Sound Here
+
+        Reloadintance = RuntimeManager.CreateInstance(ReloadEvent);
+       // Reloadintance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+        Reloadintance.start();
+        Reloadintance.release();
 
         reloading = true;
         Invoke("ReloadFinish", weapon.reloadTime);

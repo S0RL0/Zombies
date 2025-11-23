@@ -13091,6 +13091,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2811963372362173646, guid: 10ac916a2c33dbf499d33ac62772d9e4, type: 3}
+      propertyPath: ReloadEvent.Path
+      value: event:/Reload
+      objectReference: {fileID: 0}
+    - target: {fileID: 2811963372362173646, guid: 10ac916a2c33dbf499d33ac62772d9e4, type: 3}
+      propertyPath: ReloadEvent.Guid.Data1
+      value: -942216847
+      objectReference: {fileID: 0}
+    - target: {fileID: 2811963372362173646, guid: 10ac916a2c33dbf499d33ac62772d9e4, type: 3}
+      propertyPath: ReloadEvent.Guid.Data2
+      value: 1177617976
+      objectReference: {fileID: 0}
+    - target: {fileID: 2811963372362173646, guid: 10ac916a2c33dbf499d33ac62772d9e4, type: 3}
+      propertyPath: ReloadEvent.Guid.Data3
+      value: 1458946946
+      objectReference: {fileID: 0}
+    - target: {fileID: 2811963372362173646, guid: 10ac916a2c33dbf499d33ac62772d9e4, type: 3}
+      propertyPath: ReloadEvent.Guid.Data4
+      value: -958502904
+      objectReference: {fileID: 0}
     - target: {fileID: 3407801887713297778, guid: 10ac916a2c33dbf499d33ac62772d9e4, type: 3}
       propertyPath: m_Name
       value: Player
@@ -13134,6 +13154,10 @@ PrefabInstance:
     - target: {fileID: 4952792867830707671, guid: 10ac916a2c33dbf499d33ac62772d9e4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963125868598514978, guid: 10ac916a2c33dbf499d33ac62772d9e4, type: 3}
+      propertyPath: m_RayTraceProcedural
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
