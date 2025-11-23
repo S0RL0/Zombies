@@ -5,7 +5,7 @@
 			<value>Fireplace</value>
 		</property>
 		<property name="outputFormat">
-			<value>0</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{3737d2e6-d9f7-4b0c-8735-d4e37730c8ce}</destination>
@@ -38,6 +38,9 @@
 		</relationship>
 	</object>
 	<object class="MasterTrack" id="{a2dc9a08-c062-44f5-b037-4f1f6ac766f1}">
+		<relationship name="modules">
+			<destination>{6b59311a-c2ea-45c6-9216-9c2480f78925}</destination>
+		</relationship>
 		<relationship name="mixerGroup">
 			<destination>{c9546f4f-7b5c-48fd-a49e-56326786111e}</destination>
 		</relationship>
@@ -56,6 +59,9 @@
 	<object class="EventAutomatableProperties" id="{7a2f23b4-cf8a-4921-bce8-d30fd1335028}" />
 	<object class="MarkerTrack" id="{2bac7d2b-b762-4ef1-a827-5c1e3cc9dac5}" />
 	<object class="Timeline" id="{fe9f66f3-60b3-43be-9d9e-d00fbfe830b6}">
+		<relationship name="modules">
+			<destination>{6b59311a-c2ea-45c6-9216-9c2480f78925}</destination>
+		</relationship>
 		<relationship name="markers">
 			<destination>{dbb3e932-c3da-4032-be27-12f1b02d75a3}</destination>
 		</relationship>
@@ -71,6 +77,14 @@
 			<destination>{4d684796-3bbd-468c-a690-5bba284fee99}</destination>
 		</relationship>
 	</object>
+	<object class="SingleSound" id="{6b59311a-c2ea-45c6-9216-9c2480f78925}">
+		<property name="length">
+			<value>60.01145833333333</value>
+		</property>
+		<relationship name="audioFile">
+			<destination>{56a8d29c-c821-4689-a2ee-9cd4bb03d56b}</destination>
+		</relationship>
+	</object>
 	<object class="MixerBusEffectChain" id="{f8742b28-02ef-455b-bf60-42fb3d3ad5b1}">
 		<relationship name="effects">
 			<destination>{b87dd22d-9db7-4a5f-b0c3-ab766afcdeea}</destination>
@@ -82,7 +96,7 @@
 			<value>0</value>
 		</property>
 		<property name="length">
-			<value>137.23733333333334</value>
+			<value>60.01145833333333</value>
 		</property>
 		<relationship name="timeline">
 			<destination>{fe9f66f3-60b3-43be-9d9e-d00fbfe830b6}</destination>
