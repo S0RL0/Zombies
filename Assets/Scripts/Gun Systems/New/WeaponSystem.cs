@@ -8,7 +8,9 @@ using FMODUnity;
 public class WeaponSystem : MonoBehaviour
 {
 
-    public WeaponProfile weapon;
+    public List<WeaponProfile> weapon;
+    public int currentWeaponIndex = 0;
+    public int inventorySize = 2;
 
     #region Inputs and calculations
     // Input variables for input handler
@@ -58,10 +60,10 @@ public class WeaponSystem : MonoBehaviour
     private List<ShotGizmo> shotGizmos = new List<ShotGizmo>();
     #endregion
 
-
+    #region Start and Update
     private void Awake()
     {
-        bulletsLeft = weapon.magazineSize;
+        bulletsLeft = weapon[currentWeaponIndex].magazineSize;
         readyToFire = true;
         cam = GetComponentInParent<Camera>();
     }
@@ -78,10 +80,10 @@ public class WeaponSystem : MonoBehaviour
     private void updateInput()
     {
         // Decide if we should be shooting this frame
-        bool shooting = weapon.allowTriggerHold ? fireKeyHeld : firePressedThisFrame;
+        bool shooting = weapon[currentWeaponIndex].allowTriggerHold ? fireKeyHeld : firePressedThisFrame;
 
         // Handle reload
-        if (reloadPressedThisFrame && bulletsLeft < weapon.magazineSize && !reloading)
+        if (reloadPressedThisFrame && bulletsLeft < weapon[currentWeaponIndex].magazineSize && !reloading)
         {
             Reload();
         }
@@ -91,7 +93,7 @@ public class WeaponSystem : MonoBehaviour
         {
             bulletsShot = 0;
 
-            if (weapon.hitDetection == HitDetectionModel.Projectile)
+            if (weapon[currentWeaponIndex].hitDetection == HitDetectionModel.Projectile)
                 ShootProjectile();
             else
                 ShootRaycast();
@@ -118,20 +120,20 @@ public class WeaponSystem : MonoBehaviour
         reloadPressedThisFrame = true;
     }
 
-
-
-
     private void updateUI()
     {
 
     }
 
+    #endregion
+
+    #region Shooting and Reloading
     private void ShootRaycast()
     {
         readyToFire = false;
 
         // Spread
-        float halfSpread = 0.5f * weapon.spread;
+        float halfSpread = 0.5f * weapon[currentWeaponIndex].spread;
         float x = Random.Range(-halfSpread, halfSpread);
         float y = Random.Range(-halfSpread, halfSpread);
 
@@ -139,29 +141,29 @@ public class WeaponSystem : MonoBehaviour
         Vector3 direction = cam.transform.forward + new Vector3(x, y, 0);
 
         // RayCast
-        if (Physics.Raycast(cam.transform.position, direction, out rayHit, weapon.maxRange))
+        if (Physics.Raycast(cam.transform.position, direction, out rayHit, weapon[currentWeaponIndex].maxRange))
         {
             Debug.Log(rayHit.collider.name);
 
             if (rayHit.collider.CompareTag("Enemy"))
             {
-                rayHit.collider.GetComponent<Enemy>().TakeDamage(weapon.damage);
+                rayHit.collider.GetComponent<Enemy>().TakeDamage(weapon[currentWeaponIndex].damage);
             }
 
             CalculateGizmo(cam.transform.position, rayHit.point);
         }
         else
         {
-            CalculateGizmo(cam.transform.position, cam.transform.position + (direction.normalized * weapon.maxRange));
+            CalculateGizmo(cam.transform.position, cam.transform.position + (direction.normalized * weapon[currentWeaponIndex].maxRange));
         }
 
         // Camera Shake here
 
         // Particle effects here
-        if (weapon.bulletImpact != null)
-            Instantiate(weapon.bulletImpact, rayHit.point, Quaternion.Euler(0, 180, 0));
-        if (weapon.muzzleFlash != null)
-            Instantiate(weapon.muzzleFlash, attackPoint.position, Quaternion.identity);
+        if (weapon[currentWeaponIndex].bulletImpact != null)
+            Instantiate(weapon[currentWeaponIndex].bulletImpact, rayHit.point, Quaternion.Euler(0, 180, 0));
+        if (weapon[currentWeaponIndex].muzzleFlash != null)
+            Instantiate(weapon[currentWeaponIndex].muzzleFlash, attackPoint.position, Quaternion.identity);
 
 
         // Sound here
@@ -171,12 +173,12 @@ public class WeaponSystem : MonoBehaviour
         bulletsShot++;
 
         // Invoke resetShot
-        Invoke("ResetShot", weapon.timeBetweenTriggerPull);
+        Invoke("ResetShot", weapon[currentWeaponIndex].timeBetweenTriggerPull);
 
         // Shoot again if more shotsPerTriggerPull
-        if (bulletsShot <= weapon.shotsPerTriggerPull && bulletsLeft > 0)
+        if (bulletsShot <= weapon[currentWeaponIndex].shotsPerTriggerPull && bulletsLeft > 0)
         {
-            Invoke("ShootRaycast", weapon.timeBetweenRounds);
+            Invoke("ShootRaycast", weapon[currentWeaponIndex].timeBetweenRounds);
         }
     }
 
@@ -203,7 +205,7 @@ public class WeaponSystem : MonoBehaviour
         Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
 
         // Calculate spread
-        float halfSpread = 0.5f * weapon.spread;
+        float halfSpread = 0.5f * weapon[currentWeaponIndex].spread;
         float x = Random.Range(-halfSpread, halfSpread);
         float y = Random.Range(-halfSpread, halfSpread);
 
@@ -211,14 +213,14 @@ public class WeaponSystem : MonoBehaviour
         Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0);
 
         // Instantiate projectile
-        GameObject currentProjectile = Instantiate(weapon.projectilePrefab, attackPoint.position, Quaternion.identity);
+        GameObject currentProjectile = Instantiate(weapon[currentWeaponIndex].projectilePrefab, attackPoint.position, Quaternion.identity);
 
         // Rotate projectile to face the target
         currentProjectile.transform.forward = directionWithSpread.normalized;
 
         // Add forces to projectile
-        currentProjectile.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * weapon.forwardForce, ForceMode.Impulse);
-        currentProjectile.GetComponent<Rigidbody>().AddForce(attackPoint.up * weapon.upwardForce, ForceMode.Impulse);
+        currentProjectile.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * weapon[currentWeaponIndex].forwardForce, ForceMode.Impulse);
+        currentProjectile.GetComponent<Rigidbody>().AddForce(attackPoint.up * weapon[currentWeaponIndex].upwardForce, ForceMode.Impulse);
 
 
         // Adjust ammo
@@ -226,12 +228,12 @@ public class WeaponSystem : MonoBehaviour
         bulletsShot++;
 
         // Invoke resetShot
-        Invoke("ResetShot", weapon.timeBetweenTriggerPull);
+        Invoke("ResetShot", weapon[currentWeaponIndex].timeBetweenTriggerPull);
 
         // Shoot again if more shotsPerTriggerPull
-        if (bulletsShot <= weapon.shotsPerTriggerPull && bulletsLeft > 0)
+        if (bulletsShot <= weapon[currentWeaponIndex].shotsPerTriggerPull && bulletsLeft > 0)
         {
-            Invoke("ShootProjectile", weapon.timeBetweenRounds);
+            Invoke("ShootProjectile", weapon[currentWeaponIndex].timeBetweenRounds);
         }
     }
 
@@ -251,14 +253,51 @@ public class WeaponSystem : MonoBehaviour
         Reloadintance.release();
 
         reloading = true;
-        Invoke("ReloadFinish", weapon.reloadTime);
+        Invoke("ReloadFinish", weapon[currentWeaponIndex].reloadTime);
     }
+
     private void ReloadFinish()
     {
-        bulletsLeft = weapon.magazineSize;
+        bulletsLeft = weapon[currentWeaponIndex].magazineSize;
         reloading = false;
     }
 
+    #endregion
+
+    #region Inventories and Weapon Switching
+
+    private void SwitchToNextWeapon()
+    {
+        currentWeaponIndex++;
+        if (currentWeaponIndex >= weapon.Count)
+            currentWeaponIndex = 0;
+    }
+
+    private void SwitchToPreviousWeapon()
+    {
+        currentWeaponIndex--;
+        if (currentWeaponIndex < 0)
+            currentWeaponIndex = weapon.Count - 1;
+    }
+
+    private void PickupNewWeapon(WeaponProfile newWeapon)
+    {
+        if (weapon.Count < inventorySize)
+        {
+            weapon.Add(newWeapon);
+        }
+        else
+        {
+            weapon[currentWeaponIndex] = newWeapon;
+            GameObject droppedWeapon = Instantiate(weapon[currentWeaponIndex].weaponPrefab, transform.position + transform.forward, Quaternion.identity);
+            droppedWeapon.GetComponent<Rigidbody>().AddForce(transform.forward * 2f, ForceMode.Impulse);
+            droppedWeapon.GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * 5f, ForceMode.Impulse);
+        }
+    }
+
+    #endregion
+
+    #region Dev tools
     private void CalculateGizmo(Vector3 position, Vector3 point)
     {
         shotGizmos.Add(new ShotGizmo(position, point, shotGizmoDuration));
@@ -295,4 +334,5 @@ public class WeaponSystem : MonoBehaviour
             Gizmos.DrawSphere(g.end, 0.06f);
         }
     }
+    #endregion
 }
