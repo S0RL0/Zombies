@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         Camera _camera = GetComponentInChildren<Camera>();
         cameraTransform = _camera.gameObject.transform;
+        weaponSystem = GetComponentInChildren<WeaponSystem>();
     }
 
 
@@ -119,5 +120,31 @@ public class PlayerController : MonoBehaviour
         float currentHeight = isCrouching ? crouchHeight : standingHeight;
         characterController.height = currentHeight;
         cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, currentHeight, cameraTransform.localPosition.z);
+    }
+
+    public void Interact()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, 3f))
+        {
+            IInteractable interactable = hit.collider.GetComponent<Interactable>();
+            if (interactable != null)
+            {
+                InteractionResult result = interactable.Interact();
+                if (result.success)
+                {
+                    var item = result.item;
+                    switch(item)
+                    {
+                        case WeaponProfile weapon:
+                            weaponSystem.PickupNewWeapon(weapon, result.sourceObject);
+                            break;
+                        default:
+                            Debug.Log("Interacted with " + hit.collider.name);
+                            break;
+                    }
+                }
+            }
+        }
     }
 }

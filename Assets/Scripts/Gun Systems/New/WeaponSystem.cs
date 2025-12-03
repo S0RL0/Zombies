@@ -280,7 +280,7 @@ public class WeaponSystem : MonoBehaviour
             currentWeaponIndex = weapon.Count - 1;
     }
 
-    private void PickupNewWeapon(WeaponProfile newWeapon)
+    public void PickupNewWeapon(WeaponProfile newWeapon, GameObject model)
     {
         if (weapon.Count < inventorySize)
         {
