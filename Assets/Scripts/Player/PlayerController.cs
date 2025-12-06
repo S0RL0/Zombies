@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class PlayerController : MonoBehaviour
 {
@@ -35,7 +36,7 @@ public class PlayerController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         Camera _camera = GetComponentInChildren<Camera>();
         cameraTransform = _camera.gameObject.transform;
-        weaponSystem = GetComponentInChildren<WeaponSystem>();
+        weaponSystem = GetComponent<WeaponSystem>();
     }
 
 
@@ -124,20 +125,21 @@ public class PlayerController : MonoBehaviour
 
     public void Interact()
     {
+        Debug.LogWarning("Interacting...");
         RaycastHit hit;
         if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, 3f))
         {
-            IInteractable interactable = hit.collider.GetComponent<Interactable>();
+            Interactable interactable = hit.collider.GetComponent<Interactable>();
             if (interactable != null)
             {
                 InteractionResult result = interactable.Interact();
                 if (result.success)
                 {
-                    var item = result.item;
+                    InteractionType item = result.interactionType;
                     switch(item)
                     {
-                        case WeaponProfile weapon:
-                            weaponSystem.PickupNewWeapon(weapon, result.sourceObject);
+                        case InteractionType.Weapon:
+                            weaponSystem.PickupNewWeapon(result.GetItem<WeaponProfile>(), result.sourceObject);
                             break;
                         default:
                             Debug.Log("Interacted with " + hit.collider.name);

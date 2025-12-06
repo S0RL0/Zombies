@@ -74,12 +74,19 @@ public class WeaponProfile : ScriptableObject
 
     #region Effects
     [Header("Effects")]
-    public GameObject muzzleFlash;
     [Tooltip("Muzzle Flash FX Game Object for when gun fired")]
-    public GameObject bulletImpact;
+    public GameObject muzzleFlash;
+    [Tooltip("Muzzle Flash FX Origin Point")]
+    public Transform muzzleFlashOrigin;
+
     [Tooltip("Bullet Impact FX Game Object for when bullet hits")]
+    public GameObject bulletImpact;
+
+    [Tooltip("Case Ejection FX Game Object for when gun fired")]
     public GameObject caseEjection;
-    [Tooltip("Case Ejection FX Game Object for when bullet is fired")]
+    [Tooltip("Case Ejection FX Origin Point")]
+    public Transform caseEjectionOrigin;
+
     public float camShakeMagnitude;
     public float camShakeDuraction;
     #endregion

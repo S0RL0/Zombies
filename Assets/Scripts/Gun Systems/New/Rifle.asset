@@ -22,7 +22,7 @@ MonoBehaviour:
   roundsPerMinute: 600
   timeBetweenRounds: 0.1
   shotsPerTriggerPull: 1
-  timeBetweenTriggerPull: 0
+  timeBetweenTriggerPull: 1
   spread: 0.01
   maxRange: 50
   rangeCurve:
@@ -42,7 +42,9 @@ MonoBehaviour:
   forwardForce: 0
   upwardForce: 0
   muzzleFlash: {fileID: 1743301284569550, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
+  muzzleFlashOrigin: {fileID: 0}
   bulletImpact: {fileID: 5643604064675710849, guid: 1826b8e48fc2421489a6db0426769663, type: 3}
   caseEjection: {fileID: 0}
+  caseEjectionOrigin: {fileID: 0}
   camShakeMagnitude: 0
   camShakeDuraction: 0
