@@ -167,7 +167,7 @@ public class WeaponSystem : MonoBehaviour
     private void ShootRaycast()
     {
         count += 1;
-        Debug.Log("Bang! x" + count);
+        Debug.Log("Fire Count: " + count + "\nbulletsShotFromTriggerPull: " + bulletsShotFromTriggerPull + "\n ");
         readyToFire = false;
 
         // Spread
@@ -213,12 +213,23 @@ public class WeaponSystem : MonoBehaviour
         bulletsShotFromTriggerPull++;
 
         // Invoke resetShot
-        Invoke("ResetShot", weapon[currentWeaponIndex].timeBetweenTriggerPull);
+        
+        
 
         // Shoot again if more shotsPerTriggerPull
         if (bulletsShotFromTriggerPull <= weapon[currentWeaponIndex].shotsPerTriggerPull && bulletsLeftInCurrentMag > 0)
         {
             Invoke("ShootRaycast", weapon[currentWeaponIndex].timeBetweenRounds);
+            return;
+        }
+
+        if (weapon[currentWeaponIndex].fireMode == FireMode.Singlefire || weapon[currentWeaponIndex].fireMode == FireMode.Burst)
+        {
+            Invoke("ResetShot", weapon[currentWeaponIndex].timeBetweenTriggerPull);
+        }
+        else if (weapon[currentWeaponIndex].fireMode == FireMode.Authomatic)
+        {
+            Invoke("ResetShot", weapon[currentWeaponIndex].timeBetweenRounds);
         }
     }
 
