@@ -25,5 +25,6 @@ public enum InteractionType
     None,
     Weapon,
     Door,
-    Buy
+    Buy,
+    Ammo
 }

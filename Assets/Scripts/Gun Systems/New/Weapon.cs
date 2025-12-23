@@ -1,11 +1,13 @@
 using UnityEngine;
-using UnityEngine.Rendering;
-using static UnityEditor.Progress;
 
 public class Weapon : Interactable
 {
     public WeaponProfile weaponProfile;
     public bool activeWeapon = false;
+
+    // Effects
+    public ParticleSystem muzzleFlash;
+    public ParticleSystem caseEjection;
 
     public override InteractionResult Interact()
     {
@@ -15,5 +17,12 @@ public class Weapon : Interactable
         }
 
         return new InteractionResult(true, weaponProfile, this.gameObject, InteractionType.Weapon);
+    }
+
+    public void fireEffects()
+    {
+        // Implement firing effects such as muzzle flash, sound, etc.
+        muzzleFlash.Play();
+        caseEjection.Play();
     }
 }
