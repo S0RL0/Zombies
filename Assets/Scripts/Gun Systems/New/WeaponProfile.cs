@@ -5,10 +5,16 @@ public class WeaponProfile : ScriptableObject
 {
     #region Weapon Description
     [Header("Weapon description")]
+    [Tooltip("Unique ID")]
+    public int ID;
     [Tooltip("Weapon Name")]
     public new string name;
     [Tooltip("Weapon Description")]
     public string description;
+    [Tooltip("Cost to buy weapon")]
+    public int cost;
+    [Tooltip("Cost to buy ammo")]
+    public int ammoCost;
     [Tooltip("Weapon hit detection model either Raycast or Projectile.")]
     public HitDetectionModel hitDetection;
     [Tooltip("Weapon Catagorie e.g. Assault Rifle, Sniper, Shotgun")]
@@ -16,7 +22,9 @@ public class WeaponProfile : ScriptableObject
     [Tooltip("Weapon firemode, how many bullets are fired and how")]
     public FireMode fireMode;
     [Tooltip("Weapon prefab")]
-    public GameObject weaponPrefab;
+    public GameObject prefab;
+    [Tooltip("Upgraded weapon profile")]
+    public WeaponProfile upgradedProfile;
     #endregion
 
 
@@ -52,7 +60,7 @@ public class WeaponProfile : ScriptableObject
     [Tooltip("Number of bullets in a single clip.")]
     public int magazineSize;
     [Tooltip("Total ammo carried by player for this weapon.")]
-    public int IntialAmmo;
+    public int TotalAmmo;
     [Tooltip("Allow holding down the trigger to keep firing.")]
     public bool allowTriggerHold;
     #endregion
@@ -74,12 +82,19 @@ public class WeaponProfile : ScriptableObject
 
     #region Effects
     [Header("Effects")]
-    public GameObject muzzleFlash;
     [Tooltip("Muzzle Flash FX Game Object for when gun fired")]
-    public GameObject bulletImpact;
+    private ParticleSystem muzzleFlash;
+    [Tooltip("Muzzle Flash FX Origin Point")]
+    private Vector3 muzzleFlashOrigin;
+
     [Tooltip("Bullet Impact FX Game Object for when bullet hits")]
-    public GameObject caseEjection;
-    [Tooltip("Case Ejection FX Game Object for when bullet is fired")]
+    public GameObject bulletImpact;
+
+    [Tooltip("Case Ejection FX Game Object for when gun fired")]
+    private ParticleSystem caseEjection;
+    [Tooltip("Case Ejection FX Origin Point")]
+    private Vector3 caseEjectionOrigin;
+
     public float camShakeMagnitude;
     public float camShakeDuraction;
     #endregion

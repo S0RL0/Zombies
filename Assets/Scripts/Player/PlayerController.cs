@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class PlayerController : MonoBehaviour
 {
@@ -29,12 +30,15 @@ public class PlayerController : MonoBehaviour
     private Transform cameraTransform;
     private float verticalLookRotation;
 
+    // Economy System
+    public int money = 0;
 
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
         Camera _camera = GetComponentInChildren<Camera>();
         cameraTransform = _camera.gameObject.transform;
+        weaponSystem = GetComponent<WeaponSystem>();
     }
 
 
@@ -119,5 +123,62 @@ public class PlayerController : MonoBehaviour
         float currentHeight = isCrouching ? crouchHeight : standingHeight;
         characterController.height = currentHeight;
         cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, currentHeight, cameraTransform.localPosition.z);
+    }
+
+    public void Interact()
+    {
+        Debug.LogWarning("Interacting...");
+        RaycastHit hit;
+        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, 3f))
+        {
+            Debug.LogWarning("Hit: " + hit.collider.name);
+            Interactable interactable = hit.collider.GetComponent<Interactable>();
+            if (interactable != null)
+            {
+                Debug.LogWarning("Found Interactable: " + hit.collider.name);
+                InteractionResult result = interactable.Interact();
+                if (result.success)
+                {
+                    Debug.LogWarning("Interaction Successful with: " + hit.collider.name);
+                    InteractionType item = result.interactionType;
+                    switch(item)
+                    {
+                        case InteractionType.Weapon:
+                            weaponSystem.PickupNewWeapon(result.GetItem<WeaponProfile>(), result.sourceObject, result.sourceObject.GetComponent<Weapon>());
+                            break;
+                        case InteractionType.Door:
+                            break;
+                        case InteractionType.Buy:
+                            Debug.Log("Attempting to buy " + result.GetItem<WeaponProfile>().name + " for " + result.GetItem<WeaponProfile>().cost);
+                            money -= result.GetItem<WeaponProfile>().cost;
+                            // Sound here, successful purchase
+                            weaponSystem.PickupNewWeapon(result.GetItem<WeaponProfile>(), result.sourceObject, result.sourceObject.GetComponent<Weapon>());
+                            break;
+                        case InteractionType.Ammo:
+                            weaponSystem.RefillAmmo(result.GetItem<WeaponProfile>());
+                            break;
+
+                        default:
+                            Debug.Log("Interacted with " + hit.collider.name);
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    public bool HasWeapon(WeaponProfile weaponToCheck)
+    {
+        return weaponSystem.profiles.Contains(weaponToCheck);
+    }
+
+    public int GetMoney()
+    {
+        return money;
+    }
+
+    public void AddMoney(int amount)
+    {
+        money += amount;
     }
 }

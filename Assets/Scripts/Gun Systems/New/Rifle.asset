@@ -12,17 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f1525f5b596cf647a171e5a9f4d2f55, type: 3}
   m_Name: Rifle
   m_EditorClassIdentifier: Assembly-CSharp::WeaponProfile
+  ID: 0
   name: Test Rifle
   description: M4 like test rifle
+  cost: 1000
+  ammoCost: 0
   hitDetection: 0
   weaponType: 3
   fireMode: 1
-  weaponPrefab: {fileID: 0}
+  prefab: {fileID: 1427344184478965906, guid: 0ff001d128cfab14e94ce3011db3bebd, type: 3}
+  upgradedProfile: {fileID: 0}
   damage: 20
   roundsPerMinute: 600
   timeBetweenRounds: 0.1
-  shotsPerTriggerPull: 1
-  timeBetweenTriggerPull: 0
+  shotsPerTriggerPull: 0
+  timeBetweenTriggerPull: 1
   spread: 0.01
   maxRange: 50
   rangeCurve:
@@ -36,13 +40,11 @@ MonoBehaviour:
   roundInsertTime: 0
   reloadWrapUpTime: 0
   magazineSize: 30
-  IntialAmmo: 120
+  TotalAmmo: 120
   allowTriggerHold: 1
   projectilePrefab: {fileID: 0}
   forwardForce: 0
   upwardForce: 0
-  muzzleFlash: {fileID: 1743301284569550, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
   bulletImpact: {fileID: 5643604064675710849, guid: 1826b8e48fc2421489a6db0426769663, type: 3}
-  caseEjection: {fileID: 0}
   camShakeMagnitude: 0
   camShakeDuraction: 0

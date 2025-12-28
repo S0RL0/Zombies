@@ -32,6 +32,7 @@ public class InputHandler : MonoBehaviour
         playerControls.Player.Sprint.performed += ctx => playerController.isSprinting = ctx.ReadValueAsButton();
         playerControls.Player.Sprint.canceled += ctx => playerController.isSprinting = ctx.ReadValueAsButton();
         playerControls.Player.Crouch.performed += ctx => ToggleCrouch(ctx.ReadValueAsButton());
+        playerControls.Player.Interact.performed += HandleInteract;
         if (weaponSystem != null)
         {
             // Fire
@@ -75,6 +76,12 @@ public class InputHandler : MonoBehaviour
         {
             playerController.Crouch();
         }
+    }
+
+    void HandleInteract(InputAction.CallbackContext context)
+    {
+        // Implement interaction logic here
+        playerController.Interact();
     }
 
     private void LockCursor(bool lockState)

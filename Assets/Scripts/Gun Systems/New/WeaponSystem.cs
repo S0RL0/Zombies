@@ -1,16 +1,31 @@
-using System.Collections.Generic;
-using UnityEngine;
-using static WeaponSystem;
 using FMOD.Studio;
 using FMODUnity;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEditor;
+using UnityEngine;
+using static WeaponSystem;
 
 
 public class WeaponSystem : MonoBehaviour
 {
-
-    public List<WeaponProfile> weapon;
+    public List<WeaponProfile> profiles;
+    public List<int> bulletsInInventory;
+    public List<GameObject> weaponModels;
     public int currentWeaponIndex = 0;
     public int inventorySize = 2;
+    public Transform weaponPoint;
+
+    int bulletsLeftInCurrentMag;
+    int bulletsShotFromTriggerPull;
+
+    #region Effects
+    [Header("Effects")]
+    public List<ParticleSystem> muzzleFlash;
+    public GameObject bulletImpact;
+    public List<ParticleSystem> caseEjection;
+    #endregion
 
     #region Inputs and calculations
     // Input variables for input handler
@@ -20,8 +35,6 @@ public class WeaponSystem : MonoBehaviour
 
     // Calculations
     private bool readyToFire;          // true when able to shoot
-    int bulletsLeft;
-    int bulletsShot;
     private bool reloading;
     #endregion
 
@@ -63,13 +76,48 @@ public class WeaponSystem : MonoBehaviour
     #region Start and Update
     private void Awake()
     {
-        bulletsLeft = weapon[currentWeaponIndex].magazineSize;
+        cam = GetComponentInChildren<Camera>();
+
+        if (profiles.Count ==0)
+        {
+            Debug.LogError("WeaponSystem: No weapons assigned in the inspector.");
+            return;
+        }
+        int i = 0;
+        foreach (WeaponProfile w in profiles)
+        {
+            SetupWeapon(w, i, weaponModels[i].GetComponent<Weapon>());
+            i++;
+        }
+        
+    }
+
+    private void SetupWeapon(WeaponProfile newWeapon, int newWeaponSlot, Weapon modelScript)
+    {
+        int currentInventorySize = profiles.Count;
+        if (currentInventorySize < newWeaponSlot + 1)
+        {
+            profiles.Add(newWeapon);
+            bulletsInInventory.Add(newWeapon.TotalAmmo);
+            muzzleFlash.Add(modelScript.muzzleFlash);
+            caseEjection.Add(modelScript.caseEjection);
+        }
+        else {
+            bulletsInInventory[newWeaponSlot] = newWeapon.TotalAmmo;
+            muzzleFlash[newWeaponSlot] = modelScript.muzzleFlash;
+            caseEjection[newWeaponSlot] = modelScript.caseEjection;
+        }
+
+        bulletsLeftInCurrentMag = newWeapon.magazineSize;
         readyToFire = true;
-        cam = GetComponentInParent<Camera>();
     }
 
     private void Update()
     {
+        if(profiles.Count == 0)
+        {
+            return;
+        }
         updateInput();
 
         updateUI();
@@ -80,20 +128,20 @@ public class WeaponSystem : MonoBehaviour
     private void updateInput()
     {
         // Decide if we should be shooting this frame
-        bool shooting = weapon[currentWeaponIndex].allowTriggerHold ? fireKeyHeld : firePressedThisFrame;
+        bool shooting = profiles[currentWeaponIndex].allowTriggerHold ? fireKeyHeld : firePressedThisFrame;
 
         // Handle reload
-        if (reloadPressedThisFrame && bulletsLeft < weapon[currentWeaponIndex].magazineSize && !reloading)
+        if (reloadPressedThisFrame && bulletsLeftInCurrentMag < profiles[currentWeaponIndex].magazineSize && !reloading)
         {
             Reload();
         }
 
         // Handle shooting
-        if (readyToFire && shooting && !reloading && bulletsLeft > 0)
+        if (readyToFire && shooting && !reloading && bulletsLeftInCurrentMag > 0)
         {
-            bulletsShot = 0;
+            bulletsShotFromTriggerPull = 0;
 
-            if (weapon[currentWeaponIndex].hitDetection == HitDetectionModel.Projectile)
+            if (profiles[currentWeaponIndex].hitDetection == HitDetectionModel.Projectile)
                 ShootProjectile();
             else
                 ShootRaycast();
@@ -124,7 +172,6 @@ public class WeaponSystem : MonoBehaviour
     {
 
     }
-
     #endregion
 
     #region Shooting and Reloading
@@ -133,7 +180,7 @@ public class WeaponSystem : MonoBehaviour
         readyToFire = false;
 
         // Spread
-        float halfSpread = 0.5f * weapon[currentWeaponIndex].spread;
+        float halfSpread = 0.5f * profiles[currentWeaponIndex].spread;
         float x = Random.Range(-halfSpread, halfSpread);
         float y = Random.Range(-halfSpread, halfSpread);
 
@@ -141,44 +188,60 @@ public class WeaponSystem : MonoBehaviour
         Vector3 direction = cam.transform.forward + new Vector3(x, y, 0);
 
         // RayCast
-        if (Physics.Raycast(cam.transform.position, direction, out rayHit, weapon[currentWeaponIndex].maxRange))
+        if (Physics.Raycast(cam.transform.position, direction, out rayHit, profiles[currentWeaponIndex].maxRange, enemyLayer))
         {
             Debug.Log(rayHit.collider.name);
 
             if (rayHit.collider.CompareTag("Enemy"))
             {
-                rayHit.collider.GetComponent<Enemy>().TakeDamage(weapon[currentWeaponIndex].damage);
+                rayHit.collider.GetComponent<Enemy>().TakeDamage(profiles[currentWeaponIndex].damage);
             }
 
             CalculateGizmo(cam.transform.position, rayHit.point);
         }
         else
         {
-            CalculateGizmo(cam.transform.position, cam.transform.position + (direction.normalized * weapon[currentWeaponIndex].maxRange));
+            CalculateGizmo(cam.transform.position, cam.transform.position + (direction.normalized * profiles[currentWeaponIndex].maxRange));
         }
 
         // Camera Shake here
 
         // Particle effects here
-        if (weapon[currentWeaponIndex].bulletImpact != null)
-            Instantiate(weapon[currentWeaponIndex].bulletImpact, rayHit.point, Quaternion.Euler(0, 180, 0));
-        if (weapon[currentWeaponIndex].muzzleFlash != null)
-            Instantiate(weapon[currentWeaponIndex].muzzleFlash, attackPoint.position, Quaternion.identity);
+        if (profiles[currentWeaponIndex].bulletImpact != null)
+        {
+            Quaternion rotation = Quaternion.LookRotation(rayHit.normal);
+            Instantiate(profiles[currentWeaponIndex].bulletImpact, rayHit.point, rotation);
+        }
+        if (muzzleFlash[currentWeaponIndex] != null)
+            muzzleFlash[currentWeaponIndex].Play();
+        if (caseEjection[currentWeaponIndex] != null)
+            caseEjection[currentWeaponIndex].Play();
 
 
         // Sound here
 
         // Adjust ammo
-        bulletsLeft--;
-        bulletsShot++;
+        bulletsLeftInCurrentMag--;
+        bulletsShotFromTriggerPull++;
 
         // Invoke resetShot
-        Invoke("ResetShot", weapon[currentWeaponIndex].timeBetweenTriggerPull);
+        
+        
 
         // Shoot again if more shotsPerTriggerPull
-        if (bulletsShot <= weapon[currentWeaponIndex].shotsPerTriggerPull && bulletsLeft > 0)
+        if (bulletsShotFromTriggerPull <= profiles[currentWeaponIndex].shotsPerTriggerPull && bulletsLeftInCurrentMag > 0)
         {
-            Invoke("ShootRaycast", weapon[currentWeaponIndex].timeBetweenRounds);
+            Invoke("ShootRaycast", profiles[currentWeaponIndex].timeBetweenRounds);
+            return;
+        }
+
+        if (profiles[currentWeaponIndex].fireMode == FireMode.Singlefire || profiles[currentWeaponIndex].fireMode == FireMode.Burst)
+        {
+            Invoke("ResetShot", profiles[currentWeaponIndex].timeBetweenTriggerPull);
+        }
+        else if (profiles[currentWeaponIndex].fireMode == FireMode.Authomatic)
+        {
+            Invoke("ResetShot", profiles[currentWeaponIndex].timeBetweenRounds);
         }
     }
 
@@ -205,7 +268,7 @@ public class WeaponSystem : MonoBehaviour
         Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
 
         // Calculate spread
-        float halfSpread = 0.5f * weapon[currentWeaponIndex].spread;
+        float halfSpread = 0.5f * profiles[currentWeaponIndex].spread;
         float x = Random.Range(-halfSpread, halfSpread);
         float y = Random.Range(-halfSpread, halfSpread);
 
@@ -213,27 +276,27 @@ public class WeaponSystem : MonoBehaviour
         Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0);
 
         // Instantiate projectile
-        GameObject currentProjectile = Instantiate(weapon[currentWeaponIndex].projectilePrefab, attackPoint.position, Quaternion.identity);
+        GameObject currentProjectile = Instantiate(profiles[currentWeaponIndex].projectilePrefab, attackPoint.position, Quaternion.identity);
 
         // Rotate projectile to face the target
         currentProjectile.transform.forward = directionWithSpread.normalized;
 
         // Add forces to projectile
-        currentProjectile.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * weapon[currentWeaponIndex].forwardForce, ForceMode.Impulse);
-        currentProjectile.GetComponent<Rigidbody>().AddForce(attackPoint.up * weapon[currentWeaponIndex].upwardForce, ForceMode.Impulse);
+        currentProjectile.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * profiles[currentWeaponIndex].forwardForce, ForceMode.Impulse);
+        currentProjectile.GetComponent<Rigidbody>().AddForce(attackPoint.up * profiles[currentWeaponIndex].upwardForce, ForceMode.Impulse);
 
 
         // Adjust ammo
-        bulletsLeft--;
-        bulletsShot++;
+        bulletsLeftInCurrentMag--;
+        bulletsShotFromTriggerPull++;
 
         // Invoke resetShot
-        Invoke("ResetShot", weapon[currentWeaponIndex].timeBetweenTriggerPull);
+        Invoke("ResetShot", profiles[currentWeaponIndex].timeBetweenTriggerPull);
 
         // Shoot again if more shotsPerTriggerPull
-        if (bulletsShot <= weapon[currentWeaponIndex].shotsPerTriggerPull && bulletsLeft > 0)
+        if (bulletsShotFromTriggerPull <= profiles[currentWeaponIndex].shotsPerTriggerPull && bulletsLeftInCurrentMag > 0)
         {
-            Invoke("ShootProjectile", weapon[currentWeaponIndex].timeBetweenRounds);
+            Invoke("ShootProjectile", profiles[currentWeaponIndex].timeBetweenRounds);
         }
     }
 
@@ -244,32 +307,43 @@ public class WeaponSystem : MonoBehaviour
 
     private void Reload()
     {
+        Debug.Log("Reloading!");
         // Animation here
         // Sound Here
 
-        Reloadintance = RuntimeManager.CreateInstance(ReloadEvent);
+        //Reloadintance = RuntimeManager.CreateInstance(ReloadEvent);
        // Reloadintance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
-        Reloadintance.start();
-        Reloadintance.release();
+        //Reloadintance.start();
+        //Reloadintance.release();
 
         reloading = true;
-        Invoke("ReloadFinish", weapon[currentWeaponIndex].reloadTime);
+
+        Invoke("ReloadFinish", profiles[currentWeaponIndex].reloadTime);
     }
 
     private void ReloadFinish()
     {
-        bulletsLeft = weapon[currentWeaponIndex].magazineSize;
-        reloading = false;
-    }
+        Debug.Log("Reloaded!");
+        int bulletsNeeded = profiles[currentWeaponIndex].magazineSize - bulletsLeftInCurrentMag;
+        if (bulletsInInventory[currentWeaponIndex] >= bulletsNeeded)
+        {
+            bulletsInInventory[currentWeaponIndex] -= bulletsNeeded;
+        }
+        else
+        {
+            bulletsNeeded = bulletsInInventory[currentWeaponIndex];
+            bulletsInInventory[currentWeaponIndex] = 0;
+        }
+        bulletsLeftInCurrentMag += bulletsNeeded;
 
+        reloading = false;    }
     #endregion
 
     #region Inventories and Weapon Switching
-
     private void SwitchToNextWeapon()
     {
         currentWeaponIndex++;
-        if (currentWeaponIndex >= weapon.Count)
+        if (currentWeaponIndex >= profiles.Count)
             currentWeaponIndex = 0;
     }
 
@@ -277,21 +351,101 @@ public class WeaponSystem : MonoBehaviour
     {
         currentWeaponIndex--;
         if (currentWeaponIndex < 0)
-            currentWeaponIndex = weapon.Count - 1;
+            currentWeaponIndex = profiles.Count - 1;
     }
 
-    private void PickupNewWeapon(WeaponProfile newWeapon)
+    public void PickupNewWeapon(WeaponProfile newWeapon, GameObject model, Weapon modelScript)
     {
-        if (weapon.Count < inventorySize)
+        if (profiles.Count < inventorySize)
         {
-            weapon.Add(newWeapon);
+            Debug.Log("Picked up weapon: " + newWeapon.name);
+            // Add to Inventory
+            //weapon.Add(newWeapon);
+            SetupWeapon(newWeapon, currentWeaponIndex, modelScript);
+
+            // Assign FX
+            var systems = model.GetComponentsInChildren<ParticleSystem>();
+
+            // Move weapon to hand
+            model.transform.SetParent(weaponPoint);
+            ToggleRB(model.GetComponent<Rigidbody>(), false);
+            StartCoroutine(LerpRoutine(model, new Vector3(0,0,0), Quaternion.identity, 0.5f));
+
         }
         else
         {
-            weapon[currentWeaponIndex] = newWeapon;
+            /*weapon[currentWeaponIndex] = newWeapon;
             GameObject droppedWeapon = Instantiate(weapon[currentWeaponIndex].weaponPrefab, transform.position + transform.forward, Quaternion.identity);
             droppedWeapon.GetComponent<Rigidbody>().AddForce(transform.forward * 2f, ForceMode.Impulse);
-            droppedWeapon.GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * 5f, ForceMode.Impulse);
+            droppedWeapon.GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * 5f, ForceMode.Impulse);*/
+        }
+    }
+
+    public void MaxAmmo()
+    {
+        foreach (WeaponProfile w in profiles)
+        {
+            int ammoToAdd = w.TotalAmmo;
+            int currentIndex = profiles.IndexOf(w);
+            bulletsInInventory[currentIndex] = w.TotalAmmo;
+            bulletsLeftInCurrentMag += w.magazineSize;
+        }
+    }
+
+    public void RefillAmmo(WeaponProfile profile)
+    {
+        int currentIndex = profiles.IndexOf(profile);
+        bulletsInInventory[currentIndex] = profile.TotalAmmo;
+    }
+    private IEnumerator LerpRoutine(GameObject obj, Vector3 targetPosition, Quaternion targetRotation, float duration)
+    {
+        Transform target = obj.transform;
+        Vector3 startPos = target.localPosition;
+        Quaternion startRot = target.localRotation;
+
+        if (duration <= 0f)
+        {
+            target.localPosition = targetPosition;
+            target.localRotation = targetRotation;
+            yield break;
+        }
+
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            target.transform.localPosition = Vector3.Lerp(startPos, targetPosition, t);
+            target.transform.localRotation = Quaternion.Slerp(startRot, targetRotation, t);
+
+            yield return null;
+        }
+
+        target.localPosition = targetPosition;
+        target.localRotation = targetRotation;
+    }
+
+    private bool? ToggleRB(Rigidbody rb, bool enabled)
+    {
+        if (rb == null) return null;
+
+        if (!enabled) // turn physics OFF
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
+            rb.useGravity = false;
+            rb.detectCollisions = false; // optional
+            return enabled;
+        }
+        else // turn physics ON
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true; // set how you want when re-enabled
+            rb.detectCollisions = true; // optional
+            return true;
         }
     }
 
