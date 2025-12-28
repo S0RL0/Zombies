@@ -109,6 +109,7 @@
 		<relationship name="effects">
 			<destination>{ef8dabf1-858a-450d-8ac5-6020d455d59d}</destination>
 			<destination>{955b31d5-974e-4569-a091-2f90ddaf6b2f}</destination>
+			<destination>{7e6224ac-7b46-419e-b3db-812142f75a0c}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{993f20f7-b721-4783-beb7-96d4e7cb766b}">
@@ -119,8 +120,25 @@
 	<object class="MixerBusFader" id="{95d1a9be-9c7d-473c-9d2f-f63363d4ba86}" />
 	<object class="SpatialiserEffect" id="{ef8dabf1-858a-450d-8ac5-6020d455d59d}">
 		<property name="distanceRolloffType">
-			<value>2</value>
+			<value>3</value>
+		</property>
+		<property name="maximumDistance">
+			<value>50</value>
+		</property>
+		<property name="overrideRange">
+			<value>true</value>
+		</property>
+		<property name="extentMode">
+			<value>1</value>
+		</property>
+		<property name="soundSize">
+			<value>8</value>
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{955b31d5-974e-4569-a091-2f90ddaf6b2f}" />
+	<object class="DistortionEffect" id="{7e6224ac-7b46-419e-b3db-812142f75a0c}">
+		<property name="level">
+			<value>0.125</value>
+		</property>
+	</object>
 </objects>

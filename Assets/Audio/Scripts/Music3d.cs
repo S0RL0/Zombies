@@ -2,21 +2,22 @@ using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 
-public class AsylumMusic : MonoBehaviour
+public class Music3d : MonoBehaviour
 {
     [SerializeField] private EventReference MusicEvent;
     private EventInstance MusicInstance;
 
 
     [Header("Volume")]
-    public float Music;
+    public float Volume;
+    public Transform musicposition;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         MusicInstance = RuntimeManager.CreateInstance(MusicEvent);
-        MusicInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
-        MusicInstance.setVolume(Music);
+        MusicInstance.set3DAttributes(RuntimeUtils.To3DAttributes(musicposition.position));
+        MusicInstance.setVolume(Volume);
         MusicInstance.start();
         MusicInstance.release();
 
