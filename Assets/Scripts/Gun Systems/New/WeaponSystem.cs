@@ -83,7 +83,7 @@ public class WeaponSystem : MonoBehaviour
             Debug.LogError("WeaponSystem: No weapons assigned in the inspector.");
             return;
         }
-        int i = 0;
+            int i = 0;
         foreach (WeaponProfile w in profiles)
         {
             SetupWeapon(w, i, weaponModels[i].GetComponent<Weapon>());

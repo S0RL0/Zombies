@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1525f5b596cf647a171e5a9f4d2f55, type: 3}
+  m_Name: Ward 3
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponProfile
+  ID: 3
+  name: Ward 3
+  description: 3 round burst pistol
+  devDescription: Glock 18 style gun
+  cost: 500
+  ammoCost: 250
+  hitDetection: 0
+  weaponType: 1
+  fireMode: 0
+  prefab: {fileID: 353897160841102565, guid: f7e066a2649e12347a819558b31854bc, type: 3}
+  upgradedProfile: {fileID: 0}
+  damage: 0
+  roundsPerMinute: 120
+  timeBetweenRounds: 0.5
+  shotsPerTriggerPull: 3
+  timeBetweenTriggerPull: 0
+  spread: 0
+  maxRange: 0
+  rangeCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reloadType: 0
+  reloadTime: 0
+  roundInsertTime: 0
+  reloadWrapUpTime: 0
+  magazineSize: 0
+  TotalAmmo: 0
+  allowTriggerHold: 0
+  projectilePrefab: {fileID: 0}
+  forwardForce: 0
+  upwardForce: 0
+  bulletImpact: {fileID: 0}
+  camShakeMagnitude: 0
+  camShakeDuraction: 0

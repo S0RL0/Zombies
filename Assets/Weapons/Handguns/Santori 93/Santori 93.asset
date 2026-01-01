@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1525f5b596cf647a171e5a9f4d2f55, type: 3}
+  m_Name: Santori 93
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponProfile
+  ID: 1
+  name: Santori 93
+  description: Reliable single shot pistol
+  devDescription: Baretta 92
+  cost: 250
+  ammoCost: 100
+  hitDetection: 0
+  weaponType: 1
+  fireMode: 0
+  prefab: {fileID: 5181783632380301509, guid: 2c6fb32f6d668af44b2f2aa8dcb26bac, type: 3}
+  upgradedProfile: {fileID: 0}
+  damage: 15
+  roundsPerMinute: 45
+  timeBetweenRounds: 1.3333334
+  shotsPerTriggerPull: 1
+  timeBetweenTriggerPull: 0
+  spread: 0.01
+  maxRange: 30
+  rangeCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reloadType: 0
+  reloadTime: 1
+  roundInsertTime: 0
+  reloadWrapUpTime: 0
+  magazineSize: 15
+  TotalAmmo: 60
+  allowTriggerHold: 0
+  projectilePrefab: {fileID: 0}
+  forwardForce: 0
+  upwardForce: 0
+  bulletImpact: {fileID: 0}
+  camShakeMagnitude: 0
+  camShakeDuraction: 0

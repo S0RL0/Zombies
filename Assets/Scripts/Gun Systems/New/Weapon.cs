@@ -3,7 +3,7 @@ using UnityEngine;
 public class Weapon : Interactable
 {
     public WeaponProfile weaponProfile;
-    public bool activeWeapon = false;
+    [HideInInspector]public bool activeWeapon = false;
 
     // Effects
     public ParticleSystem muzzleFlash;

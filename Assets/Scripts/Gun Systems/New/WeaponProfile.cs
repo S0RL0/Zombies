@@ -11,6 +11,8 @@ public class WeaponProfile : ScriptableObject
     public new string name;
     [Tooltip("Weapon Description")]
     public string description;
+    [Tooltip("Developer Description (not shown in game)")]
+    public string devDescription;
     [Tooltip("Cost to buy weapon")]
     public int cost;
     [Tooltip("Cost to buy ammo")]
@@ -33,7 +35,7 @@ public class WeaponProfile : ScriptableObject
     [Tooltip("Damage per bullet.")]
     public int damage;
     [Tooltip("Rounds per minute for fire rate.")]
-    public float roundsPerMinute = 600f;
+    public float roundsPerMinute;
     public float timeBetweenRounds;
     [Tooltip("Number of bullets fired per trigger pull.")]
     public int shotsPerTriggerPull = 1;
