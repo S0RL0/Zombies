@@ -39,8 +39,8 @@ public class WeaponProfile : ScriptableObject
     public float timeBetweenRounds;
     [Tooltip("Number of bullets fired per trigger pull.")]
     public int shotsPerTriggerPull = 1;
-    [Tooltip("Time between trigger pulls.")]
-    public float timeBetweenTriggerPull;
+    [Tooltip("Time between bursts.")]
+    public float timeBetweenBursts;
     [Tooltip("Bullet spread.")]
     public float spread;
     [Tooltip("Max range of gun.")]

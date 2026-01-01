@@ -224,22 +224,19 @@ public class WeaponSystem : MonoBehaviour
         bulletsLeftInCurrentMag--;
         bulletsShotFromTriggerPull++;
 
-        // Invoke resetShot
-        
-        
-
         // Shoot again if more shotsPerTriggerPull
-        if (bulletsShotFromTriggerPull <= profiles[currentWeaponIndex].shotsPerTriggerPull && bulletsLeftInCurrentMag > 0)
+        if (bulletsShotFromTriggerPull < profiles[currentWeaponIndex].shotsPerTriggerPull && bulletsLeftInCurrentMag > 0)
         {
             Invoke("ShootRaycast", profiles[currentWeaponIndex].timeBetweenRounds);
             return;
         }
 
-        if (profiles[currentWeaponIndex].fireMode == FireMode.Singlefire || profiles[currentWeaponIndex].fireMode == FireMode.Burst)
+        // Invoke resetShot
+        if (profiles[currentWeaponIndex].fireMode == FireMode.Burst)
         {
-            Invoke("ResetShot", profiles[currentWeaponIndex].timeBetweenTriggerPull);
+            Invoke("ResetShot", profiles[currentWeaponIndex].timeBetweenBursts);
         }
-        else if (profiles[currentWeaponIndex].fireMode == FireMode.Authomatic)
+        else if (profiles[currentWeaponIndex].fireMode == FireMode.Singlefire || profiles[currentWeaponIndex].fireMode == FireMode.Authomatic)
         {
             Invoke("ResetShot", profiles[currentWeaponIndex].timeBetweenRounds);
         }
@@ -291,7 +288,7 @@ public class WeaponSystem : MonoBehaviour
         bulletsShotFromTriggerPull++;
 
         // Invoke resetShot
-        Invoke("ResetShot", profiles[currentWeaponIndex].timeBetweenTriggerPull);
+        Invoke("ResetShot", profiles[currentWeaponIndex].timeBetweenBursts);
 
         // Shoot again if more shotsPerTriggerPull
         if (bulletsShotFromTriggerPull <= profiles[currentWeaponIndex].shotsPerTriggerPull && bulletsLeftInCurrentMag > 0)
