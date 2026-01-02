@@ -155,6 +155,8 @@ public class PlayerController : MonoBehaviour
                             weaponSystem.PickupNewWeapon(result.GetItem<WeaponProfile>(), result.sourceObject, result.sourceObject.GetComponent<Weapon>());
                             break;
                         case InteractionType.Ammo:
+                            money -= result.GetItem<WeaponProfile>().ammoCost;
+                            // Sound here, successful purchase
                             weaponSystem.RefillAmmo(result.GetItem<WeaponProfile>());
                             break;
 

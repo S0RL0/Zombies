@@ -1,3 +1,5 @@
+using FMOD.Studio;
+using FMODUnity;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewWeaponProfile", menuName = "Weapons/Weapon Profile")]
@@ -23,20 +25,21 @@ public class WeaponProfile : ScriptableObject
     public WeaponType weaponType;
     [Tooltip("Weapon firemode, how many bullets are fired and how")]
     public FireMode fireMode;
+    [Tooltip("Allow holding down the trigger to keep firing.")]
+    public bool allowTriggerHold;
     [Tooltip("Weapon prefab")]
     public GameObject prefab;
     [Tooltip("Upgraded weapon profile")]
     public WeaponProfile upgradedProfile;
     #endregion
 
-
     #region Weapon Stats    
     [Header("Weapon Firing Stats")]
     [Tooltip("Damage per bullet.")]
     public int damage;
-    [Tooltip("Rounds per minute for fire rate.")]
-    public float roundsPerMinute;
-    public float timeBetweenRounds;
+    [Tooltip("Rate of fire in Rounds per minute")]
+    public float rateOfFire;
+    [HideInInspector]public float timeBetweenRounds;
     [Tooltip("Number of bullets fired per trigger pull.")]
     public int shotsPerTriggerPull = 1;
     [Tooltip("Time between bursts.")]
@@ -63,8 +66,7 @@ public class WeaponProfile : ScriptableObject
     public int magazineSize;
     [Tooltip("Total ammo carried by player for this weapon.")]
     public int TotalAmmo;
-    [Tooltip("Allow holding down the trigger to keep firing.")]
-    public bool allowTriggerHold;
+
     #endregion
 
     #region Projectile Stats
@@ -77,39 +79,47 @@ public class WeaponProfile : ScriptableObject
     public float upwardForce;
     #endregion
 
-
     #region Weapon Handling
     [Header("Weapon Handling, Sway & Recoil")]
     #endregion
 
+    
     #region Effects
     [Header("Effects")]
+    /* Removed for now
     [Tooltip("Muzzle Flash FX Game Object for when gun fired")]
     private ParticleSystem muzzleFlash;
     [Tooltip("Muzzle Flash FX Origin Point")]
     private Vector3 muzzleFlashOrigin;
-
-    [Tooltip("Bullet Impact FX Game Object for when bullet hits")]
-    public GameObject bulletImpact;
-
     [Tooltip("Case Ejection FX Game Object for when gun fired")]
     private ParticleSystem caseEjection;
     [Tooltip("Case Ejection FX Origin Point")]
     private Vector3 caseEjectionOrigin;
+    */
+    [Tooltip("Bullet Impact FX Game Object for when bullet hits")]
+    public GameObject bulletImpact;
+    /*
 
-    public float camShakeMagnitude;
-    public float camShakeDuraction;
+    [HideInInspector] public float camShakeMagnitude;
+    [HideInInspector] public float camShakeDuraction; */
     #endregion
 
-    /*
     #region Sound
     [Header("Sound")]
+    [Tooltip("Gunshot sound effect")]
+    public EventReference gunshotSFX;
+    [Tooltip("Reload sound effect")]
+    public EventReference reloadSFX;
+    [Tooltip("Individual reload Sound effect for individual reload")]
+    public EventReference roundInsertSFX;
+    [Tooltip("Wrapup reload Sound effect for individual reload")]
+    public EventReference reloadWrapUpSFX;
     #endregion
-    */
+
 
     private void OnValidate()
     {
-        timeBetweenRounds = 60f / roundsPerMinute;
+        timeBetweenRounds = 60f / rateOfFire;
     }
 }
 public enum HitDetectionModel

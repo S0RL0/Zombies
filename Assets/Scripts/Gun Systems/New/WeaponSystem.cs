@@ -29,9 +29,9 @@ public class WeaponSystem : MonoBehaviour
 
     #region Inputs and calculations
     // Input variables for input handler
-    private bool fireKeyHeld;                // true while button is held
-    private bool firePressedThisFrame;    // true only on the frame it was pressed
-    private bool reloadPressedThisFrame;  // same for reload
+    [SerializeField]private bool fireKeyHeld = false;                // true while button is held
+    [SerializeField] private bool firePressedThisFrame = false;    // true only on the frame it was pressed
+    [SerializeField] private bool reloadPressedThisFrame = false;  // same for reload
 
     // Calculations
     private bool readyToFire;          // true when able to shoot
@@ -42,7 +42,7 @@ public class WeaponSystem : MonoBehaviour
     // Refernces
     [Header("References")]
     public Camera cam;
-    public Transform attackPoint;
+    public Transform projectilePoint;
     public RaycastHit rayHit;
     public LayerMask enemyLayer;
 
@@ -78,38 +78,50 @@ public class WeaponSystem : MonoBehaviour
     {
         cam = GetComponentInChildren<Camera>();
 
-        if (profiles.Count ==0)
+        // Create weapon models at start
+        if (profiles.Count > 0)
+        {
+            foreach (WeaponProfile w in profiles)
+            {
+                GameObject model = Instantiate(w.prefab, weaponPoint.position, weaponPoint.rotation, weaponPoint);
+                weaponModels.Add(model);
+                ToggleRB(model.GetComponent<Rigidbody>(), false);
+            }
+        }
+        else
         {
             Debug.LogError("WeaponSystem: No weapons assigned in the inspector.");
             return;
         }
-            int i = 0;
-        foreach (WeaponProfile w in profiles)
+        // Assign variables for each weapon
+        for (int i = 0; i < profiles.Count; i++)
         {
-            SetupWeapon(w, i, weaponModels[i].GetComponent<Weapon>());
-            i++;
+            if (i >= weaponModels.Count) break; // safety
+            var model = weaponModels[i] ? weaponModels[i].GetComponent<Weapon>() : null;
+            SetupWeapon(profiles[i], i, model);
         }
-        
     }
 
     private void SetupWeapon(WeaponProfile newWeapon, int newWeaponSlot, Weapon modelScript)
     {
-        int currentInventorySize = profiles.Count;
-        if (currentInventorySize < newWeaponSlot + 1)
-        {
-            profiles.Add(newWeapon);
-            bulletsInInventory.Add(newWeapon.TotalAmmo);
-            muzzleFlash.Add(modelScript.muzzleFlash);
-            caseEjection.Add(modelScript.caseEjection);
-        }
-        else {
-            bulletsInInventory[newWeaponSlot] = newWeapon.TotalAmmo;
-            muzzleFlash[newWeaponSlot] = modelScript.muzzleFlash;
-            caseEjection[newWeaponSlot] = modelScript.caseEjection;
-        }
+        if (newWeaponSlot < 0) return;
 
-        bulletsLeftInCurrentMag = newWeapon.magazineSize;
+        // Only ensure the parallel lists, not profiles.
+        EnsureSize(bulletsInInventory, newWeaponSlot + 1, 0);
+        EnsureSize(muzzleFlash, newWeaponSlot + 1, null);
+        EnsureSize(caseEjection, newWeaponSlot + 1, null);
+
+        bulletsInInventory[newWeaponSlot] = newWeapon != null ? newWeapon.TotalAmmo : 0;
+        muzzleFlash[newWeaponSlot] = modelScript != null ? modelScript.muzzleFlash : null;
+        caseEjection[newWeaponSlot] = modelScript != null ? modelScript.caseEjection : null;
+
+        bulletsLeftInCurrentMag = newWeapon != null ? newWeapon.magazineSize : 0;
         readyToFire = true;
+    }
+
+    private static void EnsureSize<T>(List<T> list, int size, T filler)
+    {
+        while (list.Count < size) list.Add(filler);
     }
 
     private void Update()
@@ -190,8 +202,6 @@ public class WeaponSystem : MonoBehaviour
         // RayCast
         if (Physics.Raycast(cam.transform.position, direction, out rayHit, profiles[currentWeaponIndex].maxRange, enemyLayer))
         {
-            Debug.Log(rayHit.collider.name);
-
             if (rayHit.collider.CompareTag("Enemy"))
             {
                 rayHit.collider.GetComponent<Enemy>().TakeDamage(profiles[currentWeaponIndex].damage);
@@ -262,7 +272,7 @@ public class WeaponSystem : MonoBehaviour
         }
 
         // Calculate direction from attackPoint to targetPoint
-        Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
+        Vector3 directionWithoutSpread = targetPoint - projectilePoint.position;
 
         // Calculate spread
         float halfSpread = 0.5f * profiles[currentWeaponIndex].spread;
@@ -273,14 +283,14 @@ public class WeaponSystem : MonoBehaviour
         Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0);
 
         // Instantiate projectile
-        GameObject currentProjectile = Instantiate(profiles[currentWeaponIndex].projectilePrefab, attackPoint.position, Quaternion.identity);
+        GameObject currentProjectile = Instantiate(profiles[currentWeaponIndex].projectilePrefab, projectilePoint.position, Quaternion.identity);
 
         // Rotate projectile to face the target
         currentProjectile.transform.forward = directionWithSpread.normalized;
 
         // Add forces to projectile
         currentProjectile.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * profiles[currentWeaponIndex].forwardForce, ForceMode.Impulse);
-        currentProjectile.GetComponent<Rigidbody>().AddForce(attackPoint.up * profiles[currentWeaponIndex].upwardForce, ForceMode.Impulse);
+        currentProjectile.GetComponent<Rigidbody>().AddForce(projectilePoint.up * profiles[currentWeaponIndex].upwardForce, ForceMode.Impulse);
 
 
         // Adjust ammo
@@ -339,16 +349,34 @@ public class WeaponSystem : MonoBehaviour
     #region Inventories and Weapon Switching
     private void SwitchToNextWeapon()
     {
-        currentWeaponIndex++;
-        if (currentWeaponIndex >= profiles.Count)
-            currentWeaponIndex = 0;
+        if (profiles.Count == 0) return;
+
+        int previousIndex = currentWeaponIndex; 
+
+        currentWeaponIndex = (currentWeaponIndex + 1) % profiles.Count;
+
+        SetWeaponActive(previousIndex, false);
+        SetWeaponActive(currentWeaponIndex, true);
+
     }
 
     private void SwitchToPreviousWeapon()
     {
-        currentWeaponIndex--;
-        if (currentWeaponIndex < 0)
-            currentWeaponIndex = profiles.Count - 1;
+        if (profiles.Count == 0) return;
+
+        int previousIndex = currentWeaponIndex;
+
+        // Add Count before modulo to avoid negative values
+        currentWeaponIndex = (currentWeaponIndex - 1 + profiles.Count) % profiles.Count;
+
+        SetWeaponActive(previousIndex, false);
+        SetWeaponActive(currentWeaponIndex, true);
+    }
+
+    private void SetWeaponActive(int index, bool active)
+    {
+        if (index >= 0 && index < weaponModels.Count)
+            weaponModels[index].SetActive(active);
     }
 
     public void PickupNewWeapon(WeaponProfile newWeapon, GameObject model, Weapon modelScript)
@@ -356,12 +384,13 @@ public class WeaponSystem : MonoBehaviour
         if (profiles.Count < inventorySize)
         {
             Debug.Log("Picked up weapon: " + newWeapon.name);
-            // Add to Inventory
-            //weapon.Add(newWeapon);
-            SetupWeapon(newWeapon, currentWeaponIndex, modelScript);
 
-            // Assign FX
-            var systems = model.GetComponentsInChildren<ParticleSystem>();
+            // Add to Inventory
+            profiles.Add(newWeapon);
+            weaponModels.Add(model);
+            SwitchToNextWeapon();
+
+            SetupWeapon(newWeapon, currentWeaponIndex, modelScript);
 
             // Move weapon to hand
             model.transform.SetParent(weaponPoint);
@@ -371,6 +400,7 @@ public class WeaponSystem : MonoBehaviour
         }
         else
         {
+            Debug.LogWarning("Inventory full! Cannot pick up weapon: " + newWeapon.name);
             /*weapon[currentWeaponIndex] = newWeapon;
             GameObject droppedWeapon = Instantiate(weapon[currentWeaponIndex].weaponPrefab, transform.position + transform.forward, Quaternion.identity);
             droppedWeapon.GetComponent<Rigidbody>().AddForce(transform.forward * 2f, ForceMode.Impulse);

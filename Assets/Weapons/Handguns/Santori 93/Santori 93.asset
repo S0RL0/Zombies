@@ -21,11 +21,12 @@ MonoBehaviour:
   hitDetection: 0
   weaponType: 1
   fireMode: 0
+  allowTriggerHold: 0
   prefab: {fileID: 5181783632380301509, guid: 2c6fb32f6d668af44b2f2aa8dcb26bac, type: 3}
   upgradedProfile: {fileID: 0}
   damage: 15
-  roundsPerMinute: 300
-  timeBetweenRounds: 0.2
+  rateOfFire: 400
+  timeBetweenRounds: 0.15
   shotsPerTriggerPull: 1
   timeBetweenBursts: 0
   spread: 0.01
@@ -42,10 +43,35 @@ MonoBehaviour:
   reloadWrapUpTime: 0
   magazineSize: 15
   TotalAmmo: 60
-  allowTriggerHold: 0
   projectilePrefab: {fileID: 0}
   forwardForce: 0
   upwardForce: 0
   bulletImpact: {fileID: 0}
-  camShakeMagnitude: 0
-  camShakeDuraction: 0
+  gunshotSFX:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  reloadSFX:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  roundInsertSFX:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  reloadWrapUpSFX:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 

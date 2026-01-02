@@ -118,7 +118,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4204139192351449252}
+  - {fileID: 7504511412309223101}
   m_Father: {fileID: 6018727096603677495}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4773073344478652045
@@ -265,7 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
   weaponProfile: {fileID: 11400000, guid: a5579c6397ace234388e96af9643e057, type: 2}
   activeWeapon: 0
-  muzzleFlash: {fileID: 3656815063528119050}
+  muzzleFlash: {fileID: 6972389025874025747}
   caseEjection: {fileID: 7659849037812835709}
 --- !u!33 &6814380567385683659
 MeshFilter:
@@ -560,7 +560,7 @@ ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 8992820877865632795, guid: 17d14cd9bbf6a164a961917b1d79ba1f, type: 3}
   m_PrefabInstance: {fileID: 1621765273601597798}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &3816433783293521114
+--- !u!1001 &7389220901082573507
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -617,13 +617,13 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8646e6a245e369542a6d2263da564de7, type: 3}
---- !u!198 &3656815063528119050 stripped
+--- !u!198 &6972389025874025747 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 452945613796325328, guid: 8646e6a245e369542a6d2263da564de7, type: 3}
-  m_PrefabInstance: {fileID: 3816433783293521114}
+  m_PrefabInstance: {fileID: 7389220901082573507}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &4204139192351449252 stripped
+--- !u!4 &7504511412309223101 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1057967800966270078, guid: 8646e6a245e369542a6d2263da564de7, type: 3}
-  m_PrefabInstance: {fileID: 3816433783293521114}
+  m_PrefabInstance: {fileID: 7389220901082573507}
   m_PrefabAsset: {fileID: 0}
