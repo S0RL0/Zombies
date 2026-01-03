@@ -3,7 +3,7 @@ using FMODUnity;
 using System.Collections;
 using UnityEngine;
 
-public class BuyableDoorFireworks : MonoBehaviour
+public class BuyableDoorFireworks : Door
 {
 
     [Header("What to move")]
@@ -43,10 +43,10 @@ public class BuyableDoorFireworks : MonoBehaviour
     int currentIndex = 0;
     int fXVolume;
 
-    void Start()
+    protected override void Start()
     {
-        
 
+        base.Start();
 
         if (emitter == null)
         {
@@ -65,23 +65,16 @@ public class BuyableDoorFireworks : MonoBehaviour
         FuzeInstance = RuntimeManager.CreateInstance(FuzeEvent);
        // RuntimeManager.AttachInstanceToGameObject(FuzeInstance, Effect);
         emitter.position = pathPoints[0].position;
-        
-       
-
-       
     }
 
-    public void Buy() 
+    public override void Open() 
     {
-
         BuyInstance = RuntimeManager.CreateInstance(BuyEvent);
         BuyInstance.setVolume(fXVolume);
         BuyInstance.start();
         BuyInstance.release();
 
         StartCoroutine(FollowPath());
-
-
     }
         
 

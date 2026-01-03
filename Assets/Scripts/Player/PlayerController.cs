@@ -147,6 +147,9 @@ public class PlayerController : MonoBehaviour
                             weaponSystem.PickupNewWeapon(result.GetItem<WeaponProfile>(), result.sourceObject, result.sourceObject.GetComponent<Weapon>());
                             break;
                         case InteractionType.Door:
+                            object _item = result.item;
+                            if (_item is int cost)
+                                money -= cost;
                             break;
                         case InteractionType.Buy:
                             Debug.Log("Attempting to buy " + result.GetItem<WeaponProfile>().name + " for " + result.GetItem<WeaponProfile>().cost);

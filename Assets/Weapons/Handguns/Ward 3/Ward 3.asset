@@ -15,7 +15,8 @@ MonoBehaviour:
   ID: 3
   name: Ward 3
   description: 3 round burst pistol
-  devDescription: Glock 18 style gun
+  devDescription: Glock 17
+  icon: {fileID: 21300000, guid: 979a9b2b03cb5c3428e13a7dd61aa775, type: 3}
   cost: 500
   ammoCost: 250
   hitDetection: 0
@@ -27,7 +28,7 @@ MonoBehaviour:
   damage: 12
   rateOfFire: 600
   timeBetweenRounds: 0.1
-  shotsPerTriggerPull: 3
+  shotsPerBurst: 3
   timeBetweenBursts: 0.4
   spread: 0
   maxRange: 0
@@ -43,10 +44,10 @@ MonoBehaviour:
   reloadWrapUpTime: 0
   magazineSize: 18
   TotalAmmo: 72
+  ammoSize: 1
   projectilePrefab: {fileID: 0}
   forwardForce: 0
   upwardForce: 0
-  bulletImpact: {fileID: 0}
   gunshotSFX:
     Guid:
       Data1: 0
