@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
@@ -207,3 +209,4 @@ public class SyntyPackageHelper
         }
     }
 }
+#endif

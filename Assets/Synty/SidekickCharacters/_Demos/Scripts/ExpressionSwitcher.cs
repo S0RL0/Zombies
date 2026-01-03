@@ -14,6 +14,9 @@ public class ExpressionSwitcher : MonoBehaviour
     // Reference to the UI text to display the current emotion
     [SerializeField] private Text _emotionText;
 
+    // Reference to the button to cycle expressions
+    [SerializeField] private Button _cycleButton;
+
     // Reference to the UI slider to adjust transition time
     [SerializeField] private Slider _transitionTimeSlider;
 
@@ -26,12 +29,32 @@ public class ExpressionSwitcher : MonoBehaviour
         // Ensure the Animator is assigned
         if (_animator == null)
         {
-            Debug.LogWarning("No Animator component found on the GameObject.");
+            Debug.LogWarning("[ExpressionSwitcher] No Animator component found on the GameObject.");
             return;
         }
 
         // Populate the expression names from the Animator states in the specified layer
         PopulateExpressionNames();
+
+        // Debug: Check what was found
+        Debug.Log($"[ExpressionSwitcher] Found {_expressionNames.Count} expressions:");
+        foreach (var expr in _expressionNames)
+            Debug.Log($"  - {expr}");
+
+        // Debug: Check the layer
+        int layerIndex = _animator.GetLayerIndex("Emotion_Additive");
+        Debug.Log($"[ExpressionSwitcher] Layer 'Emotion_Additive' index: {layerIndex}");
+
+        // Wire up the button
+        if (_cycleButton != null)
+        {
+            _cycleButton.onClick.AddListener(CycleExpressions);
+            Debug.Log("[ExpressionSwitcher] Button wired up successfully");
+        }
+        else
+        {
+            Debug.LogWarning("[ExpressionSwitcher] No button assigned in Inspector!");
+        }
 
         // Ensure the slider is assigned
         if (_transitionTimeSlider != null)
@@ -47,14 +70,15 @@ public class ExpressionSwitcher : MonoBehaviour
             _transitionTimeSlider.onValueChanged.AddListener(UpdateTransitionTime);
         }
     }
-    
+
     private void PopulateExpressionNames()
     {
         RuntimeAnimatorController ac = _animator.runtimeAnimatorController;
 
         if (ac != null)
         {
-            
+            Debug.Log($"[ExpressionSwitcher] Scanning {ac.animationClips.Length} animation clips...");
+
             foreach (AnimationClip clip in ac.animationClips)
             {
                 if (clip.name.Contains("A_FacePose") && !_expressionNames.Contains(clip.name) && !clip.name.Contains("Neutral"))
@@ -65,39 +89,58 @@ public class ExpressionSwitcher : MonoBehaviour
         }
         else
         {
-            Debug.LogError("AnimatorController is not found.");
+            Debug.LogError("[ExpressionSwitcher] AnimatorController is not found.");
         }
     }
 
     public void CycleExpressions()
     {
-        if (_animator != null && _expressionNames.Count > 0)
+        Debug.Log("[ExpressionSwitcher] CycleExpressions() called");
+
+        if (_animator == null)
         {
-            string layerName = "Emotion_Additive";
-            int layerIndex = _animator.GetLayerIndex(layerName);
-
-            if (layerIndex != -1)
-            {
-                string expressionName = _expressionNames[_currentIndex];
-
-                // Attempt to play the current expression name on the specified layer
-                if (_animator.HasState(layerIndex, Animator.StringToHash(expressionName)))
-                {
-                    _animator.CrossFadeInFixedTime(expressionName, _transitionTime, layerIndex);
-                }
-                else
-                {
-                    // If the state is not found, play the 'Neutral' state on the same layer
-                    _animator.CrossFadeInFixedTime("Neutral", _transitionTime, layerIndex);
-                }
-
-                // Update the emotion text after playing the animation
-                UpdateEmotionText();
-
-                // Move to the next expression in the list
-                _currentIndex = (_currentIndex + 1) % _expressionNames.Count;
-            }
+            Debug.LogError("[ExpressionSwitcher] Animator is null!");
+            return;
         }
+
+        if (_expressionNames.Count == 0)
+        {
+            Debug.LogError("[ExpressionSwitcher] No expressions found in list!");
+            return;
+        }
+
+        string layerName = "Emotion_Additive";
+        int layerIndex = _animator.GetLayerIndex(layerName);
+
+        if (layerIndex == -1)
+        {
+            Debug.LogError($"[ExpressionSwitcher] Layer '{layerName}' not found!");
+            return;
+        }
+
+        string expressionName = _expressionNames[_currentIndex];
+        int stateHash = Animator.StringToHash(expressionName);
+        bool hasState = _animator.HasState(layerIndex, stateHash);
+
+        Debug.Log($"[ExpressionSwitcher] Trying expression: '{expressionName}' (index {_currentIndex})");
+        Debug.Log($"[ExpressionSwitcher] State hash: {stateHash}, HasState: {hasState}");
+
+        if (hasState)
+        {
+            _animator.CrossFadeInFixedTime(expressionName, _transitionTime, layerIndex);
+            Debug.Log($"[ExpressionSwitcher] Playing '{expressionName}'");
+        }
+        else
+        {
+            Debug.LogWarning($"[ExpressionSwitcher] State '{expressionName}' not found, trying 'Neutral'");
+            _animator.CrossFadeInFixedTime("Neutral", _transitionTime, layerIndex);
+        }
+
+        // Update the emotion text after playing the animation
+        UpdateEmotionText();
+
+        // Move to the next expression in the list
+        _currentIndex = (_currentIndex + 1) % _expressionNames.Count;
     }
 
     private void UpdateEmotionText()

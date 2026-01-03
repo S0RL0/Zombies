@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 
@@ -11,7 +12,7 @@ public class ExamplePackConfigLoaderEditor : Editor
         SyntyPackageHelperConfig config = (SyntyPackageHelperConfig)target;
         if (GUILayout.Button("Install Packages"))
         {
-            SyntyPackageHelper.ProcessConfigs( new SyntyPackageHelperConfig[] { config }, true);
+            SyntyPackageHelper.ProcessConfigs(new SyntyPackageHelperConfig[] { config }, true);
         }
     }
 }
@@ -23,3 +24,4 @@ public class SyntyPackageHelperConfig : ScriptableObject
     public string[] packageIds;
     public bool hasPromptedUser;
 }
+#endif

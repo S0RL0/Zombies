@@ -13,12 +13,9 @@ public class Ambiance : MonoBehaviour
 
 
     [Header("Volume")]
-    public float MusicVolume;
-    public float SoundVolume;
+    public int random;
+    
 
-    public int random; 
-
-  
 
 
 
@@ -26,8 +23,11 @@ public class Ambiance : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        
+        int musicVolume = AudioSettingsManager.Instance.MusicVolume;
+
         MusicInstance = RuntimeManager.CreateInstance(MusicEvent);
-        MusicInstance.setVolume(MusicVolume);
+        MusicInstance.setVolume(musicVolume);
         MusicInstance.start();
         MusicInstance.release();
 
@@ -43,9 +43,10 @@ public class Ambiance : MonoBehaviour
     }
 
     IEnumerator RandomSounds()
-    {
+    {   
+        int fXVolume = AudioSettingsManager.Instance.FXVolume;
         RandomInstance = RuntimeManager.CreateInstance(RandomEvent);
-        RandomInstance.setVolume(SoundVolume);
+        RandomInstance.setVolume(fXVolume);
         RandomInstance.start();
         RandomInstance.release();
         random = (Random.Range(10, 12)); 
