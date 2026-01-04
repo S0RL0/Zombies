@@ -35,7 +35,7 @@ public class EmissionFlip : MonoBehaviour
         DynamicGI.SetEmissive(targetRenderer, emission);
 
        
-        if (lightA != null) lightA.intensity = Mathf.Lerp(1f, 0f, t);
-        if (lightB != null) lightB.intensity = Mathf.Lerp(0f, 1f, t);
+        if (lightA != null) lightA.intensity = Mathf.Lerp(5f, 0f, t);
+        if (lightB != null) lightB.intensity = Mathf.Lerp(0f, 5f, t);
     }
 }
