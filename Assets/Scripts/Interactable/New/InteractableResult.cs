@@ -26,5 +26,6 @@ public enum InteractionType
     Weapon,
     Door,
     Buy,
+    MysteryCrate,
     Ammo
 }

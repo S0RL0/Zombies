@@ -84,7 +84,7 @@ public class WeaponSystem : MonoBehaviour
             {
                 GameObject model = Instantiate(w.prefab, weaponPoint.position, weaponPoint.rotation, weaponPoint);
                 weaponModels.Add(model);
-                ToggleRB(model.GetComponent<Rigidbody>(), false);
+                model.GetComponent<Rigidbody>().ToggleRB(false);
             }
         }
         else
@@ -110,7 +110,6 @@ public class WeaponSystem : MonoBehaviour
         EnsureSize(weaponScripts, newWeaponSlot + 1, null);
 
         bulletsInInventory[newWeaponSlot] = newWeapon != null ? newWeapon.TotalAmmo : 0;
-        Debug.Log("index: " + newWeaponSlot + " | array length" + weaponScripts.Count);
         weaponScripts[newWeaponSlot] = modelScript != null ? modelScript : null;
 
         bulletsLeftInCurrentMag = newWeapon != null ? newWeapon.magazineSize : 0;
@@ -190,7 +189,7 @@ public class WeaponSystem : MonoBehaviour
         readyToFire = false;
 
         // Spread
-        float halfSpread = 0.5f * profiles[currentWeaponIndex].spread;
+        float halfSpread = 0.5f * profiles[currentWeaponIndex].spread * 0.001f;
         float x = Random.Range(-halfSpread, halfSpread);
         float y = Random.Range(-halfSpread, halfSpread);
 
@@ -202,7 +201,8 @@ public class WeaponSystem : MonoBehaviour
         {
             if (rayHit.collider.CompareTag("Enemy"))
             {
-                rayHit.collider.GetComponent<Enemy>().TakeDamage(profiles[currentWeaponIndex].damage);
+                if (rayHit.collider.GetComponent<Enemy>() != null)
+                    rayHit.collider.GetComponent<Enemy>().TakeDamage(profiles[currentWeaponIndex].damage);
             }
 
             CalculateGizmo(cam.transform.position, rayHit.point);
@@ -390,7 +390,7 @@ public class WeaponSystem : MonoBehaviour
 
             // Move weapon to hand
             model.transform.SetParent(weaponPoint);
-            ToggleRB(model.GetComponent<Rigidbody>(), false);
+            model.GetComponent<Rigidbody>().ToggleRB(false);
             StartCoroutine(LerpRoutine(model, new Vector3(0,0,0), Quaternion.identity, 0.5f));
 
         }
@@ -448,28 +448,6 @@ public class WeaponSystem : MonoBehaviour
 
         target.localPosition = targetPosition;
         target.localRotation = targetRotation;
-    }
-
-    private bool? ToggleRB(Rigidbody rb, bool enabled)
-    {
-        if (rb == null) return null;
-
-        if (!enabled) // turn physics OFF
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = true;
-            rb.useGravity = false;
-            rb.detectCollisions = false; // optional
-            return enabled;
-        }
-        else // turn physics ON
-        {
-            rb.isKinematic = false;
-            rb.useGravity = true; // set how you want when re-enabled
-            rb.detectCollisions = true; // optional
-            return true;
-        }
     }
 
     #endregion
