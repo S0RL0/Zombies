@@ -158,10 +158,15 @@ public class PlayerController : MonoBehaviour
                             // Sound here, successful purchase
                             weaponSystem.RefillAmmo(result.GetItem<WeaponProfile>());
                             break;
-                        case InteractionType.MysteryCrate:
+                        case InteractionType.Mystery:
                             object box = result.item;
                             if (box is int boxCost)
                                 money -= boxCost;
+                            break;
+                        case InteractionType.Upgrade:
+                            object upgrade = result.item;
+                            if (upgrade is int upgradeCost)
+                                money -= upgradeCost;
                             break;
                         default:
                             Debug.Log("Interacted with " + hit.collider.name);
@@ -176,7 +181,20 @@ public class PlayerController : MonoBehaviour
     {
         return weaponSystem.profiles.Contains(weaponToCheck);
     }
+    public bool HasWeapon()
+    {
+        return weaponSystem.profiles.Count > 0;
+    }
 
+    public WeaponProfile GetCurrentWeaponProfile()
+    {
+        return weaponSystem.GetCurrentWeaponProfile();
+    }
+
+    public GameObject GetDropedWeapon()
+    {
+        return weaponSystem.DropCurrentWeapon(false);
+    }
     public int GetMoney()
     {
         return money;

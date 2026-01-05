@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public static class Utils
@@ -22,5 +23,34 @@ public static class Utils
             rb.detectCollisions = true; // optional
             return true;
         }
+    }
+    private static IEnumerator LerpRoutine(GameObject obj, Vector3 targetPosition, Quaternion targetRotation, float duration)
+    {
+        Transform target = obj.transform;
+        Vector3 startPos = target.localPosition;
+        Quaternion startRot = target.localRotation;
+
+        if (duration <= 0f)
+        {
+            target.localPosition = targetPosition;
+            target.localRotation = targetRotation;
+            yield break;
+        }
+
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            target.transform.localPosition = Vector3.Lerp(startPos, targetPosition, t);
+            target.transform.localRotation = Quaternion.Slerp(startRot, targetRotation, t);
+
+            yield return null;
+        }
+
+        target.localPosition = targetPosition;
+        target.localRotation = targetRotation;
     }
 }

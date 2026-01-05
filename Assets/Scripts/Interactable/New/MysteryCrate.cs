@@ -13,8 +13,8 @@ public class MysteryCrate : WeaponCrate
     [SerializeField] private float lidCloseAnimationDuration = 0.3f;
     [SerializeField] private float weaponRiseAnimationDuration = 5f;
     [SerializeField] private float weaponLowerAnimationDuration = 10f;
-    private bool isWeaponAvailable = false;
     [SerializeField] private GameObject glow;
+    [SerializeField] private ParticleSystem sparkle;
 
     public int cost = 1000;
     [SerializeField] private List<WeaponProfile> possibleWeapons;
@@ -35,6 +35,7 @@ public class MysteryCrate : WeaponCrate
     {
         base.Start();
         glow.SetActive(false);
+        sparkle.Stop();
         lid.transform.localRotation = Quaternion.Euler(closeAngle);
 
         // Instantiate all weapon prefabs except the final `model`
@@ -60,6 +61,7 @@ public class MysteryCrate : WeaponCrate
                 // Game Feel: Sound and VFX
                 state = State.animation;
                 glow.SetActive(true);
+                sparkle.Play();
                 AnimateLid(true);
                 AnimateWeaponRise(true);
 
@@ -69,10 +71,10 @@ public class MysteryCrate : WeaponCrate
 
                 weaponCycleCoroutine = StartCoroutine(CycleWeapons());
 
-                return new InteractionResult(true, 1000, this.gameObject, InteractionType.MysteryCrate);
+                return new InteractionResult(true, 1000, this.gameObject, InteractionType.Mystery);
             case State.animation:
                 // Crate is in animation, do nothing
-                break;
+                return new InteractionResult(false, null, null, InteractionType.Buy);
             case State.open:
                 AnimateLid(false);
                 // Give weapon to player if they don't have it, otherwise give ammo
@@ -80,15 +82,14 @@ public class MysteryCrate : WeaponCrate
                 {
                     return new InteractionResult(true, profile, null, InteractionType.Ammo);
                 }
-                
-                
                 return new InteractionResult(true, profile, model, InteractionType.Weapon);
             case State.cooldown:
                 // Crate is in transition or cooldown, do nothing
-                break;
+                return new InteractionResult(false, null, null, InteractionType.Buy);
+            default:
+                // Fallback case
+                return new InteractionResult(false, null, null, InteractionType.Buy);
         }
-        return new InteractionResult(false, null, null, InteractionType.Buy);
-
     }
 
     private System.Collections.IEnumerator CycleWeapons()
@@ -120,7 +121,7 @@ public class MysteryCrate : WeaponCrate
     }
 
 
-    protected override void CreateGun()
+    protected override void CreateWeapon()
     {
         /*
         model = Instantiate(possibleWeapons[0].prefab, weaponDisplayPoint.transform.position, weaponDisplayPoint.transform.rotation, weaponDisplayPoint.transform);
@@ -130,7 +131,7 @@ public class MysteryCrate : WeaponCrate
         */
     }
 
-    private void selectFinalWeapon()
+    private void SelectFinalWeapon()
     {
         // Hide all cycling models
         foreach (GameObject obj in weaponModels)
@@ -176,7 +177,7 @@ public class MysteryCrate : WeaponCrate
                     StopCoroutine(weaponCycleCoroutine);
                     weaponCycleCoroutine = null;
                 }
-                selectFinalWeapon();
+                SelectFinalWeapon();
                 // Lower the weapon after a short delay
                 AnimateWeaponRise(false);
             }
@@ -216,6 +217,7 @@ public class MysteryCrate : WeaponCrate
             if (!open)
             {
                 glow.SetActive(false);
+                sparkle.Stop();
                 if (profile != null) profile = null;
                 
             }

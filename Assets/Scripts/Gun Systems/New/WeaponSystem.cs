@@ -1,3 +1,4 @@
+using DG.Tweening;
 using FMOD.Studio;
 using FMODUnity;
 using System.Collections;
@@ -391,7 +392,8 @@ public class WeaponSystem : MonoBehaviour
             // Move weapon to hand
             model.transform.SetParent(weaponPoint);
             model.GetComponent<Rigidbody>().ToggleRB(false);
-            StartCoroutine(LerpRoutine(model, new Vector3(0,0,0), Quaternion.identity, 0.5f));
+            //StartCoroutine(LerpRoutine(model, new Vector3(0,0,0), Quaternion.identity, 0.5f));
+            TweenUtils.LerpTween(model, Vector3.zero, Quaternion.identity, 0.5f, Ease.OutCubic);
 
         }
         else
@@ -402,6 +404,34 @@ public class WeaponSystem : MonoBehaviour
             droppedWeapon.GetComponent<Rigidbody>().AddForce(transform.forward * 2f, ForceMode.Impulse);
             droppedWeapon.GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * 5f, ForceMode.Impulse);*/
         }
+    }
+
+    public GameObject DropCurrentWeapon(bool applyPhysics)
+    {
+        // Drop current weapon and remove from inventory
+        if (profiles.Count == 0) return null;
+        Debug.Log("Dropped weapon: " + profiles[currentWeaponIndex].name);
+        GameObject droppedmodel = weaponModels[currentWeaponIndex];
+        weaponModels.RemoveAt(currentWeaponIndex);
+        droppedmodel.transform.SetParent(null);
+        droppedmodel.GetComponent<Rigidbody>().ToggleRB(false);
+        if (applyPhysics)
+        {
+            droppedmodel.GetComponent<Rigidbody>().ToggleRB(true);
+            droppedmodel.GetComponent<Rigidbody>().AddForce(transform.forward * 2f, ForceMode.Impulse);
+            droppedmodel.GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * 5f, ForceMode.Impulse);
+        }
+        profiles.RemoveAt(currentWeaponIndex);
+        bulletsInInventory.RemoveAt(currentWeaponIndex);
+        weaponScripts.RemoveAt(currentWeaponIndex);
+        SwitchToNextWeapon();
+        return droppedmodel;
+    }
+
+    public WeaponProfile GetCurrentWeaponProfile()
+    {
+        if (profiles.Count == 0) return null;
+        return profiles[currentWeaponIndex];
     }
 
     public void MaxAmmo()
@@ -419,35 +449,6 @@ public class WeaponSystem : MonoBehaviour
     {
         int currentIndex = profiles.IndexOf(profile);
         bulletsInInventory[currentIndex] = profile.TotalAmmo;
-    }
-    private IEnumerator LerpRoutine(GameObject obj, Vector3 targetPosition, Quaternion targetRotation, float duration)
-    {
-        Transform target = obj.transform;
-        Vector3 startPos = target.localPosition;
-        Quaternion startRot = target.localRotation;
-
-        if (duration <= 0f)
-        {
-            target.localPosition = targetPosition;
-            target.localRotation = targetRotation;
-            yield break;
-        }
-
-
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / duration);
-
-            target.transform.localPosition = Vector3.Lerp(startPos, targetPosition, t);
-            target.transform.localRotation = Quaternion.Slerp(startRot, targetRotation, t);
-
-            yield return null;
-        }
-
-        target.localPosition = targetPosition;
-        target.localRotation = targetRotation;
     }
 
     #endregion

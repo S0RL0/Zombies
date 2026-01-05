@@ -36,12 +36,19 @@ public class WeaponCrate : Interactable
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
     {
-        CreateGun();
+        CreateWeapon();
         player = FindFirstObjectByType<PlayerController>();
     }
-    protected virtual void CreateGun()
+    protected virtual void CreateWeapon()
     {
         model = Instantiate(profile.prefab, weaponDisplayPoint.transform.position, weaponDisplayPoint.transform.rotation, weaponDisplayPoint.transform);
+        MeshCollider col = model.GetComponent<MeshCollider>();
+        col.enabled = false;
+        model.GetComponent<Rigidbody>().ToggleRB(false);
+    }
+    protected virtual void CreateWeapon(WeaponProfile _profile)
+    {
+        model = Instantiate(_profile.prefab, weaponDisplayPoint.transform.position, weaponDisplayPoint.transform.rotation, weaponDisplayPoint.transform);
         MeshCollider col = model.GetComponent<MeshCollider>();
         col.enabled = false;
         model.GetComponent<Rigidbody>().ToggleRB(false);

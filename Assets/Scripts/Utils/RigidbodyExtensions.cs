@@ -14,8 +14,8 @@ public static class RigidbodyExtensions
 
         if (!enabled) // turn physics OFF
         {
-            rb.linearVelocity = Vector3.zero;       
-            rb.angularVelocity = Vector3.zero;
+            //rb.linearVelocity = Vector3.zero;       
+            //rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
             rb.useGravity = false;
             rb.detectCollisions = false;
