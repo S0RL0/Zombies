@@ -19,10 +19,12 @@ public class Weapon : Interactable
         return new InteractionResult(true, weaponProfile, this.gameObject, InteractionType.Weapon);
     }
 
-    public void fireEffects()
+    public void fireFX()
     {
         // Implement firing effects such as muzzle flash, sound, etc.
-        muzzleFlash.Play();
-        caseEjection.Play();
+        if (muzzleFlash != null)
+            muzzleFlash.Play();
+        if (caseEjection != null)
+            caseEjection.Play();
     }
 }

@@ -15,6 +15,8 @@ public class WeaponProfile : ScriptableObject
     public string description;
     [Tooltip("Developer Description (not shown in game)")]
     public string devDescription;
+    [Tooltip("Weapon Icon")]
+    public Sprite icon;
     [Tooltip("Cost to buy weapon")]
     public int cost;
     [Tooltip("Cost to buy ammo")]
@@ -41,7 +43,7 @@ public class WeaponProfile : ScriptableObject
     public float rateOfFire;
     [HideInInspector]public float timeBetweenRounds;
     [Tooltip("Number of bullets fired per trigger pull.")]
-    public int shotsPerTriggerPull = 1;
+    public int shotsPerBurst = 1;
     [Tooltip("Time between bursts.")]
     public float timeBetweenBursts;
     [Tooltip("Bullet spread.")]
@@ -66,6 +68,9 @@ public class WeaponProfile : ScriptableObject
     public int magazineSize;
     [Tooltip("Total ammo carried by player for this weapon.")]
     public int TotalAmmo;
+    [Tooltip("Ammo size (1-4). 1: Small, 2: Medium, 3: Large, 4: Shotgun")]
+    [Range(1,4)]
+    public int ammoSize;
 
     #endregion
 
@@ -81,27 +86,6 @@ public class WeaponProfile : ScriptableObject
 
     #region Weapon Handling
     [Header("Weapon Handling, Sway & Recoil")]
-    #endregion
-
-    
-    #region Effects
-    [Header("Effects")]
-    /* Removed for now
-    [Tooltip("Muzzle Flash FX Game Object for when gun fired")]
-    private ParticleSystem muzzleFlash;
-    [Tooltip("Muzzle Flash FX Origin Point")]
-    private Vector3 muzzleFlashOrigin;
-    [Tooltip("Case Ejection FX Game Object for when gun fired")]
-    private ParticleSystem caseEjection;
-    [Tooltip("Case Ejection FX Origin Point")]
-    private Vector3 caseEjectionOrigin;
-    */
-    [Tooltip("Bullet Impact FX Game Object for when bullet hits")]
-    public GameObject bulletImpact;
-    /*
-
-    [HideInInspector] public float camShakeMagnitude;
-    [HideInInspector] public float camShakeDuraction; */
     #endregion
 
     #region Sound

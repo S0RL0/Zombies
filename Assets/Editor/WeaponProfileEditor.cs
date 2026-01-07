@@ -5,20 +5,17 @@ using UnityEngine;
 public class WeaponProfileEditor : Editor
 {
     // Description
-    SerializedProperty ID, nameProp, description, devDescription, cost, ammoCost;
+    SerializedProperty ID, nameProp, description, devDescription, icon, cost, ammoCost;
     SerializedProperty hitDetection, weaponType, fireMode, allowTriggerHold, prefab, upgradedProfile;
 
     // Firing stats
-    SerializedProperty damage, rateOfFire, shotsPerTriggerPull, timeBetweenBursts, spread, maxRange, rangeCurve;
+    SerializedProperty damage, rateOfFire, shotsPerBurst, timeBetweenBursts, spread, maxRange, rangeCurve;
 
     // Reload / ammo
-    SerializedProperty reloadType, reloadTime, roundInsertTime, reloadWrapUpTime, magazineSize, TotalAmmo;
+    SerializedProperty reloadType, reloadTime, roundInsertTime, reloadWrapUpTime, magazineSize, TotalAmmo, ammoSize;
 
     // Projectile
     SerializedProperty projectilePrefab, forwardForce, upwardForce;
-
-    // Effects
-    SerializedProperty bulletImpact;
 
     // Sound
     SerializedProperty gunshotSFX, reloadSFX, roundInsertSFX, reloadWrapUpSFX;
@@ -30,6 +27,7 @@ public class WeaponProfileEditor : Editor
         nameProp = serializedObject.FindProperty("name");
         description = serializedObject.FindProperty("description");
         devDescription = serializedObject.FindProperty("devDescription");
+        icon = serializedObject.FindProperty("icon");
         cost = serializedObject.FindProperty("cost");
         ammoCost = serializedObject.FindProperty("ammoCost");
         hitDetection = serializedObject.FindProperty("hitDetection");
@@ -42,7 +40,7 @@ public class WeaponProfileEditor : Editor
         // Firing
         damage = serializedObject.FindProperty("damage");
         rateOfFire = serializedObject.FindProperty("rateOfFire");
-        shotsPerTriggerPull = serializedObject.FindProperty("shotsPerTriggerPull");
+        shotsPerBurst = serializedObject.FindProperty("shotsPerBurst");
         timeBetweenBursts = serializedObject.FindProperty("timeBetweenBursts");
         spread = serializedObject.FindProperty("spread");
         maxRange = serializedObject.FindProperty("maxRange");
@@ -55,14 +53,12 @@ public class WeaponProfileEditor : Editor
         reloadWrapUpTime = serializedObject.FindProperty("reloadWrapUpTime");
         magazineSize = serializedObject.FindProperty("magazineSize");
         TotalAmmo = serializedObject.FindProperty("TotalAmmo");
+        ammoSize = serializedObject.FindProperty("ammoSize");
 
         // Projectile
         projectilePrefab = serializedObject.FindProperty("projectilePrefab");
         forwardForce = serializedObject.FindProperty("forwardForce");
         upwardForce = serializedObject.FindProperty("upwardForce");
-
-        // Effects
-        bulletImpact = serializedObject.FindProperty("bulletImpact");
 
         // Sound
         gunshotSFX = serializedObject.FindProperty("gunshotSFX");
@@ -79,11 +75,11 @@ public class WeaponProfileEditor : Editor
         EditorGUILayout.Space(8);
         DrawFiringStats();
         EditorGUILayout.Space(8);
-        DrawReloadAndAmmo();
+        DrawReloadAndAmmo();     // includes ammoSize + auto-defaulting
         EditorGUILayout.Space(8);
         DrawProjectileStats();
         EditorGUILayout.Space(8);
-        DrawEffectsAndSound();
+        DrawSound();
 
         serializedObject.ApplyModifiedProperties();
     }
@@ -94,57 +90,50 @@ public class WeaponProfileEditor : Editor
         EditorGUILayout.PropertyField(nameProp, new GUIContent("Name"));
         EditorGUILayout.PropertyField(description);
         EditorGUILayout.PropertyField(devDescription);
+        EditorGUILayout.PropertyField(icon);
         EditorGUILayout.PropertyField(cost);
         EditorGUILayout.PropertyField(ammoCost);
 
         EditorGUILayout.PropertyField(hitDetection);
+
+        // Detect weaponType changes so we can default ammoSize
+        EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(weaponType);
+        bool weaponTypeChanged = EditorGUI.EndChangeCheck();
+
         EditorGUILayout.PropertyField(fireMode);
         EditorGUILayout.PropertyField(allowTriggerHold);
 
         EditorGUILayout.PropertyField(prefab);
         EditorGUILayout.PropertyField(upgradedProfile);
+
+        if (weaponTypeChanged)
+        {
+            SetAmmoSizeDefaultFromWeaponType();
+        }
     }
 
     void DrawFiringStats()
     {
-
         EditorGUILayout.PropertyField(damage);
 
         var fm = (FireMode)fireMode.enumValueIndex;
-
-        // FireMode rules:
-        // - Singlefire or Automatic: hide timeBetweenBursts and shotsPerTriggerPull
-        // - Burst: show both, rename RPM and shots field
-        // - Scatter: hide timeBetweenBursts, rename shotsPerTriggerPull to pellets per shot
 
         if (fm == FireMode.Burst)
         {
             EditorGUILayout.PropertyField(rateOfFire, new GUIContent("Rate of Fire During Burst"));
             EditorGUILayout.PropertyField(timeBetweenBursts, new GUIContent("Time Between Bursts"));
-            EditorGUILayout.PropertyField(shotsPerTriggerPull, new GUIContent("Shots Per Burst"));
+            EditorGUILayout.PropertyField(shotsPerBurst, new GUIContent("Shots Per Burst"));
         }
         else
         {
-            // Normal RPM label unless Burst (your requirement only changes it for Burst)
             EditorGUILayout.PropertyField(rateOfFire, new GUIContent("Rate of Fire"));
 
             if (fm == FireMode.Scatter)
             {
-                // Scatter: show shots but rename, hide timeBetweenBursts
-                EditorGUILayout.PropertyField(shotsPerTriggerPull, new GUIContent("Pellets Per Shot"));
+                EditorGUILayout.PropertyField(shotsPerBurst, new GUIContent("Shots Per Scatter"));
             }
-            else
-            {
-                // Singlefire or Authomatic: hide both
-                // (Also covers any other non-burst/non-scatter modes you may add later.)
-                if (fm != FireMode.Singlefire && fm != FireMode.Authomatic)
-                {
-                    // If you ever add a mode where you want it visible, it’ll show here by default
-                    EditorGUILayout.PropertyField(shotsPerTriggerPull, new GUIContent("Shots Per Trigger Pull"));
-                    EditorGUILayout.PropertyField(timeBetweenBursts, new GUIContent("Time Between Bursts"));
-                }
-            }
+            // Singlefire & Authomatic intentionally hide shotsPerBurst and timeBetweenBursts
         }
 
         EditorGUILayout.PropertyField(spread);
@@ -154,33 +143,29 @@ public class WeaponProfileEditor : Editor
 
     void DrawReloadAndAmmo()
     {
-
         EditorGUILayout.PropertyField(reloadType);
 
         var rt = (ReloadType)reloadType.enumValueIndex;
 
-        // Reload rules:
-        // - Magazine: hide roundInsertTime, reloadWrapUpTime and their SFX
-        // - Individual: hide reloadTime and reloadSFX; show insert/wrap times + SFX
-        // - Manual: not specified; sensible default = treat like Magazine (uses reloadTime/reloadSFX)
         if (rt == ReloadType.Individual)
         {
-            EditorGUILayout.PropertyField(roundInsertTime, new GUIContent("Round Insert Time"));
-            EditorGUILayout.PropertyField(reloadWrapUpTime, new GUIContent("Reload Wrap-Up Time"));
+            EditorGUILayout.PropertyField(roundInsertTime);
+            EditorGUILayout.PropertyField(reloadWrapUpTime);
         }
         else
         {
-            EditorGUILayout.PropertyField(reloadTime, new GUIContent("Reload Time"));
+            EditorGUILayout.PropertyField(reloadTime);
         }
 
         EditorGUILayout.PropertyField(magazineSize);
         EditorGUILayout.PropertyField(TotalAmmo);
+
+        // ammoSize is always relevant, but gets auto-defaulted when weaponType changes
+        EditorGUILayout.PropertyField(ammoSize, new GUIContent("Ammo Size"));
     }
 
     void DrawProjectileStats()
     {
-        // Hit detection rule:
-        // When hit detection is NOT Projectile, hide all projectile related variables.
         var hd = (HitDetectionModel)hitDetection.enumValueIndex;
         if (hd != HitDetectionModel.Projectile) return;
 
@@ -189,26 +174,46 @@ public class WeaponProfileEditor : Editor
         EditorGUILayout.PropertyField(upwardForce);
     }
 
-    void DrawEffectsAndSound()
+    void DrawSound()
     {
-        EditorGUILayout.PropertyField(bulletImpact);
-
-        EditorGUILayout.Space(6);
-
         EditorGUILayout.PropertyField(gunshotSFX);
 
         var rt = (ReloadType)reloadType.enumValueIndex;
 
         if (rt == ReloadType.Individual)
         {
-            // Individual: hide reloadSFX; show per-step SFX
             EditorGUILayout.PropertyField(roundInsertSFX, new GUIContent("Round Insert SFX"));
             EditorGUILayout.PropertyField(reloadWrapUpSFX, new GUIContent("Wrap-Up Reload SFX"));
         }
         else
         {
-            // Magazine (and Manual by default): show reloadSFX; hide per-step SFX
             EditorGUILayout.PropertyField(reloadSFX, new GUIContent("Reload SFX"));
+        }
+    }
+
+    void SetAmmoSizeDefaultFromWeaponType()
+    {
+        var wt = (WeaponType)weaponType.enumValueIndex;
+
+        int targetAmmoSize = wt switch
+        {
+            WeaponType.Pistol => 1,
+            WeaponType.SubmachineGun => 1,
+
+            WeaponType.AssaultRifle => 2,
+            WeaponType.DesignatedMarksmenRifle => 2,
+
+            WeaponType.Sniper => 3,
+            WeaponType.LightMachineGun => 3,
+
+            WeaponType.Shotgun => 4,
+
+            _ => ammoSize.intValue // don't change for Melee/unknown
+        };
+
+        if (targetAmmoSize != ammoSize.intValue)
+        {
+            ammoSize.intValue = targetAmmoSize;
         }
     }
 }

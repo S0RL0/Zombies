@@ -47,7 +47,7 @@ public class Projectile : MonoBehaviour
     public float maxLifetime = 10f;
 
     // Private variables
-    private bool stuckToEnemy = false;
+    //private bool stuckToEnemy = false;
     private int collisions = 0;
     private PhysicsMaterial physicsMaterial;
 

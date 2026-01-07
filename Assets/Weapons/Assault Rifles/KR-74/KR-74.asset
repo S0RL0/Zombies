@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1525f5b596cf647a171e5a9f4d2f55, type: 3}
+  m_Name: KR-74
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponProfile
+  ID: 11
+  name: KR-74
+  description: Powerful rifle
+  devDescription: AK-74
+  icon: {fileID: 21300000, guid: 0cc3ba1178e98c2448b1c34a1d672046, type: 3}
+  cost: 1000
+  ammoCost: 50
+  hitDetection: 0
+  weaponType: 3
+  fireMode: 1
+  allowTriggerHold: 1
+  prefab: {fileID: 5781005907472603983, guid: a53a434f8d82443488339f65d6b45fcb, type: 3}
+  upgradedProfile: {fileID: 0}
+  damage: 28
+  rateOfFire: 550
+  timeBetweenRounds: 0.10909091
+  shotsPerBurst: 1
+  timeBetweenBursts: 0
+  spread: 50
+  maxRange: 50
+  rangeCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reloadType: 0
+  reloadTime: 1.2
+  roundInsertTime: 0
+  reloadWrapUpTime: 0
+  magazineSize: 30
+  TotalAmmo: 120
+  ammoSize: 2
+  projectilePrefab: {fileID: 0}
+  forwardForce: 0
+  upwardForce: 0
+  gunshotSFX:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  reloadSFX:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  roundInsertSFX:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  reloadWrapUpSFX:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 

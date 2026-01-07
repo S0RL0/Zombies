@@ -5,9 +5,9 @@ public class WeaponCrate : Interactable
     public WeaponProfile profile;
     //public GameObject ammoModel;
     public GameObject weaponDisplayPoint;
-    private GameObject model;
+    public GameObject model;
 
-    private PlayerController player;
+    protected PlayerController player;
     public override InteractionResult Interact()
     {
         // Check if player is null
@@ -34,44 +34,28 @@ public class WeaponCrate : Interactable
 
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected virtual void Start()
     {
-        CreateGun();
+        CreateWeapon();
         player = FindFirstObjectByType<PlayerController>();
-        Debug.Log("Player found: " + (player != null));
     }
-    private void CreateGun()
+    protected virtual void CreateWeapon()
     {
         model = Instantiate(profile.prefab, weaponDisplayPoint.transform.position, weaponDisplayPoint.transform.rotation, weaponDisplayPoint.transform);
         MeshCollider col = model.GetComponent<MeshCollider>();
         col.enabled = false;
-        ToggleRB(model.GetComponent<Rigidbody>(), false);
+        model.GetComponent<Rigidbody>().ToggleRB(false);
+    }
+    protected virtual void CreateWeapon(WeaponProfile _profile)
+    {
+        model = Instantiate(_profile.prefab, weaponDisplayPoint.transform.position, weaponDisplayPoint.transform.rotation, weaponDisplayPoint.transform);
+        MeshCollider col = model.GetComponent<MeshCollider>();
+        col.enabled = false;
+        model.GetComponent<Rigidbody>().ToggleRB(false);
     }
 
     private void CreateAmmo()
     {
 
-    }
-
-    private bool? ToggleRB(Rigidbody rb, bool enabled)
-    {
-        if (rb == null) return null;
-
-        if (!enabled) // turn physics OFF
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = true;
-            rb.useGravity = false;
-            rb.detectCollisions = false; // optional
-            return enabled;
-        }
-        else // turn physics ON
-        {
-            rb.isKinematic = false;
-            rb.useGravity = true; // set how you want when re-enabled
-            rb.detectCollisions = true; // optional
-            return true;
-        }
     }
 }

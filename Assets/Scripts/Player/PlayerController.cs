@@ -127,19 +127,16 @@ public class PlayerController : MonoBehaviour
 
     public void Interact()
     {
-        Debug.LogWarning("Interacting...");
         RaycastHit hit;
         if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, 3f))
         {
-            Debug.LogWarning("Hit: " + hit.collider.name);
             Interactable interactable = hit.collider.GetComponent<Interactable>();
             if (interactable != null)
             {
-                Debug.LogWarning("Found Interactable: " + hit.collider.name);
                 InteractionResult result = interactable.Interact();
                 if (result.success)
                 {
-                    Debug.LogWarning("Interaction Successful with: " + hit.collider.name);
+                    Debug.Log("Interaction Successful with: " + hit.collider.name);
                     InteractionType item = result.interactionType;
                     switch(item)
                     {
@@ -147,9 +144,11 @@ public class PlayerController : MonoBehaviour
                             weaponSystem.PickupNewWeapon(result.GetItem<WeaponProfile>(), result.sourceObject, result.sourceObject.GetComponent<Weapon>());
                             break;
                         case InteractionType.Door:
+                            object _item = result.item;
+                            if (_item is int cost)
+                                money -= cost;
                             break;
                         case InteractionType.Buy:
-                            Debug.Log("Attempting to buy " + result.GetItem<WeaponProfile>().name + " for " + result.GetItem<WeaponProfile>().cost);
                             money -= result.GetItem<WeaponProfile>().cost;
                             // Sound here, successful purchase
                             weaponSystem.PickupNewWeapon(result.GetItem<WeaponProfile>(), result.sourceObject, result.sourceObject.GetComponent<Weapon>());
@@ -159,7 +158,16 @@ public class PlayerController : MonoBehaviour
                             // Sound here, successful purchase
                             weaponSystem.RefillAmmo(result.GetItem<WeaponProfile>());
                             break;
-
+                        case InteractionType.Mystery:
+                            object box = result.item;
+                            if (box is int boxCost)
+                                money -= boxCost;
+                            break;
+                        case InteractionType.Upgrade:
+                            object upgrade = result.item;
+                            if (upgrade is int upgradeCost)
+                                money -= upgradeCost;
+                            break;
                         default:
                             Debug.Log("Interacted with " + hit.collider.name);
                             break;
@@ -173,7 +181,20 @@ public class PlayerController : MonoBehaviour
     {
         return weaponSystem.profiles.Contains(weaponToCheck);
     }
+    public bool HasWeapon()
+    {
+        return weaponSystem.profiles.Count > 0;
+    }
 
+    public WeaponProfile GetCurrentWeaponProfile()
+    {
+        return weaponSystem.GetCurrentWeaponProfile();
+    }
+
+    public GameObject GetDropedWeapon()
+    {
+        return weaponSystem.DropCurrentWeapon(false);
+    }
     public int GetMoney()
     {
         return money;

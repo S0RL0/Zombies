@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1525f5b596cf647a171e5a9f4d2f55, type: 3}
+  m_Name: Centurion
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponProfile
+  ID: 101
+  name: Centurian
+  description: Reliable single shot pistol
+  devDescription: Baretta 92
+  icon: {fileID: 21300000, guid: 72ac3443b9fb13949bc9a781afcca505, type: 3}
+  cost: 0
+  ammoCost: 500
+  hitDetection: 0
+  weaponType: 1
+  fireMode: 1
+  allowTriggerHold: 1
+  prefab: {fileID: 5181783632380301509, guid: fea078716e31c6040ab4d53a43edef90, type: 3}
+  upgradedProfile: {fileID: 0}
+  damage: 40
+  rateOfFire: 400
+  timeBetweenRounds: 0.15
+  shotsPerBurst: 1
+  timeBetweenBursts: 0
+  spread: 20
+  maxRange: 40
+  rangeCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reloadType: 0
+  reloadTime: 1
+  roundInsertTime: 0
+  reloadWrapUpTime: 0
+  magazineSize: 25
+  TotalAmmo: 60
+  ammoSize: 1
+  projectilePrefab: {fileID: 0}
+  forwardForce: 0
+  upwardForce: 0
+  gunshotSFX:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  reloadSFX:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  roundInsertSFX:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  reloadWrapUpSFX:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 

@@ -16,6 +16,7 @@ MonoBehaviour:
   name: Santori 93
   description: Reliable single shot pistol
   devDescription: Baretta 92
+  icon: {fileID: 21300000, guid: 72ac3443b9fb13949bc9a781afcca505, type: 3}
   cost: 250
   ammoCost: 100
   hitDetection: 0
@@ -23,13 +24,13 @@ MonoBehaviour:
   fireMode: 0
   allowTriggerHold: 0
   prefab: {fileID: 5181783632380301509, guid: 2c6fb32f6d668af44b2f2aa8dcb26bac, type: 3}
-  upgradedProfile: {fileID: 0}
+  upgradedProfile: {fileID: 11400000, guid: 37473f286556f72428310b332d502265, type: 2}
   damage: 15
   rateOfFire: 400
   timeBetweenRounds: 0.15
-  shotsPerTriggerPull: 1
+  shotsPerBurst: 1
   timeBetweenBursts: 0
-  spread: 0.01
+  spread: 20
   maxRange: 30
   rangeCurve:
     serializedVersion: 2
@@ -43,10 +44,10 @@ MonoBehaviour:
   reloadWrapUpTime: 0
   magazineSize: 15
   TotalAmmo: 60
+  ammoSize: 1
   projectilePrefab: {fileID: 0}
   forwardForce: 0
   upwardForce: 0
-  bulletImpact: {fileID: 0}
   gunshotSFX:
     Guid:
       Data1: 0

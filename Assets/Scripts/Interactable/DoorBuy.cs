@@ -22,7 +22,7 @@ public class DoorBuy : MonoBehaviour
         if (other.CompareTag("Player"))
         {
            Script = GetComponentInParent<BuyableDoorFireworks>();
-           Script.Buy();
+           Script.Open();
             Self.SetActive(false); 
         }
     }
