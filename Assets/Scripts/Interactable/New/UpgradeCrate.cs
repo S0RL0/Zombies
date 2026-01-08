@@ -1,23 +1,26 @@
 ﻿using DG.Tweening;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using Sequence = DG.Tweening.Sequence;
 
 public class UpgradeCrate : WeaponCrate
 {
+    [Header("Stats")]
     public int upgradeCost = 5000;
     private State state = State.ready;
     private WeaponProfile upgradedProfile;
 
     // Lid Animation
+    [Header("Lid variables")]
     [SerializeField] private Transform lid;
-    // Lid Lift Animation
     private Vector3 lidClosedLocalPos;
     [SerializeField] private float lidOpenHeight = 0.5f;
     [SerializeField] private float lidOpenAnimationDuration = 0.35f;
     [SerializeField] private float lidCloseAnimationDuration = 0.25f;
 
     // Weapon Animation
+    [Header("Weapon variables")]
     [SerializeField] private Vector3 weaponStartPosition = new Vector3(0f,0.8f,1.2f);
     [SerializeField] private Vector3 weaponReadyPosition = new Vector3(0f, 0.8f, 0f);
     [SerializeField] private Vector3 weaponClosedPosition = new Vector3(0f, 0.1f, 0f);
@@ -25,6 +28,7 @@ public class UpgradeCrate : WeaponCrate
     [SerializeField] private float weaponRecieveAnimationDuration = 10f;
 
     // Chest Shake Animation
+    [Header("Shake variables")]
     [SerializeField] private float riseHeight = 1.2f;
     [SerializeField] private float riseDuration = 0.35f;
     [SerializeField] private float lowerDuration = 1.2f;
@@ -32,11 +36,17 @@ public class UpgradeCrate : WeaponCrate
     [SerializeField] private float shakeStrength = 0.15f;
     [SerializeField] private int shakeVibrato = 20;
 
+    // FX references
+    [Header("FX references")]
+    [SerializeField] private List<ParticleSystem> particleSystems = new List<ParticleSystem>();
+    [SerializeField] private GameObject glow;
+
     protected override void Start()
     {
         lidClosedLocalPos = lid.localPosition;
         player = FindFirstObjectByType<PlayerController>();
         weaponDisplayPoint.transform.localPosition = weaponStartPosition;
+        glow.SetActive(false);
     }
 
     public override InteractionResult Interact()
@@ -75,7 +85,7 @@ public class UpgradeCrate : WeaponCrate
                 // set model parent to weapon display position
                 model.transform.SetParent(weaponDisplayPoint.transform);
                 TweenUtils.LerpTween(model, Vector3.zero, Quaternion.identity, 0.5f);
-
+                SwitchFX(true);
                 state = State.recieving;
                 AnimateLid(true);
                 return new InteractionResult(true, upgradeCost, null, InteractionType.Upgrade);
@@ -88,12 +98,25 @@ public class UpgradeCrate : WeaponCrate
             case State.collection:
                 Debug.Log("Upgrade ready for collection.");
                 state = State.ready;
+                SwitchFX(false);
                 AnimateLid(false);
                 return new InteractionResult(true, upgradedProfile, model, InteractionType.Weapon);
             default:
                 Debug.LogError("Unknown state.");
                 return new InteractionResult(false, null, null, InteractionType.Upgrade);
         }
+    }
+
+    private void UpgradeWeapon()
+    {
+        if (model == null || upgradedProfile == null)
+        {
+            Debug.LogError("Model or UpgradedWeapon is null.");
+            return;
+        }
+
+        Destroy(model);
+        CreateWeapon(upgradedProfile);
     }
 
     private void AnimateGun(bool deposit)
@@ -126,6 +149,9 @@ public class UpgradeCrate : WeaponCrate
 
     private void AnimateLid(bool open)
     {
+        if (!open)
+            glow.SetActive(false);
+
         lid.DOKill();
 
         Vector3 targetPos = open
@@ -142,6 +168,8 @@ public class UpgradeCrate : WeaponCrate
             .SetEase(ease)
             .OnComplete(() =>
             {
+                if (open)
+                    glow.SetActive(true);
                 switch (state)
                 {
                     case State.recieving:
@@ -221,17 +249,25 @@ public class UpgradeCrate : WeaponCrate
         });
     }
 
-    private void UpgradeWeapon()
+    private void SwitchFX(bool on)
     {
-        if (model == null || upgradedProfile == null)
+        if (particleSystems == null || particleSystems.Count == 0) return;
+        if (on)
         {
-            Debug.LogError("Model or UpgradedWeapon is null.");
-            return;
+            foreach (var ps in particleSystems)
+            {
+                ps.Play();
+            }
         }
-
-        Destroy(model);
-        CreateWeapon(upgradedProfile);
+        else
+        {
+            foreach (var ps in particleSystems)
+            {
+                ps.Stop();
+            }
+        }
     }
+
 
     private enum State
     {

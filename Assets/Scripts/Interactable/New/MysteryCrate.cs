@@ -80,6 +80,7 @@ public class MysteryCrate : WeaponCrate
                 // Give weapon to player if they don't have it, otherwise give ammo
                 if (player.HasWeapon(profile))
                 {
+                    Destroy(model);
                     return new InteractionResult(true, profile, null, InteractionType.Ammo);
                 }
                 return new InteractionResult(true, profile, model, InteractionType.Weapon);
