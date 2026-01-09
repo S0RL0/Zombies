@@ -1,39 +1,39 @@
-using TMPro;
 using UnityEngine;
-using StarterAssets;
+using UnityEngine.UI;
+using TMPro;
+using Text = TMPro.TextMeshProUGUI;
+using System.Collections.Generic;
+
 
 public class UIController : MonoBehaviour
 {
-    public SpawnManager SpawnManager;
-    public TextMeshProUGUI RoundsText;
-    public TextMeshProUGUI ZombiesLeft;
-    public FirstPersonController First;
-    public GameObject HealthPerkUI;
-    public GameObject SpeedPerkUI;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        HealthPerkUI.SetActive(false);
-        SpeedPerkUI.SetActive(false);
-    }
+    // UI References
+    // Hotbar
+    [Header("Hotbar")]
+    [SerializeField] private List<Text> ammoDiplay;
+    [SerializeField] private List<Text> inputKeyDisplay;
+    [SerializeField] private List<Image> weaponIcons;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-            RoundsText.text = $"{SpawnManager.Rounds}";
-            ZombiesLeft.text = $"{SpawnManager.ZombiesLeft}";
+    // Topright counters
+    [Header("Topright Counters")]
+    [SerializeField] private Text zombieCounter;
+    [SerializeField] private Text roundCounter;
+    [SerializeField] private Text pointCounter;
 
-        if(First.HealthPerkBool)
-        {
-            HealthPerkUI.SetActive(true); 
-        }
+    // Scoreboard
+    [Header("Scoreboard")]
+    [SerializeField] private GameObject scoreboard;
 
-        if (First.SpeedPerkBool)
-        {
-            SpeedPerkUI.SetActive(true);
-        }
+    // Interaction Prompts
+    [Header("Interaction Prompts")]
+    [SerializeField] private Text interactionPrompt;
+    [SerializeField] private Text interactionIcon;
+    [SerializeField] private ParticleSystem hitScreenEffect;
+    //[SerializeField] private ParticleSystem healScreenEffect;
+    [SerializeField] private GameObject hitDirectionEffect; // Rotate the z axis based on hit direction
+    [SerializeField] private Animator hitDirectionAnimator;
+    [SerializeField] private GameObject hitVignetteEffect;
+    [SerializeField] private Animator hitVignetteAnimator;
 
 
-    }
 }
