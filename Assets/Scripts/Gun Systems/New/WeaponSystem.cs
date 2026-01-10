@@ -451,6 +451,31 @@ public class WeaponSystem : MonoBehaviour
         bulletsInInventory[currentIndex] = profile.TotalAmmo;
     }
 
+    public List<int> GetAmmoCount(int index)
+    {
+        List<int> ammoCount = new List<int>();
+        if (index == currentWeaponIndex)
+        {
+            ammoCount.Add(bulletsLeftInCurrentMag);
+        }
+        else
+        {
+            ammoCount.Add(profiles[index].magazineSize);
+        }
+
+        ammoCount.Add(bulletsInInventory[index]);
+        return ammoCount;
+    }
+
+    public List<int> GetAmmoCount(WeaponProfile profile)
+    {
+        int index = profiles.IndexOf(profile);
+        List<int> ammoCount = new List<int>();
+        ammoCount.Add(bulletsLeftInCurrentMag);
+        ammoCount.Add(bulletsInInventory[index]);
+        return ammoCount;
+    }
+
     #endregion
 
     #region Dev tools
