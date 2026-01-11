@@ -477,6 +477,9 @@ public class WeaponSystem : MonoBehaviour
             int currentIndex = profiles.IndexOf(w);
             bulletsInInventory[currentIndex] = w.TotalAmmo;
             bulletsLeftInCurrentMag += w.magazineSize;
+
+            // Trigger event
+            onAmmoChanged?.Invoke(gameObject);
         }
     }
 

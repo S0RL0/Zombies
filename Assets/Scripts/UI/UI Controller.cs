@@ -10,6 +10,7 @@ public class UIController : MonoBehaviour
     // Script references
     private PlayerController player;
     private WeaponSystem weaponSystem;
+    private Transform cameraTransform;
 
     // UI References
     // Hotbar
@@ -46,8 +47,7 @@ public class UIController : MonoBehaviour
     {
         player = FindFirstObjectByType<PlayerController>();
         weaponSystem = player.GetComponent<WeaponSystem>();
-
-        //SetupHotbar();
+        cameraTransform = player.GetComponentInChildren<Camera>().transform;
     }
     private void OnEnable()
     {
@@ -63,12 +63,23 @@ public class UIController : MonoBehaviour
 
     }
 
+    private void OnDisable()
+    {
+        RemoveEvents();
+    }
 
     private void ApplyEvents()
     {
         WeaponSystem.onAmmoChanged += UpdateAmmo;
         WeaponSystem.onWeaponSwitched += WeaponSwitched;
         WeaponSystem.onInventoryChanged += UpdateInventory;
+    }
+
+    void RemoveEvents()
+    {
+        WeaponSystem.onAmmoChanged -= UpdateAmmo;
+        WeaponSystem.onWeaponSwitched -= WeaponSwitched;
+        WeaponSystem.onInventoryChanged -= UpdateInventory;
     }
 
     void SetupHotbar()
@@ -108,10 +119,45 @@ public class UIController : MonoBehaviour
         {
             hotbarIcons[i].SetActive(false);
         }
+    }
 
+    void Update()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, 3f))
+        {
+            bool interacted = false;
+            // Check if looking at interactable
+            Interactable interactable = hit.collider.GetComponent<Interactable>();
+            if (interactable != null)
+            {
+                Debug.Log("Looking at interactable: " + interactable.name);
+                interactionPrompt.text = "test";//interactable.GetInteractionPrompt();
+                //interactionIcon.sprite = interactable.GetInteractionIcon();
+                interactionPrompt.gameObject.SetActive(true);
+                interactionIcon.gameObject.SetActive(true);
+                interacted = true;
+            }
 
+            // Check if looking at weapon you can pick up
+            Weapon weapon = hit.collider.GetComponent<Weapon>();
+            if (weapon != null)
+            {
+                // Show weapon pickup prompt
+                interactionPrompt.text = "Pick up " + weapon.weaponProfile.name;
+                interactionIcon.sprite = weapon.weaponProfile.icon;
+                interactionPrompt.gameObject.SetActive(true);
+                interactionIcon.gameObject.SetActive(true);
+                interacted = true;
+            }
 
-
+            //Debug.Log("Interacted: " + interacted);
+            if (!interacted)
+            {
+                interactionPrompt.gameObject.SetActive(false);
+                interactionIcon.gameObject.SetActive(false);
+            }
+        }
     }
 
     void UpdateAmmo(GameObject sender)

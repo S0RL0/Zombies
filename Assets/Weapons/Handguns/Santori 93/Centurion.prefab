@@ -224,6 +224,7 @@ GameObject:
   - component: {fileID: 5728432694974569829}
   - component: {fileID: 3254475483153677365}
   - component: {fileID: 5405752129500098715}
+  - component: {fileID: 4852162409830754241}
   m_Layer: 0
   m_Name: Centurion
   m_TagString: Untagged
@@ -240,7 +241,7 @@ Transform:
   m_GameObject: {fileID: 5181783632380301509}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.51, y: 0.452, z: 2.6135554}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -300,7 +301,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 55eac2569f40f8a4ca76bc7533461cb0, type: 2}
+  - {fileID: 2100000, guid: 2180d8c00f8eddf4f832919320e5b267, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -372,6 +373,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4852162409830754241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5181783632380301509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f918173d8c867fe4d8c74a5c7c267e89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  scrollSpeedX: 0.001
+  scrollSpeedY: 0.001
 --- !u!1 &5973894879901946832
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,7 +485,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 55eac2569f40f8a4ca76bc7533461cb0, type: 2}
+  - {fileID: 2100000, guid: 2180d8c00f8eddf4f832919320e5b267, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
