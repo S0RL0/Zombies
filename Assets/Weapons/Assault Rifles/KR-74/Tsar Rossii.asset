@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f1525f5b596cf647a171e5a9f4d2f55, type: 3}
-  m_Name: KR-74
+  m_Name: Tsar Rossii
   m_EditorClassIdentifier: Assembly-CSharp::WeaponProfile
-  ID: 11
-  name: KR-74
+  ID: 111
+  name: Tsar Rossii
   description: Powerful rifle
   devDescription: AK-74
   icon: {fileID: 21300000, guid: 0cc3ba1178e98c2448b1c34a1d672046, type: 3}
@@ -24,13 +24,13 @@ MonoBehaviour:
   fireMode: 1
   allowTriggerHold: 1
   prefab: {fileID: 5781005907472603983, guid: a53a434f8d82443488339f65d6b45fcb, type: 3}
-  upgradedProfile: {fileID: 11400000, guid: f9adce9df0b314c4a861be39684a2efb, type: 2}
-  damage: 28
-  rateOfFire: 550
-  timeBetweenRounds: 0.10909091
+  upgradedProfile: {fileID: 0}
+  damage: 50
+  rateOfFire: 800
+  timeBetweenRounds: 0.075
   shotsPerBurst: 1
   timeBetweenBursts: 0
-  spread: 50
+  spread: 80
   maxRange: 50
   rangeCurve:
     serializedVersion: 2
@@ -42,8 +42,8 @@ MonoBehaviour:
   reloadTime: 1.2
   roundInsertTime: 0
   reloadWrapUpTime: 0
-  magazineSize: 30
-  TotalAmmo: 120
+  magazineSize: 50
+  TotalAmmo: 200
   ammoSize: 2
   projectilePrefab: {fileID: 0}
   forwardForce: 0

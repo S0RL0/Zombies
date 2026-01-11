@@ -1,16 +1,16 @@
 using DG.Tweening;
 using FMOD.Studio;
 using FMODUnity;
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using TMPro;
-using UnityEditor;
 using UnityEngine;
-using static WeaponSystem;
+using Random = UnityEngine.Random;
 
 
 public class WeaponSystem : MonoBehaviour
 {
+    #region Weapon System
+    [Header("Weapon System")]
     public List<WeaponProfile> profiles;
     public List<int> bulletsInInventory;
     public List<GameObject> weaponModels;
@@ -21,6 +21,8 @@ public class WeaponSystem : MonoBehaviour
 
     private int bulletsLeftInCurrentMag;
     private int bulletsShotFromTriggerPull;
+
+    #endregion
 
     #region Effects
     [Header("Effects")]
@@ -51,6 +53,14 @@ public class WeaponSystem : MonoBehaviour
 
     #endregion
 
+    #region Events
+    // Events
+    public static event Action<GameObject> onAmmoChanged;
+    public static event Action<GameObject> onWeaponSwitched;
+    public static event Action<GameObject> onInventoryChanged;
+
+    #endregion
+
     #region Dev Tools
     [System.Serializable]
     public struct ShotGizmo     // Gizmo stuct
@@ -73,7 +83,7 @@ public class WeaponSystem : MonoBehaviour
     private List<ShotGizmo> shotGizmos = new List<ShotGizmo>();
     #endregion
 
-    #region Start and Update
+    #region Start
     private void Awake()
     {
         cam = GetComponentInChildren<Camera>();
@@ -121,10 +131,12 @@ public class WeaponSystem : MonoBehaviour
     {
         while (list.Count < size) list.Add(filler);
     }
+    #endregion
 
+    #region Update
     private void Update()
     {
-        if(profiles.Count == 0)
+        if (profiles.Count == 0)
         {
             return;
         }
@@ -230,6 +242,7 @@ public class WeaponSystem : MonoBehaviour
         // Adjust ammo
         bulletsLeftInCurrentMag--;
         bulletsShotFromTriggerPull++;
+        onAmmoChanged?.Invoke(gameObject);
 
         // Shoot again if more shotsPerTriggerPull
         if (bulletsShotFromTriggerPull < profiles[currentWeaponIndex].shotsPerBurst && bulletsLeftInCurrentMag > 0)
@@ -293,6 +306,7 @@ public class WeaponSystem : MonoBehaviour
         // Adjust ammo
         bulletsLeftInCurrentMag--;
         bulletsShotFromTriggerPull++;
+        onAmmoChanged?.Invoke(gameObject);
 
         // Invoke resetShot
         Invoke("ResetShot", profiles[currentWeaponIndex].timeBetweenBursts);
@@ -308,15 +322,16 @@ public class WeaponSystem : MonoBehaviour
     {
         readyToFire = true;
     }
+    #endregion
 
+    #region Reloading
     private void Reload()
     {
-        Debug.Log("Reloading!");
         // Animation here
         // Sound Here
 
         //Reloadintance = RuntimeManager.CreateInstance(ReloadEvent);
-       // Reloadintance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+        // Reloadintance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
         //Reloadintance.start();
         //Reloadintance.release();
 
@@ -327,7 +342,6 @@ public class WeaponSystem : MonoBehaviour
 
     private void ReloadFinish()
     {
-        Debug.Log("Reloaded!");
         int bulletsNeeded = profiles[currentWeaponIndex].magazineSize - bulletsLeftInCurrentMag;
         if (bulletsInInventory[currentWeaponIndex] >= bulletsNeeded)
         {
@@ -340,7 +354,9 @@ public class WeaponSystem : MonoBehaviour
         }
         bulletsLeftInCurrentMag += bulletsNeeded;
 
-        reloading = false;    }
+        onAmmoChanged?.Invoke(gameObject);
+        reloading = false;
+    }
     #endregion
 
     #region Inventories and Weapon Switching
@@ -348,12 +364,15 @@ public class WeaponSystem : MonoBehaviour
     {
         if (profiles.Count == 0) return;
 
-        int previousIndex = currentWeaponIndex; 
+        int previousIndex = currentWeaponIndex;
 
         currentWeaponIndex = (currentWeaponIndex + 1) % profiles.Count;
 
         SetWeaponActive(previousIndex, false);
         SetWeaponActive(currentWeaponIndex, true);
+
+        // Trigger event
+        onWeaponSwitched?.Invoke(gameObject);
 
     }
 
@@ -368,6 +387,9 @@ public class WeaponSystem : MonoBehaviour
 
         SetWeaponActive(previousIndex, false);
         SetWeaponActive(currentWeaponIndex, true);
+
+        // Trigger event
+        onWeaponSwitched?.Invoke(gameObject);
     }
 
     private void SetWeaponActive(int index, bool active)
@@ -392,17 +414,30 @@ public class WeaponSystem : MonoBehaviour
             // Move weapon to hand
             model.transform.SetParent(weaponPoint);
             model.GetComponent<Rigidbody>().ToggleRB(false);
-            //StartCoroutine(LerpRoutine(model, new Vector3(0,0,0), Quaternion.identity, 0.5f));
             TweenUtils.LerpTween(model, Vector3.zero, Quaternion.identity, 0.5f, Ease.OutCubic);
+
+            // Trigger event
+            onInventoryChanged?.Invoke(gameObject);
 
         }
         else
         {
-            Debug.LogWarning("Inventory full! Cannot pick up weapon: " + newWeapon.name);
-            /*weapon[currentWeaponIndex] = newWeapon;
-            GameObject droppedWeapon = Instantiate(weapon[currentWeaponIndex].weaponPrefab, transform.position + transform.forward, Quaternion.identity);
-            droppedWeapon.GetComponent<Rigidbody>().AddForce(transform.forward * 2f, ForceMode.Impulse);
-            droppedWeapon.GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * 5f, ForceMode.Impulse);*/
+            DropCurrentWeapon(true);
+
+            // Add new weapon to inventory
+            profiles[currentWeaponIndex] = newWeapon;
+            weaponModels[currentWeaponIndex] = model;
+            SetupWeapon(newWeapon, currentWeaponIndex, modelScript);
+
+            Debug.Log("Replaced weapon with: " + newWeapon.name);
+
+            // Move weapon to hand
+            model.transform.SetParent(weaponPoint);
+            model.GetComponent<Rigidbody>().ToggleRB(false);
+            TweenUtils.LerpTween(model, Vector3.zero, Quaternion.identity, 0.5f, Ease.OutCubic);
+
+            // Trigger event
+            onInventoryChanged?.Invoke(gameObject);
         }
     }
 
@@ -449,10 +484,18 @@ public class WeaponSystem : MonoBehaviour
     {
         int currentIndex = profiles.IndexOf(profile);
         bulletsInInventory[currentIndex] = profile.TotalAmmo;
+
+        // Trigger event
+        onAmmoChanged?.Invoke(gameObject);
     }
 
     public List<int> GetAmmoCount(int index)
     {
+        if (index < 0 || index >= profiles.Count)
+        {
+            return new List<int> { 0, 0 };
+        }
+
         List<int> ammoCount = new List<int>();
         if (index == currentWeaponIndex)
         {
@@ -462,14 +505,26 @@ public class WeaponSystem : MonoBehaviour
         {
             ammoCount.Add(profiles[index].magazineSize);
         }
+        if (index >= 0 && index < bulletsInInventory.Count)
+        {
+            ammoCount.Add(bulletsInInventory[index]);
 
-        ammoCount.Add(bulletsInInventory[index]);
+        }
+        else
+        {
+            ammoCount.Add(0);
+        }
         return ammoCount;
     }
 
     public List<int> GetAmmoCount(WeaponProfile profile)
     {
         int index = profiles.IndexOf(profile);
+        if (index < 0 || index >= profiles.Count)
+        {
+            return new List<int> { 0, 0 };
+        }
+
         List<int> ammoCount = new List<int>();
         ammoCount.Add(bulletsLeftInCurrentMag);
         ammoCount.Add(bulletsInInventory[index]);
@@ -504,7 +559,7 @@ public class WeaponSystem : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        if(!showGizmos) return;
+        if (!showGizmos) return;
 
         Gizmos.color = Color.red;
 

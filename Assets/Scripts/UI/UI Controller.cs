@@ -1,9 +1,8 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using Text = TMPro.TextMeshProUGUI;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+
 
 
 public class UIController : MonoBehaviour
@@ -16,9 +15,9 @@ public class UIController : MonoBehaviour
     // Hotbar
     [Header("Hotbar")]
     [SerializeField] private List<GameObject> hotbarIcons;
-    [SerializeField] private List<Text> ammoDiplay = new List<Text>();
-    [SerializeField] private List<Text> inputKeyDisplay = new List<Text>();
-    [SerializeField] private List<Image> weaponIcons = new List<Image>();
+    private List<Text> ammoDiplay = new List<Text>();
+    private List<Text> inputKeyDisplay = new List<Text>();
+    private List<Image> weaponIcons = new List<Image>();
     private List<Animator> weaponIconAnimators = new List<Animator>();
 
     // Topright counters
@@ -58,8 +57,18 @@ public class UIController : MonoBehaviour
             weaponSystem = player.GetComponent<WeaponSystem>();
         }
 
+        ApplyEvents();
+
         SetupHotbar();
 
+    }
+
+
+    private void ApplyEvents()
+    {
+        WeaponSystem.onAmmoChanged += UpdateAmmo;
+        WeaponSystem.onWeaponSwitched += WeaponSwitched;
+        WeaponSystem.onInventoryChanged += UpdateInventory;
     }
 
     void SetupHotbar()
@@ -103,5 +112,71 @@ public class UIController : MonoBehaviour
 
 
 
+    }
+
+    void UpdateAmmo(GameObject sender)
+    {
+        if (sender != weaponSystem.gameObject)
+            return;
+
+        for (int i = 0; i < weaponSystem.profiles.Count; i++)
+        {
+            List<int> ammoValues = weaponSystem.GetAmmoCount(i);
+            ammoDiplay[i].text = ammoValues[0].ToString() + " / " + ammoValues[1].ToString();
+        }
+    }
+
+    void UpdateWeapons(GameObject sender)
+    {
+        if (sender != weaponSystem.gameObject)
+            return;
+
+        for (int i = 0; i < weaponSystem.profiles.Count; i++)
+        {
+            weaponIcons[i].sprite = weaponSystem.profiles[i].icon;
+        }
+        UpdateAmmo(sender);
+    }
+
+    void WeaponSwitched(GameObject sender)
+    {
+        if (sender != weaponSystem.gameObject)
+            return;
+
+        // Update selected weapon animation
+        for (int i = 0; i < weaponIconAnimators.Count; i++)
+        {
+            if (i == weaponSystem.currentWeaponIndex)
+            {
+                weaponIconAnimators[i].SetBool("isSelected", true);
+            }
+            else
+            {
+                weaponIconAnimators[i].SetBool("isSelected", false);
+            }
+        }
+        UpdateAmmo(sender);
+    }
+
+    void UpdateInventory(GameObject sender)
+    {
+        if (sender != weaponSystem.gameObject)
+            return;
+
+        int i = 0;
+        for (i = 0; i < weaponSystem.profiles.Count; i++)
+        {
+            if (i >= hotbarIcons.Count)
+                break;
+            hotbarIcons[i].SetActive(true);
+            weaponIcons[i].sprite = weaponSystem.profiles[i].icon;
+            inputKeyDisplay[i].text = (i + 1).ToString();
+            List<int> ammoValues = weaponSystem.GetAmmoCount(i);
+            ammoDiplay[i].text = ammoValues[0].ToString() + " / " + ammoValues[1].ToString();
+        }
+        for (; i < hotbarIcons.Count; i++)
+        {
+            hotbarIcons[i].SetActive(false);
+        }
     }
 }
