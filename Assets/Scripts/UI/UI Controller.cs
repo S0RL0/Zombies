@@ -43,11 +43,15 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameObject hitVignetteEffect;
     [SerializeField] private Animator hitVignetteAnimator;
 
+    private string interactKey; // Store interact key from input mapping
+
     private void Start()
     {
         player = FindFirstObjectByType<PlayerController>();
         weaponSystem = player.GetComponent<WeaponSystem>();
         cameraTransform = player.GetComponentInChildren<Camera>().transform;
+
+        interactKey = "F";
     }
     private void OnEnable()
     {
@@ -132,7 +136,7 @@ public class UIController : MonoBehaviour
             if (interactable != null)
             {
                 Debug.Log("Looking at interactable: " + interactable.name);
-                interactionPrompt.text = "test";//interactable.GetInteractionPrompt();
+                interactionPrompt.text = "Press " + interactKey + " to " + interactable.GetInteactionText();
                 //interactionIcon.sprite = interactable.GetInteractionIcon();
                 interactionPrompt.gameObject.SetActive(true);
                 interactionIcon.gameObject.SetActive(true);
@@ -144,7 +148,7 @@ public class UIController : MonoBehaviour
             if (weapon != null)
             {
                 // Show weapon pickup prompt
-                interactionPrompt.text = "Pick up " + weapon.weaponProfile.name;
+                interactionPrompt.text = "Press " + interactKey + " to " + weapon.GetInteactionText();
                 interactionIcon.sprite = weapon.weaponProfile.icon;
                 interactionPrompt.gameObject.SetActive(true);
                 interactionIcon.gameObject.SetActive(true);

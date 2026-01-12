@@ -6,7 +6,8 @@ public class WeaponCrate : Interactable
     //public GameObject ammoModel;
     public GameObject weaponDisplayPoint;
     public GameObject model;
-
+    public string interactPromptText;
+    //public string interactAmmoText;
     protected PlayerController player;
     public override InteractionResult Interact()
     {
@@ -38,6 +39,7 @@ public class WeaponCrate : Interactable
     {
         CreateWeapon();
         player = FindFirstObjectByType<PlayerController>();
+        interactPromptText = $"Buy {profile.name} [Cost: ${profile.cost}]\nBuy Ammo [Cost: ${profile.ammoCost}]";
     }
     protected virtual void CreateWeapon()
     {
@@ -57,5 +59,10 @@ public class WeaponCrate : Interactable
     private void CreateAmmo()
     {
 
+    }
+
+    public override string GetInteactionText()
+    {
+        return interactPromptText;
     }
 }

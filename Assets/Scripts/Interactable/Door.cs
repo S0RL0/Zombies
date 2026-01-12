@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class Door : Interactable
 {
     public int doorID;
@@ -31,6 +29,12 @@ public class Door : Interactable
 
     public virtual void Open()
     {
-    
+
+    }
+
+    public override string GetInteactionText()
+    {
+        string str = "Buy Door [Cost: " + doorCost + "]";
+        return str;
     }
 }

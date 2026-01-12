@@ -3,7 +3,7 @@ using UnityEngine;
 public class Weapon : Interactable
 {
     public WeaponProfile weaponProfile;
-    [HideInInspector]public bool activeWeapon = false;
+    [HideInInspector] public bool activeWeapon = false;
 
     // Effects
     public ParticleSystem muzzleFlash;
@@ -26,5 +26,11 @@ public class Weapon : Interactable
             muzzleFlash.Play();
         if (caseEjection != null)
             caseEjection.Play();
+    }
+
+    public override string GetInteactionText()
+    {
+        string str = "pick up " + weaponProfile.name;
+        return str;
     }
 }
