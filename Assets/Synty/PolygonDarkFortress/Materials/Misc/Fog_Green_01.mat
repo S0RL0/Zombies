@@ -33,11 +33,13 @@ Material:
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap:
-    RenderType: Opaque
+    RenderType: Transparent
   disabledShaderPasses:
   - GRABPASS
+  - DepthOnly
+  - SHADOWCASTER
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -215,8 +217,8 @@ Material:
     - _DistortionEnabled: 0
     - _DistortionStrength: 1
     - _DistortionStrengthScaled: 0
-    - _DstBlend: 0
-    - _DstBlendAlpha: 0
+    - _DstBlend: 1
+    - _DstBlendAlpha: 1
     - _EmissionEnabled: 0
     - _Enable_Ambient_Occlusion: 0
     - _Enable_Base_Texture: 1
@@ -277,7 +279,7 @@ Material:
     - _Soft_Distance: 0.1
     - _Soft_Power: 1
     - _SpecularHighlights: 1
-    - _SrcBlend: 1
+    - _SrcBlend: 5
     - _SrcBlendAlpha: 1
     - _Surface: 1
     - _Top_Metallic: 0
@@ -300,7 +302,7 @@ Material:
     - _Wave_Object_Offset: 0
     - _Wave_Scale: 0.246
     - _Wave_Speed: 1
-    - _ZWrite: 1
+    - _ZWrite: 0
     m_Colors:
     - _AO_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _AO_Tiling: {r: 1, g: 1, b: 0, a: 0}
@@ -311,7 +313,7 @@ Material:
     - _Base_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Base_Tiling: {r: 1, g: 1, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 0.56473076, g: 1.900364, b: 1.0578816, a: 0.9019608}
+    - _Color: {r: 0, g: 1, b: 0.48777258, a: 0.70980394}
     - _ColorAddSubDiff: {r: -1, g: 1, b: 0, a: 0}
     - _Color_Tint: {r: 0.007520473, g: 0.122641504, b: 0.043568473, a: 0.31764707}
     - _EmissionColor: {r: 0, g: 2.9960787, b: 1.8017943, a: 1}
