@@ -25,7 +25,7 @@ public class WeaponCrate : Interactable
         // Check if player has enough money
         if (player.GetMoney() >= profile.cost)
         {
-            Invoke("CreateGun", 5f); // respawn gun after 5 seconds
+            Invoke("CreateWeapon", 5f); // respawn gun after 5 seconds
             return new InteractionResult(true, profile, model, InteractionType.Buy);
         }
         else
@@ -39,7 +39,8 @@ public class WeaponCrate : Interactable
     {
         CreateWeapon();
         player = FindFirstObjectByType<PlayerController>();
-        interactPromptText = $"Buy {profile.name} [Cost: ${profile.cost}]\nBuy Ammo [Cost: ${profile.ammoCost}]";
+        if (profile != null)
+            interactPromptText = $"for {profile.name} [Cost: ${profile.cost}]";
     }
     protected virtual void CreateWeapon()
     {
@@ -61,8 +62,17 @@ public class WeaponCrate : Interactable
 
     }
 
-    public override string GetInteactionText()
+    public override string GetInteractionText()
     {
+        if (player.HasWeapon(profile))
+        {
+            return $"For Ammo [Cost: ${profile.ammoCost}]";
+        }
         return interactPromptText;
+    }
+
+    public override Sprite GetInteractionIcon()
+    {
+        return profile.icon;
     }
 }

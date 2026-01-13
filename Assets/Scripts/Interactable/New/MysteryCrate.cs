@@ -1,13 +1,13 @@
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 
 public class MysteryCrate : WeaponCrate
 {
+    #region Variables
     [SerializeField] private GameObject lid;
-    private Vector3 openAngle = new Vector3(-160f,0,0);
+    private Vector3 openAngle = new Vector3(-160f, 0, 0);
     private Vector3 closeAngle = Vector3.zero;
     [SerializeField] private float lidOpenAnimationDuration = 0.6f;
     [SerializeField] private float lidCloseAnimationDuration = 0.3f;
@@ -22,23 +22,20 @@ public class MysteryCrate : WeaponCrate
     private WeaponProfile currentWeaponProfile;
     private Coroutine weaponCycleCoroutine;
 
-    private enum State
-    {
-        closed,
-        animation,
-        open,
-        cooldown
-    }
+    private enum State { closed, animation, open, cooldown }
     [SerializeField] private State state = State.closed;
+    #endregion
 
+    #region Start
     protected override void Start()
     {
         base.Start();
         glow.SetActive(false);
         sparkle.Stop();
         lid.transform.localRotation = Quaternion.Euler(closeAngle);
+        interactPromptText = $"for a Random Weapon for [Cost:${cost}]";
 
-        // Instantiate all weapon prefabs except the final `model`
+        // Instantiate all models except the final model
         foreach (WeaponProfile wp in possibleWeapons)
         {
             if (wp.prefab == model) continue; // skip final model
@@ -48,7 +45,9 @@ public class MysteryCrate : WeaponCrate
             weaponModels.Add(obj);
         }
     }
+    #endregion
 
+    #region Interaction
     public override InteractionResult Interact()
     {
         if (player == null) return new InteractionResult(false, null, null, InteractionType.Buy);
@@ -93,35 +92,6 @@ public class MysteryCrate : WeaponCrate
         }
     }
 
-    private System.Collections.IEnumerator CycleWeapons()
-    {
-        int currentIndex = -1;
-
-        while (true)
-        {
-            if (weaponModels.Count == 0) yield break;
-
-            int nextIndex;
-            do
-            {
-                nextIndex = Random.Range(0, weaponModels.Count);
-            } while (nextIndex == currentIndex && weaponModels.Count > 1);
-
-            // Hide previous weapon
-            if (currentIndex != -1)
-                weaponModels[currentIndex].SetActive(false);
-
-            // Show next weapon
-            weaponModels[nextIndex].SetActive(true);
-
-            currentIndex = nextIndex;
-            currentWeaponProfile = possibleWeapons[nextIndex];
-
-            yield return new WaitForSeconds(0.5f);
-        }
-    }
-
-
     protected override void CreateWeapon()
     {
         /*
@@ -151,6 +121,57 @@ public class MysteryCrate : WeaponCrate
         MeshCollider col = model.GetComponent<MeshCollider>();
         if (col != null) col.enabled = false;
         model.GetComponent<Rigidbody>().ToggleRB(false);
+    }
+
+    public override string GetInteractionText()
+    {
+        switch (state)
+        {
+            case State.closed:
+                return interactPromptText;
+            case State.open:
+                if (player != null && player.HasWeapon(profile))
+                    return $"to collect Ammo";
+                else
+                    return $"to collect weapon";
+            default:
+                return null;
+        }
+    }
+
+    public override Sprite GetInteractionIcon()
+    {
+        return null;
+    }
+    #endregion
+
+    #region Animation
+    private System.Collections.IEnumerator CycleWeapons()
+    {
+        int currentIndex = -1;
+
+        while (true)
+        {
+            if (weaponModels.Count == 0) yield break;
+
+            int nextIndex;
+            do
+            {
+                nextIndex = Random.Range(0, weaponModels.Count);
+            } while (nextIndex == currentIndex && weaponModels.Count > 1);
+
+            // Hide previous weapon
+            if (currentIndex != -1)
+                weaponModels[currentIndex].SetActive(false);
+
+            // Show next weapon
+            weaponModels[nextIndex].SetActive(true);
+
+            currentIndex = nextIndex;
+            currentWeaponProfile = possibleWeapons[nextIndex];
+
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 
     private void AnimateWeaponRise(bool up)
@@ -220,9 +241,10 @@ public class MysteryCrate : WeaponCrate
                 glow.SetActive(false);
                 sparkle.Stop();
                 if (profile != null) profile = null;
-                
+
             }
             state = open ? State.open : State.closed;
         });
     }
+    #endregion
 }

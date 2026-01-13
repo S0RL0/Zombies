@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Weapon : Interactable
 {
-    public WeaponProfile weaponProfile;
+    public WeaponProfile profile;
     [HideInInspector] public bool activeWeapon = false;
 
     // Effects
@@ -16,7 +16,7 @@ public class Weapon : Interactable
             return new InteractionResult(false, null, this.gameObject, InteractionType.None);
         }
 
-        return new InteractionResult(true, weaponProfile, this.gameObject, InteractionType.Weapon);
+        return new InteractionResult(true, profile, this.gameObject, InteractionType.Weapon);
     }
 
     public void fireFX()
@@ -28,9 +28,14 @@ public class Weapon : Interactable
             caseEjection.Play();
     }
 
-    public override string GetInteactionText()
+    public override string GetInteractionText()
     {
-        string str = "pick up " + weaponProfile.name;
+        string str = "to Pick Up " + profile.name;
         return str;
+    }
+
+    public override Sprite GetInteractionIcon()
+    {
+        return profile.icon;
     }
 }

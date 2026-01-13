@@ -612,6 +612,7 @@ GameObject:
   - component: {fileID: 8871352466569828225}
   - component: {fileID: 1579674594047901169}
   - component: {fileID: 7954148436786241422}
+  - component: {fileID: -7634686281618918712}
   m_Layer: 8
   m_Name: AR-25
   m_TagString: Untagged
@@ -731,10 +732,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 636bf41c2956f344e954a423696f3a96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
-  weaponProfile: {fileID: 11400000, guid: 8a9d2642ea978cc4b8304272d40224d5, type: 2}
+  profile: {fileID: 11400000, guid: 8a9d2642ea978cc4b8304272d40224d5, type: 2}
   activeWeapon: 0
   muzzleFlash: {fileID: 3561175026851684350}
   caseEjection: {fileID: 4657214322887294936}
+--- !u!54 &-7634686281618918712
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9028087573219373988}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &3366566430486071
 PrefabInstance:
   m_ObjectHideFlags: 0
