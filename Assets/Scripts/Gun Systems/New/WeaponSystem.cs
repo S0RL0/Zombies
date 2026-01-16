@@ -2,6 +2,7 @@ using DG.Tweening;
 using FMOD.Studio;
 using FMODUnity;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -38,6 +39,7 @@ public class WeaponSystem : MonoBehaviour
     // Calculations
     private bool readyToFire;          // true when able to shoot
     private bool reloading;
+    private bool dryfire = true; 
     #endregion
 
     #region References
@@ -51,6 +53,8 @@ public class WeaponSystem : MonoBehaviour
     private EventInstance Reloadintance;
     [SerializeField] private EventReference ReloadEvent;
 
+    private EventInstance GunshotInstance;
+    private EventInstance DryInstance;
     #endregion
 
     #region Events
@@ -169,9 +173,29 @@ public class WeaponSystem : MonoBehaviour
                 ShootRaycast();
         }
 
+        if (readyToFire && shooting && !reloading && bulletsLeftInCurrentMag == 0 && dryfire )
+        {
+
+            DryInstance = RuntimeManager.CreateInstance(profiles[currentWeaponIndex].dryfireSFX);
+            DryInstance.setVolume(1);
+            DryInstance.start();
+            DryInstance.release();
+            dryfire = false;
+            StartCoroutine(Timer());
+
+        }
+
         // Reset one-frame flags
         firePressedThisFrame = false;
         reloadPressedThisFrame = false;
+    }
+
+    IEnumerator Timer()
+    {
+
+
+        yield return new WaitForSeconds(1);
+        dryfire = true;
     }
 
     public void OnFirePerformed()
@@ -237,8 +261,15 @@ public class WeaponSystem : MonoBehaviour
         }
 
 
-        // Sound here
+        // int fXVolume = AudioSettingsManager.Instance.FXVolume;
+        
+            GunshotInstance = RuntimeManager.CreateInstance(profiles[currentWeaponIndex].gunshotSFX);
+            GunshotInstance.setVolume(1);
+            GunshotInstance.start();
+            GunshotInstance.release();
+        
 
+      
         // Adjust ammo
         bulletsLeftInCurrentMag--;
         bulletsShotFromTriggerPull++;
@@ -330,10 +361,10 @@ public class WeaponSystem : MonoBehaviour
         // Animation here
         // Sound Here
 
-        //Reloadintance = RuntimeManager.CreateInstance(ReloadEvent);
-        // Reloadintance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
-        //Reloadintance.start();
-        //Reloadintance.release();
+        Reloadintance = RuntimeManager.CreateInstance(profiles[currentWeaponIndex].reloadSFX);
+        Reloadintance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+        Reloadintance.start();
+        Reloadintance.release();
 
         reloading = true;
 

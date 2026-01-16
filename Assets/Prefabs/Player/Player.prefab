@@ -3818,6 +3818,7 @@ MonoBehaviour:
   isJumping: 0
   isSprinting: 0
   isCrouching: 0
+  money: 0
 --- !u!114 &3264958680031191917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3925,7 +3926,7 @@ MonoBehaviour:
       Data2: 1272723079
       Data3: -729466714
       Data4: 461472418
-    Path: event:/Footsteps
+    Path: event:/Interaction/Footsteps
   stepInterval: 0.5
   currentSurface: 0
 --- !u!1 &3452310086563077993
@@ -6095,12 +6096,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6055adb2b72ad644ab8e7b17cc7ce9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponSystem
-  weapon: {fileID: 11400000, guid: 8af42353eab59a540a478220bdca143b, type: 2}
+  profiles: []
+  bulletsInInventory: 
+  weaponModels: []
+  weaponScripts: []
+  currentWeaponIndex: 0
+  inventorySize: 2
+  weaponPoint: {fileID: 0}
+  bulletImpact: []
   cam: {fileID: 0}
-  attackPoint: {fileID: 804141098625627974}
+  projectilePoint: {fileID: 0}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 8
+  ReloadEvent:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   showGizmos: 1
   shotGizmoDuration: 1
 --- !u!1 &9212980583132132861

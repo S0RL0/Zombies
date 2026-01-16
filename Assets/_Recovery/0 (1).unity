@@ -7806,14 +7806,14 @@ MonoBehaviour:
   profiles: []
   bulletsInInventory: 
   weaponModels: []
+  weaponScripts: []
   currentWeaponIndex: 0
   inventorySize: 2
   weaponPoint: {fileID: 1036676688}
-  muzzleFlash: []
-  bulletImpact: {fileID: 0}
-  caseEjection: []
+  bulletImpact:
+  - {fileID: 0}
   cam: {fileID: 0}
-  attackPoint: {fileID: 0}
+  projectilePoint: {fileID: 0}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 127
@@ -7887,16 +7887,14 @@ MonoBehaviour:
       Data2: 1280631180
       Data3: -1999938633
       Data4: -778438812
-    Path: event:/Crickets
+    Path: event:/3D Scene Sounds/Crickets
   RandomEvent:
     Guid:
       Data1: -380622704
       Data2: 1148434042
       Data3: 1359359166
       Data4: 1027524893
-    Path: event:/Outside Random Sounds
-  MusicVolume: 0.5
-  SoundVolume: 2
+    Path: event:/Random Ambiance/Outside Random Sounds
   random: 0
 --- !u!114 &668413868
 MonoBehaviour:
@@ -21371,8 +21369,7 @@ MonoBehaviour:
       Data2: 1205621212
       Data3: -1663054707
       Data4: 611744402
-    Path: event:/Electrical Hum
-  Volume: 0.1
+    Path: event:/3D Scene Sounds/Electrical Hum
   musicposition: {fileID: 666039348}
 --- !u!1 &1946303258
 GameObject:
@@ -21568,8 +21565,7 @@ MonoBehaviour:
       Data2: 1168306254
       Data3: 110970758
       Data4: 331572724
-    Path: event:/Car
-  Volume: 3
+    Path: event:/3D Scene Sounds/Car
   musicposition: {fileID: 1965259801}
 --- !u!114 &1965259806
 MonoBehaviour:

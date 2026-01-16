@@ -98,6 +98,10 @@ public class WeaponProfile : ScriptableObject
     public EventReference roundInsertSFX;
     [Tooltip("Wrapup reload Sound effect for individual reload")]
     public EventReference reloadWrapUpSFX;
+    [Tooltip("dryfire sound effect")]
+    public EventReference dryfireSFX;
+
+
     #endregion
 
 

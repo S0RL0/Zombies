@@ -12609,6 +12609,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5e26813ca6d64e4a8ca9bb31c279654, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  doorID: 0
+  doorCost: 0
   Effect: {fileID: 1160259242}
   emitter: {fileID: 1160259243}
   pathPoints:
@@ -12632,28 +12634,28 @@ MonoBehaviour:
       Data2: 1096863036
       Data3: 962692231
       Data4: -1011579020
-    Path: event:/DoorBuy
+    Path: event:/Buyable Doors/DoorBuy
   FuzeEvent:
     Guid:
       Data1: 971654639
       Data2: 1146415188
       Data3: 1495572667
       Data4: -1305067152
-    Path: event:/Fuze
+    Path: event:/3D Scene Sounds/Fuze
   FireworksEvent:
     Guid:
       Data1: 1812801919
       Data2: 1306963893
       Data3: -2139313739
       Data4: 1397917950
-    Path: event:/Firework
+    Path: event:/Buyable Doors/Firework
   ExplosionEvent:
     Guid:
       Data1: -2132282341
       Data2: 1293019327
       Data3: -1227729530
       Data4: 286450921
-    Path: event:/Explosion
+    Path: event:/3D Scene Sounds/Explosion
 --- !u!4 &445435845 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 834266676654166457, guid: b8fde50f78f3da84e9abcb2e60037a2d, type: 3}
@@ -26840,7 +26842,7 @@ MonoBehaviour:
       Data2: 1122145995
       Data3: -1112595802
       Data4: 408601107
-    Path: event:/ClownLaugh
+    Path: event:/3D Scene Sounds/ClownLaugh
   musicposition: {fileID: 613415438}
   timer: 2
 --- !u!65 &1235368750
@@ -37120,14 +37122,14 @@ MonoBehaviour:
       Data2: 1280631180
       Data3: -1999938633
       Data4: -778438812
-    Path: event:/Crickets
+    Path: event:/3D Scene Sounds/Crickets
   RandomEvent:
     Guid:
       Data1: -380622704
       Data2: 1148434042
       Data3: 1359359166
       Data4: 1027524893
-    Path: event:/Outside Random Sounds
+    Path: event:/Random Ambiance/Outside Random Sounds
   random: 0
 --- !u!95 &1813254595
 Animator:
@@ -37234,15 +37236,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a5579c6397ace234388e96af9643e057, type: 2}
   bulletsInInventory: 
   weaponModels: []
+  weaponScripts: []
   currentWeaponIndex: 0
   inventorySize: 2
   weaponPoint: {fileID: 2139315150}
-  muzzleFlash: []
-  bulletImpact: {fileID: 0}
-  caseEjection: []
-  fireKeyHeld: 0
-  firePressedThisFrame: 0
-  reloadPressedThisFrame: 0
+  bulletImpact:
+  - {fileID: 0}
   cam: {fileID: 0}
   projectilePoint: {fileID: 0}
   enemyLayer:
@@ -37650,7 +37649,7 @@ MonoBehaviour:
       Data2: 1131374962
       Data3: -1279286873
       Data4: -1420352820
-    Path: event:/Ambulance
+    Path: event:/3D Scene Sounds/Ambulance
   musicposition: {fileID: 1829492598}
 --- !u!1 &1831956681 stripped
 GameObject:
@@ -38498,7 +38497,7 @@ MonoBehaviour:
       Data2: 1096863036
       Data3: 962692231
       Data4: -1011579020
-    Path: event:/DoorBuy
+    Path: event:/Buyable Doors/DoorBuy
   NotEnoughMoneyEvent:
     Guid:
       Data1: 0
@@ -38512,28 +38511,28 @@ MonoBehaviour:
       Data2: 1166024094
       Data3: 52785336
       Data4: -2033687265
-    Path: event:/Lazer
+    Path: event:/Buyable Doors/Lazer
   ExplosionEvent:
     Guid:
       Data1: -2132282341
       Data2: 1293019327
       Data3: -1227729530
       Data4: 286450921
-    Path: event:/Explosion
+    Path: event:/3D Scene Sounds/Explosion
   LightsEvent:
     Guid:
       Data1: 710051362
       Data2: 1122145995
       Data3: -1112595802
       Data4: 408601107
-    Path: event:/ClownLaugh
+    Path: event:/3D Scene Sounds/ClownLaugh
   MusicEvent:
     Guid:
       Data1: -1410700084
       Data2: 1274113330
       Data3: 1031302284
       Data4: 558379863
-    Path: event:/Carnival starting up
+    Path: event:/Buyable Doors/Carnival starting up
   Lights:
   - {fileID: 1866611034}
   - {fileID: 1299861162}
@@ -40957,7 +40956,7 @@ MonoBehaviour:
       Data2: 1205621212
       Data3: -1663054707
       Data4: 611744402
-    Path: event:/Electrical Hum
+    Path: event:/3D Scene Sounds/Electrical Hum
   musicposition: {fileID: 666039348}
 --- !u!1 &1948484345
 GameObject:

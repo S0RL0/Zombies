@@ -18,7 +18,7 @@ public class WeaponProfileEditor : Editor
     SerializedProperty projectilePrefab, forwardForce, upwardForce;
 
     // Sound
-    SerializedProperty gunshotSFX, reloadSFX, roundInsertSFX, reloadWrapUpSFX;
+    SerializedProperty gunshotSFX, reloadSFX, roundInsertSFX, reloadWrapUpSFX, dryfireSFX;
 
     void OnEnable()
     {
@@ -65,6 +65,7 @@ public class WeaponProfileEditor : Editor
         reloadSFX = serializedObject.FindProperty("reloadSFX");
         roundInsertSFX = serializedObject.FindProperty("roundInsertSFX");
         reloadWrapUpSFX = serializedObject.FindProperty("reloadWrapUpSFX");
+        dryfireSFX = serializedObject.FindProperty("dryfireSFX");
     }
 
     public override void OnInspectorGUI()
@@ -177,6 +178,8 @@ public class WeaponProfileEditor : Editor
     void DrawSound()
     {
         EditorGUILayout.PropertyField(gunshotSFX);
+        EditorGUILayout.PropertyField(dryfireSFX);
+
 
         var rt = (ReloadType)reloadType.enumValueIndex;
 
