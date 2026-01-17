@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Powerful rifle
   devDescription: AK-74
   icon: {fileID: 21300000, guid: 0cc3ba1178e98c2448b1c34a1d672046, type: 3}
-  cost: 1000
+  cost: 1500
   ammoCost: 50
   hitDetection: 0
   weaponType: 3
@@ -26,8 +26,8 @@ MonoBehaviour:
   prefab: {fileID: 5781005907472603983, guid: a53a434f8d82443488339f65d6b45fcb, type: 3}
   upgradedProfile: {fileID: 11400000, guid: f9adce9df0b314c4a861be39684a2efb, type: 2}
   damage: 28
-  rateOfFire: 550
-  timeBetweenRounds: 0.10909091
+  rateOfFire: 600
+  timeBetweenRounds: 0.1
   shotsPerBurst: 1
   timeBetweenBursts: 0
   spread: 50
@@ -50,18 +50,18 @@ MonoBehaviour:
   upwardForce: 0
   gunshotSFX:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1933252898
+      Data2: 1287761119
+      Data3: -1419772509
+      Data4: -334094308
+    Path: event:/Weapons/AR/AR Firing
   reloadSFX:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1240313989
+      Data2: 1192722070
+      Data3: 1771908512
+      Data4: 1336187619
+    Path: event:/Weapons/AR/AR Reloading
   roundInsertSFX:
     Guid:
       Data1: 0
@@ -76,3 +76,10 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  dryfireSFX:
+    Guid:
+      Data1: -1421021019
+      Data2: 1292550974
+      Data3: -712122724
+      Data4: 1499800601
+    Path: event:/Weapons/AR/AR Empty

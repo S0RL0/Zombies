@@ -10,28 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f1525f5b596cf647a171e5a9f4d2f55, type: 3}
-  m_Name: AR-25
+  m_Name: Nord KP7
   m_EditorClassIdentifier: Assembly-CSharp::WeaponProfile
-  ID: 10
-  name: AR-25
-  description: Accurate medium range rifle
-  devDescription: M4/AR-15
-  icon: {fileID: 21300000, guid: 546f17af6a0bcbf4b9921599f049a380, type: 3}
-  cost: 2000
-  ammoCost: 500
+  ID: 20
+  name: Nord KP7
+  description: Close range SMG
+  devDescription: MP5
+  icon: {fileID: 21300000, guid: 1f652e8ebe7c0c245ac0a504012f236e, type: 3}
+  cost: 1500
+  ammoCost: 250
   hitDetection: 0
-  weaponType: 3
+  weaponType: 2
   fireMode: 1
   allowTriggerHold: 1
-  prefab: {fileID: 9028087573219373988, guid: 4b6bca77f69e71747ad84c6e0eb466bd, type: 3}
-  upgradedProfile: {fileID: 11400000, guid: afdfeeaed10542b449751783123f8c84, type: 2}
-  damage: 20
-  rateOfFire: 700
-  timeBetweenRounds: 0.08571429
+  prefab: {fileID: 897262066082303617, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
+  upgradedProfile: {fileID: 11400000, guid: 52dcb30aa2fe7ae478074961a59a4b13, type: 2}
+  damage: 18
+  rateOfFire: 850
+  timeBetweenRounds: 0.07058824
   shotsPerBurst: 1
   timeBetweenBursts: 0
-  spread: 5
-  maxRange: 50
+  spread: 30
+  maxRange: 40
   rangeCurve:
     serializedVersion: 2
     m_Curve: []
@@ -39,29 +39,29 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   reloadType: 0
-  reloadTime: 3
+  reloadTime: 1
   roundInsertTime: 0
   reloadWrapUpTime: 0
-  magazineSize: 30
-  TotalAmmo: 120
-  ammoSize: 2
+  magazineSize: 35
+  TotalAmmo: 140
+  ammoSize: 1
   projectilePrefab: {fileID: 0}
   forwardForce: 0
   upwardForce: 0
   gunshotSFX:
     Guid:
-      Data1: -1933252898
-      Data2: 1287761119
-      Data3: -1419772509
-      Data4: -334094308
-    Path: event:/Weapons/AR/AR Firing
+      Data1: 1466741426
+      Data2: 1190316327
+      Data3: 596956551
+      Data4: 826141613
+    Path: event:/Weapons/Pistol/Pistol Firing
   reloadSFX:
     Guid:
-      Data1: -1240313989
-      Data2: 1192722070
-      Data3: 1771908512
-      Data4: 1336187619
-    Path: event:/Weapons/AR/AR Reloading
+      Data1: -1734151932
+      Data2: 1301204947
+      Data3: 1543415230
+      Data4: -1982326124
+    Path: event:/Weapons/Pistol/Pistol Reload
   roundInsertSFX:
     Guid:
       Data1: 0
@@ -78,8 +78,8 @@ MonoBehaviour:
     Path: 
   dryfireSFX:
     Guid:
-      Data1: -1421021019
-      Data2: 1292550974
-      Data3: -712122724
-      Data4: 1499800601
-    Path: event:/Weapons/AR/AR Empty
+      Data1: 1958389754
+      Data2: 1082142784
+      Data3: 2058096573
+      Data4: 1797542350
+    Path: event:/Weapons/Pistol/Pistol Empty

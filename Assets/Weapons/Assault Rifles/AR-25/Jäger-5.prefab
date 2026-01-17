@@ -9731,11 +9731,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5221293892896044371}
+  - component: {fileID: 313735650176817128}
   - component: {fileID: 164452969437329710}
   - component: {fileID: 6889181380063111675}
   - component: {fileID: 4027738195407643095}
-  - component: {fileID: 313735650176817128}
   - component: {fileID: 4784946678987624229}
+  - component: {fileID: 8786892930655556025}
   m_Layer: 8
   m_Name: "J\xE4ger-5"
   m_TagString: Untagged
@@ -9765,6 +9766,22 @@ Transform:
   - {fileID: 8580506842909430187}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &313735650176817128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3092902449249772199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 636bf41c2956f344e954a423696f3a96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Weapon
+  profile: {fileID: 11400000, guid: afdfeeaed10542b449751783123f8c84, type: 2}
+  activeWeapon: 0
+  muzzleFlash: {fileID: 2670706504742859788}
+  caseEjection: {fileID: 3364117121232843991}
 --- !u!33 &164452969437329710
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -9843,22 +9860,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 43531877904820074, guid: d70ea84b37167204484057e531733574, type: 2}
---- !u!114 &313735650176817128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3092902449249772199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 636bf41c2956f344e954a423696f3a96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Weapon
-  profile: {fileID: 11400000, guid: afdfeeaed10542b449751783123f8c84, type: 2}
-  activeWeapon: 0
-  muzzleFlash: {fileID: 2670706504742859788}
-  caseEjection: {fileID: 3364117121232843991}
 --- !u!54 &4784946678987624229
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9886,6 +9887,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8786892930655556025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3092902449249772199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f918173d8c867fe4d8c74a5c7c267e89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MaterialScroller
+  scrollSpeedX: 0.01
+  scrollSpeedY: 0.01
 --- !u!1 &4013837463888017630
 GameObject:
   m_ObjectHideFlags: 0

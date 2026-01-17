@@ -1,4 +1,3 @@
-using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 
@@ -41,15 +40,15 @@ public class WeaponProfile : ScriptableObject
     public int damage;
     [Tooltip("Rate of fire in Rounds per minute")]
     public float rateOfFire;
-    [HideInInspector]public float timeBetweenRounds;
+    [HideInInspector] public float timeBetweenRounds;
     [Tooltip("Number of bullets fired per trigger pull.")]
     public int shotsPerBurst = 1;
     [Tooltip("Time between bursts.")]
     public float timeBetweenBursts;
     [Tooltip("Bullet spread.")]
-    public float spread;
+    public float spread = 20;
     [Tooltip("Max range of gun.")]
-    public float maxRange;
+    public float maxRange = 50;
     [Tooltip("Damage over range cure.")]
     public AnimationCurve rangeCurve;
     #endregion
@@ -59,7 +58,7 @@ public class WeaponProfile : ScriptableObject
     [Tooltip("How the gun is loaded.")]
     public ReloadType reloadType;
     [Tooltip("Time taken for reload animation.")]
-    public float reloadTime;
+    public float reloadTime = 1;
     [Tooltip("Time taken between individual bullet loads (for individual reload types).")]
     public float roundInsertTime;
     [Tooltip("Time taken to finish reloading after individual bullet loads")]
@@ -69,7 +68,7 @@ public class WeaponProfile : ScriptableObject
     [Tooltip("Total ammo carried by player for this weapon.")]
     public int TotalAmmo;
     [Tooltip("Ammo size (1-4). 1: Small, 2: Medium, 3: Large, 4: Shotgun")]
-    [Range(1,4)]
+    [Range(1, 4)]
     public int ammoSize;
 
     #endregion

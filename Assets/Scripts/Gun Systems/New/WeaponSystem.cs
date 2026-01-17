@@ -20,7 +20,7 @@ public class WeaponSystem : MonoBehaviour
     public int inventorySize = 2;
     public Transform weaponPoint;
 
-    private int bulletsLeftInCurrentMag;
+    [SerializeField] private List<int> bulletsLeftInMag;
     private int bulletsShotFromTriggerPull;
 
     #endregion
@@ -39,7 +39,7 @@ public class WeaponSystem : MonoBehaviour
     // Calculations
     private bool readyToFire;          // true when able to shoot
     private bool reloading;
-    private bool dryfire = true; 
+    private bool dryfire = true;
     #endregion
 
     #region References
@@ -123,11 +123,11 @@ public class WeaponSystem : MonoBehaviour
         // Only ensure the parallel lists, not profiles.
         EnsureSize(bulletsInInventory, newWeaponSlot + 1, 0);
         EnsureSize(weaponScripts, newWeaponSlot + 1, null);
+        EnsureSize(bulletsLeftInMag, newWeaponSlot + 1, 0);
 
         bulletsInInventory[newWeaponSlot] = newWeapon != null ? newWeapon.TotalAmmo : 0;
         weaponScripts[newWeaponSlot] = modelScript != null ? modelScript : null;
-
-        bulletsLeftInCurrentMag = newWeapon != null ? newWeapon.magazineSize : 0;
+        bulletsLeftInMag[newWeaponSlot] = newWeapon != null ? newWeapon.magazineSize : 0;
         readyToFire = true;
     }
 
@@ -157,13 +157,13 @@ public class WeaponSystem : MonoBehaviour
         bool shooting = profiles[currentWeaponIndex].allowTriggerHold ? fireKeyHeld : firePressedThisFrame;
 
         // Handle reload
-        if (reloadPressedThisFrame && bulletsLeftInCurrentMag < profiles[currentWeaponIndex].magazineSize && !reloading)
+        if (reloadPressedThisFrame && bulletsLeftInMag[currentWeaponIndex] < profiles[currentWeaponIndex].magazineSize && !reloading)
         {
             Reload();
         }
 
         // Handle shooting
-        if (readyToFire && shooting && !reloading && bulletsLeftInCurrentMag > 0)
+        if (readyToFire && shooting && !reloading && bulletsLeftInMag[currentWeaponIndex] > 0)
         {
             bulletsShotFromTriggerPull = 0;
 
@@ -173,7 +173,7 @@ public class WeaponSystem : MonoBehaviour
                 ShootRaycast();
         }
 
-        if (readyToFire && shooting && !reloading && bulletsLeftInCurrentMag == 0 && dryfire )
+        if (readyToFire && shooting && !reloading && bulletsLeftInMag[currentWeaponIndex] == 0 && dryfire)
         {
 
             DryInstance = RuntimeManager.CreateInstance(profiles[currentWeaponIndex].dryfireSFX);
@@ -265,21 +265,21 @@ public class WeaponSystem : MonoBehaviour
 
 
         // int fXVolume = AudioSettingsManager.Instance.FXVolume;
-        
-            GunshotInstance = RuntimeManager.CreateInstance(profiles[currentWeaponIndex].gunshotSFX);
-            GunshotInstance.setVolume(0.2F);
-            GunshotInstance.start();
-            GunshotInstance.release();
-        
 
-      
+        GunshotInstance = RuntimeManager.CreateInstance(profiles[currentWeaponIndex].gunshotSFX);
+        GunshotInstance.setVolume(0.2F);
+        GunshotInstance.start();
+        GunshotInstance.release();
+
+
+
         // Adjust ammo
-        bulletsLeftInCurrentMag--;
+        bulletsLeftInMag[currentWeaponIndex]--;
         bulletsShotFromTriggerPull++;
         onAmmoChanged?.Invoke(gameObject);
 
         // Shoot again if more shotsPerTriggerPull
-        if (bulletsShotFromTriggerPull < profiles[currentWeaponIndex].shotsPerBurst && bulletsLeftInCurrentMag > 0)
+        if (bulletsShotFromTriggerPull < profiles[currentWeaponIndex].shotsPerBurst && bulletsLeftInMag[currentWeaponIndex] > 0)
         {
             Invoke("ShootRaycast", profiles[currentWeaponIndex].timeBetweenRounds);
             return;
@@ -338,7 +338,7 @@ public class WeaponSystem : MonoBehaviour
 
 
         // Adjust ammo
-        bulletsLeftInCurrentMag--;
+        bulletsLeftInMag[currentWeaponIndex]--;
         bulletsShotFromTriggerPull++;
         onAmmoChanged?.Invoke(gameObject);
 
@@ -346,7 +346,7 @@ public class WeaponSystem : MonoBehaviour
         Invoke("ResetShot", profiles[currentWeaponIndex].timeBetweenBursts);
 
         // Shoot again if more shotsPerTriggerPull
-        if (bulletsShotFromTriggerPull <= profiles[currentWeaponIndex].shotsPerBurst && bulletsLeftInCurrentMag > 0)
+        if (bulletsShotFromTriggerPull <= profiles[currentWeaponIndex].shotsPerBurst && bulletsLeftInMag[currentWeaponIndex] > 0)
         {
             Invoke("ShootProjectile", profiles[currentWeaponIndex].timeBetweenRounds);
         }
@@ -376,7 +376,7 @@ public class WeaponSystem : MonoBehaviour
 
     private void ReloadFinish()
     {
-        int bulletsNeeded = profiles[currentWeaponIndex].magazineSize - bulletsLeftInCurrentMag;
+        int bulletsNeeded = profiles[currentWeaponIndex].magazineSize - bulletsLeftInMag[currentWeaponIndex];
         if (bulletsInInventory[currentWeaponIndex] >= bulletsNeeded)
         {
             bulletsInInventory[currentWeaponIndex] -= bulletsNeeded;
@@ -386,10 +386,27 @@ public class WeaponSystem : MonoBehaviour
             bulletsNeeded = bulletsInInventory[currentWeaponIndex];
             bulletsInInventory[currentWeaponIndex] = 0;
         }
-        bulletsLeftInCurrentMag += bulletsNeeded;
+        bulletsLeftInMag[currentWeaponIndex] += bulletsNeeded;
 
         onAmmoChanged?.Invoke(gameObject);
         reloading = false;
+    }
+
+    private IEnumerator ReloadInventory(int index, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        int bulletsNeeded = profiles[index].magazineSize - bulletsLeftInMag[index];
+        if (bulletsInInventory[index] >= bulletsNeeded)
+        {
+            bulletsInInventory[index] -= bulletsNeeded;
+        }
+        else
+        {
+            bulletsNeeded = bulletsInInventory[index];
+            bulletsInInventory[index] = 0;
+        }
+        bulletsLeftInMag[index] += bulletsNeeded;
     }
     #endregion
 
@@ -399,10 +416,14 @@ public class WeaponSystem : MonoBehaviour
         if (profiles.Count == 0) return;
 
         int previousIndex = currentWeaponIndex;
+        Debug.Log("previous weapon index: " + previousIndex + "profiles size: " + profiles.Count + "ammo size: " + bulletsLeftInMag.Count);
+        if (previousIndex < profiles.Count)
+            StartCoroutine(ReloadInventory(previousIndex, profiles[previousIndex].reloadTime));
 
         currentWeaponIndex = (currentWeaponIndex + 1) % profiles.Count;
 
-        SetWeaponActive(previousIndex, false);
+        if (previousIndex < profiles.Count)
+            SetWeaponActive(previousIndex, false);
         SetWeaponActive(currentWeaponIndex, true);
 
         // Trigger event
@@ -415,6 +436,7 @@ public class WeaponSystem : MonoBehaviour
         if (profiles.Count == 0) return;
 
         int previousIndex = currentWeaponIndex;
+        StartCoroutine(ReloadInventory(previousIndex, profiles[previousIndex].reloadTime));
 
         // Add Count before modulo to avoid negative values
         currentWeaponIndex = (currentWeaponIndex - 1 + profiles.Count) % profiles.Count;
@@ -434,13 +456,16 @@ public class WeaponSystem : MonoBehaviour
 
     public void PickupNewWeapon(WeaponProfile newWeapon, GameObject model, Weapon modelScript)
     {
+        Debug.Log("Before: Inventory size: " + inventorySize + " |current weapon count: " + weaponModels.Count);
         if (profiles.Count < inventorySize)
         {
-            Debug.Log("Picked up weapon: " + newWeapon.name);
+
+
 
             // Add to Inventory
             profiles.Add(newWeapon);
             weaponModels.Add(model);
+            bulletsLeftInMag.Add(newWeapon.magazineSize);
             SwitchToNextWeapon();
 
             SetupWeapon(newWeapon, currentWeaponIndex, modelScript);
@@ -452,15 +477,19 @@ public class WeaponSystem : MonoBehaviour
 
             // Trigger event
             onInventoryChanged?.Invoke(gameObject);
+            Debug.Log("added: Inventory size: " + inventorySize + " |current weapon count: " + weaponModels.Count);
 
         }
         else
         {
+
             DropCurrentWeapon(true);
 
             // Add new weapon to inventory
-            profiles[currentWeaponIndex] = newWeapon;
-            weaponModels[currentWeaponIndex] = model;
+            profiles.Add(newWeapon);
+            weaponModels.Add(model);
+            bulletsLeftInMag.Add(newWeapon.magazineSize);
+            SwitchToNextWeapon();
             SetupWeapon(newWeapon, currentWeaponIndex, modelScript);
 
             Debug.Log("Replaced weapon with: " + newWeapon.name);
@@ -470,8 +499,12 @@ public class WeaponSystem : MonoBehaviour
             model.GetComponent<Rigidbody>().ToggleRB(false);
             TweenUtils.LerpTween(model, Vector3.zero, Quaternion.identity, 0.5f, Ease.OutCubic);
 
+
+
             // Trigger event
             onInventoryChanged?.Invoke(gameObject);
+            Debug.Log("replaced: Inventory size: " + inventorySize + " |current weapon count: " + weaponModels.Count);
+
         }
     }
 
@@ -493,6 +526,7 @@ public class WeaponSystem : MonoBehaviour
         profiles.RemoveAt(currentWeaponIndex);
         bulletsInInventory.RemoveAt(currentWeaponIndex);
         weaponScripts.RemoveAt(currentWeaponIndex);
+        bulletsLeftInMag.RemoveAt(currentWeaponIndex);
         SwitchToNextWeapon();
         return droppedmodel;
     }
@@ -510,7 +544,7 @@ public class WeaponSystem : MonoBehaviour
             int ammoToAdd = w.TotalAmmo;
             int currentIndex = profiles.IndexOf(w);
             bulletsInInventory[currentIndex] = w.TotalAmmo;
-            bulletsLeftInCurrentMag += w.magazineSize;
+            bulletsLeftInMag[currentIndex] += w.magazineSize;
 
             // Trigger event
             onAmmoChanged?.Invoke(gameObject);
@@ -528,7 +562,7 @@ public class WeaponSystem : MonoBehaviour
 
     public List<int> GetAmmoCount(int index)
     {
-        if (index < 0 || index >= profiles.Count)
+        if (index < 0 || index >= profiles.Count || index >= bulletsLeftInMag.Count)
         {
             return new List<int> { 0, 0 };
         }
@@ -536,7 +570,7 @@ public class WeaponSystem : MonoBehaviour
         List<int> ammoCount = new List<int>();
         if (index == currentWeaponIndex)
         {
-            ammoCount.Add(bulletsLeftInCurrentMag);
+            ammoCount.Add(bulletsLeftInMag[index]);
         }
         else
         {
@@ -563,7 +597,7 @@ public class WeaponSystem : MonoBehaviour
         }
 
         List<int> ammoCount = new List<int>();
-        ammoCount.Add(bulletsLeftInCurrentMag);
+        ammoCount.Add(bulletsLeftInMag[index]);
         ammoCount.Add(bulletsInInventory[index]);
         return ammoCount;
     }

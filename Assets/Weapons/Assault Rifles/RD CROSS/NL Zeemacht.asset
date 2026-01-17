@@ -10,27 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f1525f5b596cf647a171e5a9f4d2f55, type: 3}
-  m_Name: AR-25
+  m_Name: NL Zeemacht
   m_EditorClassIdentifier: Assembly-CSharp::WeaponProfile
-  ID: 10
-  name: AR-25
-  description: Accurate medium range rifle
-  devDescription: M4/AR-15
-  icon: {fileID: 21300000, guid: 546f17af6a0bcbf4b9921599f049a380, type: 3}
-  cost: 2000
-  ammoCost: 500
+  ID: 112
+  name: NL Zeemacht
+  description: High powered lower fire rate rifle
+  devDescription: FN SCAR
+  icon: {fileID: 21300000, guid: 25ee4b513b7056145b5dc9800a2606ab, type: 3}
+  cost: 5000
+  ammoCost: 1000
   hitDetection: 0
   weaponType: 3
   fireMode: 1
   allowTriggerHold: 1
-  prefab: {fileID: 9028087573219373988, guid: 4b6bca77f69e71747ad84c6e0eb466bd, type: 3}
-  upgradedProfile: {fileID: 11400000, guid: afdfeeaed10542b449751783123f8c84, type: 2}
-  damage: 20
-  rateOfFire: 700
-  timeBetweenRounds: 0.08571429
+  prefab: {fileID: 8852958112673623584, guid: 2482bc2882311d9418ac71c80677c887, type: 3}
+  upgradedProfile: {fileID: 0}
+  damage: 75
+  rateOfFire: 450
+  timeBetweenRounds: 0.13333334
   shotsPerBurst: 1
   timeBetweenBursts: 0
-  spread: 5
+  spread: 10
   maxRange: 50
   rangeCurve:
     serializedVersion: 2
@@ -39,7 +39,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   reloadType: 0
-  reloadTime: 3
+  reloadTime: 1
   roundInsertTime: 0
   reloadWrapUpTime: 0
   magazineSize: 30

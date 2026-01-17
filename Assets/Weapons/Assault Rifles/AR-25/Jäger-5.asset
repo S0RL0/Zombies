@@ -17,13 +17,13 @@ MonoBehaviour:
   description: Upgraded AR-25
   devDescription: M4/AR-15
   icon: {fileID: 21300000, guid: 546f17af6a0bcbf4b9921599f049a380, type: 3}
-  cost: 1000
-  ammoCost: 500
+  cost: 5000
+  ammoCost: 1000
   hitDetection: 0
   weaponType: 3
   fireMode: 1
   allowTriggerHold: 1
-  prefab: {fileID: 9028087573219373988, guid: 4b6bca77f69e71747ad84c6e0eb466bd, type: 3}
+  prefab: {fileID: 3092902449249772199, guid: 7632199282aafe94bab69a4656fd3a85, type: 3}
   upgradedProfile: {fileID: 0}
   damage: 20
   rateOfFire: 600
@@ -50,18 +50,18 @@ MonoBehaviour:
   upwardForce: 0
   gunshotSFX:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1933252898
+      Data2: 1287761119
+      Data3: -1419772509
+      Data4: -334094308
+    Path: event:/Weapons/AR/AR Firing
   reloadSFX:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1240313989
+      Data2: 1192722070
+      Data3: 1771908512
+      Data4: 1336187619
+    Path: event:/Weapons/AR/AR Reloading
   roundInsertSFX:
     Guid:
       Data1: 0
@@ -76,3 +76,10 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  dryfireSFX:
+    Guid:
+      Data1: -1421021019
+      Data2: 1292550974
+      Data3: -712122724
+      Data4: 1499800601
+    Path: event:/Weapons/AR/AR Empty
