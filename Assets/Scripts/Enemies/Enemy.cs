@@ -104,6 +104,7 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             animator.SetTrigger("Jump");
         }
+
     }
 
     public virtual void init(Transform target)
