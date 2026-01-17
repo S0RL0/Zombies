@@ -264,7 +264,7 @@ public class WeaponSystem : MonoBehaviour
         // int fXVolume = AudioSettingsManager.Instance.FXVolume;
         
             GunshotInstance = RuntimeManager.CreateInstance(profiles[currentWeaponIndex].gunshotSFX);
-            GunshotInstance.setVolume(1);
+            GunshotInstance.setVolume(0.2F);
             GunshotInstance.start();
             GunshotInstance.release();
         
