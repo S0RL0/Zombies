@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f1525f5b596cf647a171e5a9f4d2f55, type: 3}
-  m_Name: Rifle
+  m_Name: RD CROSS
   m_EditorClassIdentifier: Assembly-CSharp::WeaponProfile
-  ID: 0
-  name: Test Rifle
-  description: M4 like test rifle
-  devDescription: 
+  ID: 12
+  name: RD CROSS
+  description: High powered lower fire rate rifle
+  devDescription: FN SCAR
+  icon: {fileID: 0}
   cost: 1000
   ammoCost: 0
   hitDetection: 0
@@ -24,12 +25,12 @@ MonoBehaviour:
   allowTriggerHold: 1
   prefab: {fileID: 1427344184478965906, guid: 0ff001d128cfab14e94ce3011db3bebd, type: 3}
   upgradedProfile: {fileID: 0}
-  damage: 20
+  damage: 35
   rateOfFire: 600
   timeBetweenRounds: 0.1
-  shotsPerTriggerPull: 0
+  shotsPerBurst: 1
   timeBetweenBursts: 0
-  spread: 0.01
+  spread: 10
   maxRange: 50
   rangeCurve:
     serializedVersion: 2
@@ -43,24 +44,24 @@ MonoBehaviour:
   reloadWrapUpTime: 0
   magazineSize: 30
   TotalAmmo: 120
+  ammoSize: 2
   projectilePrefab: {fileID: 0}
   forwardForce: 0
   upwardForce: 0
-  bulletImpact: {fileID: 5643604064675710849, guid: 1826b8e48fc2421489a6db0426769663, type: 3}
   gunshotSFX:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1933252898
+      Data2: 1287761119
+      Data3: -1419772509
+      Data4: -334094308
+    Path: event:/Weapons/AR/AR Firing
   reloadSFX:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1240313989
+      Data2: 1192722070
+      Data3: 1771908512
+      Data4: 1336187619
+    Path: event:/Weapons/AR/AR Reloading
   roundInsertSFX:
     Guid:
       Data1: 0
@@ -75,3 +76,10 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  dryfireSFX:
+    Guid:
+      Data1: -1421021019
+      Data2: 1292550974
+      Data3: -712122724
+      Data4: 1499800601
+    Path: event:/Weapons/AR/AR Empty
