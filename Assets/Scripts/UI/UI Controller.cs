@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Text = TMPro.TextMeshProUGUI;
 
@@ -51,7 +52,22 @@ public class UIController : MonoBehaviour
         weaponSystem = player.GetComponent<WeaponSystem>();
         cameraTransform = player.GetComponentInChildren<Camera>().transform;
 
-        interactKey = "F";
+        PlayerInput playerInput = player.GetComponent<PlayerInput>();
+        InputActionAsset actions = playerInput.actions;
+        InputAction interactAction = actions.FindAction("Player/Interact");
+        if (interactAction != null && interactAction.bindings.Count > 0)
+        {
+            // Get the first binding (usually the main one)
+            InputBinding binding = interactAction.bindings[0];
+
+            // Convert binding to a readable string
+            interactKey = InputControlPath.ToHumanReadableString(
+                binding.effectivePath,
+                InputControlPath.HumanReadableStringOptions.OmitDevice
+            );
+
+            Debug.Log("Jump keybind: " + interactKey);
+        }
     }
     private void OnEnable()
     {
@@ -130,17 +146,24 @@ public class UIController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, 3f))
         {
-            bool interacted = false;
+            bool textFound = false;
+            bool iconFound = false;
             // Check if looking at interactable
             Interactable interactable = hit.collider.GetComponent<Interactable>();
             if (interactable != null)
             {
-                Debug.Log("Looking at interactable: " + interactable.name);
-                interactionPrompt.text = "Press " + interactKey + " to " + interactable.GetInteactionText();
-                //interactionIcon.sprite = interactable.GetInteractionIcon();
-                interactionPrompt.gameObject.SetActive(true);
-                interactionIcon.gameObject.SetActive(true);
-                interacted = true;
+                if (interactable.GetInteractionText() != null)
+                {
+                    interactionPrompt.text = "Press " + interactKey + " " + interactable.GetInteractionText();
+                    textFound = true;
+                }
+
+                if (interactable.GetInteractionIcon() != null)
+                {
+                    interactionIcon.sprite = interactable.GetInteractionIcon();
+                    iconFound = true;
+                }
+
             }
 
             // Check if looking at weapon you can pick up
@@ -148,19 +171,20 @@ public class UIController : MonoBehaviour
             if (weapon != null)
             {
                 // Show weapon pickup prompt
-                interactionPrompt.text = "Press " + interactKey + " to " + weapon.GetInteactionText();
-                interactionIcon.sprite = weapon.weaponProfile.icon;
-                interactionPrompt.gameObject.SetActive(true);
-                interactionIcon.gameObject.SetActive(true);
-                interacted = true;
+                interactionPrompt.text = "Press " + interactKey + " " + weapon.GetInteractionText();
+                interactionIcon.sprite = weapon.GetInteractionIcon();
+                textFound = true;
+                iconFound = true;
             }
 
             //Debug.Log("Interacted: " + interacted);
-            if (!interacted)
-            {
-                interactionPrompt.gameObject.SetActive(false);
-                interactionIcon.gameObject.SetActive(false);
-            }
+            interactionPrompt.gameObject.SetActive(textFound);
+            interactionIcon.gameObject.SetActive(iconFound);
+        }
+        else
+        {
+            interactionPrompt.gameObject.SetActive(false);
+            interactionIcon.gameObject.SetActive(false);
         }
     }
 

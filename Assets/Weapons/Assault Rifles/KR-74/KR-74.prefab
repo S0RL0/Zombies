@@ -255,6 +255,7 @@ GameObject:
   - component: {fileID: 2942255405845678195}
   - component: {fileID: 7353203865154221140}
   - component: {fileID: 6358434458244877591}
+  - component: {fileID: 8174783040005140656}
   m_Layer: 8
   m_Name: KR-74
   m_TagString: Untagged
@@ -294,7 +295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 636bf41c2956f344e954a423696f3a96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
-  weaponProfile: {fileID: 11400000, guid: 4dbb309bf14ca964f9e4b3c8bb5353bf, type: 2}
+  profile: {fileID: 11400000, guid: 4dbb309bf14ca964f9e4b3c8bb5353bf, type: 2}
   activeWeapon: 0
   muzzleFlash: {fileID: 5725096157903648064}
   caseEjection: {fileID: 9110912862140355672}
@@ -376,6 +377,33 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 43040860746499972, guid: dae341061aec79f4eb6a650d63b972d3, type: 2}
+--- !u!54 &8174783040005140656
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5781005907472603983}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &6098399195292082932
 GameObject:
   m_ObjectHideFlags: 0

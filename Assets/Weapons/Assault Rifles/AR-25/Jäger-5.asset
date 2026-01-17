@@ -10,28 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f1525f5b596cf647a171e5a9f4d2f55, type: 3}
-  m_Name: Ward 3
+  m_Name: "J\xE4ger-5"
   m_EditorClassIdentifier: Assembly-CSharp::WeaponProfile
-  ID: 3
-  name: Ward 3
-  description: 3 round burst pistol
-  devDescription: Glock 17
-  icon: {fileID: 21300000, guid: 979a9b2b03cb5c3428e13a7dd61aa775, type: 3}
-  cost: 500
-  ammoCost: 250
+  ID: 110
+  name: "J\xE4ger-5"
+  description: Upgraded AR-25
+  devDescription: M4/AR-15
+  icon: {fileID: 21300000, guid: 546f17af6a0bcbf4b9921599f049a380, type: 3}
+  cost: 1000
+  ammoCost: 500
   hitDetection: 0
-  weaponType: 1
-  fireMode: 2
-  allowTriggerHold: 0
-  prefab: {fileID: 353897160841102565, guid: f7e066a2649e12347a819558b31854bc, type: 3}
-  upgradedProfile: {fileID: 11400000, guid: a6ba64a8a9a1b0240ba21d4774e00ae3, type: 2}
-  damage: 12
+  weaponType: 3
+  fireMode: 1
+  allowTriggerHold: 1
+  prefab: {fileID: 9028087573219373988, guid: 4b6bca77f69e71747ad84c6e0eb466bd, type: 3}
+  upgradedProfile: {fileID: 0}
+  damage: 20
   rateOfFire: 600
   timeBetweenRounds: 0.1
-  shotsPerBurst: 3
-  timeBetweenBursts: 0.4
-  spread: 35
-  maxRange: 30
+  shotsPerBurst: 1
+  timeBetweenBursts: 0
+  spread: 5
+  maxRange: 50
   rangeCurve:
     serializedVersion: 2
     m_Curve: []
@@ -42,9 +42,9 @@ MonoBehaviour:
   reloadTime: 0.8
   roundInsertTime: 0
   reloadWrapUpTime: 0
-  magazineSize: 18
-  TotalAmmo: 72
-  ammoSize: 1
+  magazineSize: 30
+  TotalAmmo: 120
+  ammoSize: 2
   projectilePrefab: {fileID: 0}
   forwardForce: 0
   upwardForce: 0

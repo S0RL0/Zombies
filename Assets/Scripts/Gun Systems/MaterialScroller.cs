@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MeterialScroller : MonoBehaviour
+public class MaterialScroller : MonoBehaviour
 {
     public float scrollSpeedX = 0.01f;
     public float scrollSpeedY = 0.0f;

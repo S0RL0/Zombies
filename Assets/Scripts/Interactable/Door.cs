@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class Door : Interactable
 {
     public int doorID;
@@ -32,9 +34,14 @@ public class Door : Interactable
 
     }
 
-    public override string GetInteactionText()
+    public override string GetInteractionText()
     {
-        string str = "Buy Door [Cost: " + doorCost + "]";
+        string str = "to Buy Door [Cost: " + doorCost + "]";
         return str;
+    }
+
+    public override Sprite GetInteractionIcon()
+    {
+        return null;
     }
 }

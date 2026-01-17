@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,7 +7,8 @@ public class PlayerController : MonoBehaviour
     private WeaponSystem weaponSystem;
 
     [Header("Stats")]
-    [SerializeField] private float lookSpeed = 100f;
+    [SerializeField] private float lookSpeed = 20f;
+    [SerializeField] private float smoothTime = 0.05f;
     [SerializeField] private float walkSpeed = 5f;
     [SerializeField] private float sprintSpeed = 7f;
     [SerializeField] private float crouchSpeed = 3f;
@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     // Input varibles
     [HideInInspector] public Vector2 moveInput;
     [HideInInspector] public Vector2 lookInput = Vector2.zero;
+    [HideInInspector] private Vector2 currentLook;
+    [HideInInspector] private Vector2 lookVelocity;
     [HideInInspector] public bool isJumping;
     [HideInInspector] public bool isSprinting;
     [HideInInspector] public bool isCrouching;
@@ -42,15 +44,17 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    void Update()
+    {
+        Look();
+    }
+
     void FixedUpdate()
     {
 
         Move();
 
         Jump();
-
-        Look();
-
 
     }
 
@@ -103,16 +107,15 @@ public class PlayerController : MonoBehaviour
 
     private void Look()
     {
-
         // Inputs
-        float horizontalLook = lookInput.x * lookSpeed * Time.deltaTime;
-        float verticalLook = lookInput.y * lookSpeed * Time.deltaTime;
+        float horizontalLook = lookInput.x * lookSpeed * 0.01f;
+        float verticalLook = lookInput.y * lookSpeed * 0.01f;
 
         // Vertical rotation
         verticalLookRotation -= verticalLook;
         verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
 
-        // Rotatation
+        // Apply rotations
         cameraTransform.localRotation = Quaternion.Euler(verticalLookRotation, 0f, 0f);
         transform.Rotate(Vector3.up * horizontalLook);
     }
@@ -138,7 +141,7 @@ public class PlayerController : MonoBehaviour
                 {
                     Debug.Log("Interaction Successful with: " + hit.collider.name);
                     InteractionType item = result.interactionType;
-                    switch(item)
+                    switch (item)
                     {
                         case InteractionType.Weapon:
                             weaponSystem.PickupNewWeapon(result.GetItem<WeaponProfile>(), result.sourceObject, result.sourceObject.GetComponent<Weapon>());

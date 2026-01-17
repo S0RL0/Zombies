@@ -1,6 +1,5 @@
 ﻿using DG.Tweening;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using Sequence = DG.Tweening.Sequence;
 
@@ -21,7 +20,7 @@ public class UpgradeCrate : WeaponCrate
 
     // Weapon Animation
     [Header("Weapon variables")]
-    [SerializeField] private Vector3 weaponStartPosition = new Vector3(0f,0.8f,1.2f);
+    [SerializeField] private Vector3 weaponStartPosition = new Vector3(0f, 0.8f, 1.2f);
     [SerializeField] private Vector3 weaponReadyPosition = new Vector3(0f, 0.8f, 0f);
     [SerializeField] private Vector3 weaponClosedPosition = new Vector3(0f, 0.1f, 0f);
     [SerializeField] private float weaponDepositAnimationDuration = 5f;
@@ -47,6 +46,8 @@ public class UpgradeCrate : WeaponCrate
         player = FindFirstObjectByType<PlayerController>();
         weaponDisplayPoint.transform.localPosition = weaponStartPosition;
         glow.SetActive(false);
+        interactPromptText = $"to Upgrade Weapon [Cost: ${upgradeCost}]";
+
     }
 
     public override InteractionResult Interact()
@@ -80,7 +81,7 @@ public class UpgradeCrate : WeaponCrate
                     return new InteractionResult(false, null, null, InteractionType.Upgrade);
                 }
                 model = player.GetDropedWeapon();
-                upgradedProfile = model.GetComponent<Weapon>().weaponProfile.upgradedProfile;
+                upgradedProfile = model.GetComponent<Weapon>().profile.upgradedProfile;
 
                 // set model parent to weapon display position
                 model.transform.SetParent(weaponDisplayPoint.transform);
@@ -90,11 +91,11 @@ public class UpgradeCrate : WeaponCrate
                 AnimateLid(true);
                 return new InteractionResult(true, upgradeCost, null, InteractionType.Upgrade);
             case State.recieving:
-                    Debug.Log("Currently receiving a weapon, do nothing.");
-                    return new InteractionResult(false, null, null, InteractionType.Upgrade);
+                Debug.Log("Currently receiving a weapon, do nothing.");
+                return new InteractionResult(false, null, null, InteractionType.Upgrade);
             case State.returning:
-                    Debug.Log("Currently returning a weapon, do nothing.");
-                    return new InteractionResult(false, null, null, InteractionType.Upgrade);
+                Debug.Log("Currently returning a weapon, do nothing.");
+                return new InteractionResult(false, null, null, InteractionType.Upgrade);
             case State.collection:
                 Debug.Log("Upgrade ready for collection.");
                 state = State.ready;
@@ -266,6 +267,29 @@ public class UpgradeCrate : WeaponCrate
                 ps.Stop();
             }
         }
+    }
+
+    public override string GetInteractionText()
+    {
+        switch (state)
+        {
+            case State.ready:
+                WeaponProfile profile = player.GetCurrentWeaponProfile();
+                if (profile == null)
+                    return null;
+                if (profile.upgradedProfile == null)
+                    return null;
+                return interactPromptText;
+            case State.collection:
+                return "to take weapon";
+            default:
+                return null;
+        }
+    }
+
+    public override Sprite GetInteractionIcon()
+    {
+        return null;
     }
 
 
