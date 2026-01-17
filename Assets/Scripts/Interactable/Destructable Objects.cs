@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DestructableObjects : Enemy
+public class DestructableObjects : Destructable
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

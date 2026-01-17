@@ -240,6 +240,9 @@ public class WeaponSystem : MonoBehaviour
             {
                 if (rayHit.collider.GetComponent<Enemy>() != null)
                     rayHit.collider.GetComponent<Enemy>().TakeDamage(profiles[currentWeaponIndex].damage);
+
+                if (rayHit.collider.GetComponent<Destructable>() != null)
+                    rayHit.collider.GetComponent<Destructable>().TakeDamage(profiles[currentWeaponIndex].damage);
             }
 
             CalculateGizmo(cam.transform.position, rayHit.point);

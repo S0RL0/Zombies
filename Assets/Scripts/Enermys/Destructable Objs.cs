@@ -2,7 +2,7 @@ using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IDamageable
+public class Destructable : MonoBehaviour, IDamageable
 {
     public float health = 100f;
     public GameObject floatingText;
