@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MaterialScroller : MonoBehaviour
@@ -7,37 +8,58 @@ public class MaterialScroller : MonoBehaviour
 
     private Vector2 offset;
 
+    private List<Renderer> renderers = new List<Renderer>();
+
+    private void Start()
+    {
+        // Initialize the list of renderers from this object and all children
+        CollectRenderersRecursively(transform);
+
+    }
+
     void Update()
     {
         offset.x += scrollSpeedX * Time.deltaTime;
         offset.y += scrollSpeedY * Time.deltaTime;
 
         // Apply to this object and all children
-        ApplyOffsetRecursively(transform, offset);
+        ApplyOffset(offset);
     }
 
-    void ApplyOffsetRecursively(Transform parent, Vector2 offset)
+    void ApplyOffset(Vector2 offset)
     {
-        foreach (Transform child in parent)
+        foreach (Renderer rend in renderers)
         {
-            Renderer rend = child.GetComponent<Renderer>();
             if (rend != null && rend.sharedMaterial != null)
             {
                 rend.sharedMaterial.mainTextureOffset = offset;
             }
+        }
+    }
 
+    void CollectRenderersRecursively(Transform parent)
+    {
+        foreach (Transform child in parent)
+        {
+            Renderer rend = child.GetComponent<Renderer>();
+
+            // Exclude renders with particle systems
+            ParticleSystem ps = child.GetComponent<ParticleSystem>();
+            if (rend != null && ps == null)
+            {
+                renderers.Add(rend);
+            }
             // Recursive call for grandchildren
             if (child.childCount > 0)
             {
-                ApplyOffsetRecursively(child, offset);
+                CollectRenderersRecursively(child);
             }
         }
-
-        // Also apply to the parent itself
+        // Also add the parent itself
         Renderer parentRend = parent.GetComponent<Renderer>();
-        if (parentRend != null && parentRend.sharedMaterial != null)
+        if (parentRend != null)
         {
-            parentRend.sharedMaterial.mainTextureOffset = offset;
+            renderers.Add(parentRend);
         }
     }
 }
