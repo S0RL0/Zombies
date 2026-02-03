@@ -2427,7 +2427,7 @@ Transform:
   m_GameObject: {fileID: 545438561}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.89, y: 0.961, z: 18.432644}
+  m_LocalPosition: {x: -7.05, y: 2.151, z: 17.898}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6572,6 +6572,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Prop_Crate_Stack_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1651506808176312, guid: 7e6480ea848b6d244af5ec2ff3bc6e03, type: 3}
+      propertyPath: m_TagString
+      value: Wood
+      objectReference: {fileID: 0}
     - target: {fileID: 4572491030229316, guid: 7e6480ea848b6d244af5ec2ff3bc6e03, type: 3}
       propertyPath: m_LocalPosition.x
       value: 16.755463
@@ -7070,6 +7074,70 @@ Transform:
   m_Children:
   - {fileID: 1885715451}
   m_Father: {fileID: 1621822674}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1655129446
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1655129448}
+  - component: {fileID: 1655129447}
+  m_Layer: 0
+  m_Name: Navmesh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1655129447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1655129446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 255
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.06666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: dbf1b9de5a4985447bfd28f1d181650f, type: 2}
+  m_BuildHeightMesh: 0
+--- !u!4 &1655129448
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1655129446}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1659337163
 GameObject:
@@ -8333,9 +8401,53 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1065175737304674, guid: 6993fd0e7237f024e80f00288eb435cd, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1071591853618604, guid: 6993fd0e7237f024e80f00288eb435cd, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 1215176133026714, guid: 6993fd0e7237f024e80f00288eb435cd, type: 3}
       propertyPath: m_Name
       value: SM_Wep_Pistol_Revolver_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1215176133026714, guid: 6993fd0e7237f024e80f00288eb435cd, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1299932741892594, guid: 6993fd0e7237f024e80f00288eb435cd, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1300283488227454, guid: 6993fd0e7237f024e80f00288eb435cd, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1305051011425520, guid: 6993fd0e7237f024e80f00288eb435cd, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1445563466327256, guid: 6993fd0e7237f024e80f00288eb435cd, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1653451728894900, guid: 6993fd0e7237f024e80f00288eb435cd, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1808575786381338, guid: 6993fd0e7237f024e80f00288eb435cd, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1853517519676078, guid: 6993fd0e7237f024e80f00288eb435cd, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1992835969015540, guid: 6993fd0e7237f024e80f00288eb435cd, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4765272294121392, guid: 6993fd0e7237f024e80f00288eb435cd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8488,6 +8600,10 @@ PrefabInstance:
     - target: {fileID: 1651506808176312, guid: 7e6480ea848b6d244af5ec2ff3bc6e03, type: 3}
       propertyPath: m_Name
       value: SM_Prop_Crate_Stack_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1651506808176312, guid: 7e6480ea848b6d244af5ec2ff3bc6e03, type: 3}
+      propertyPath: m_TagString
+      value: Wood
       objectReference: {fileID: 0}
     - target: {fileID: 4572491030229316, guid: 7e6480ea848b6d244af5ec2ff3bc6e03, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8905,9 +9021,53 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1000918064348102, guid: ee2cb268404949a4fbaadcf58acb29c5, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1065312521456956, guid: ee2cb268404949a4fbaadcf58acb29c5, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195068092327116, guid: ee2cb268404949a4fbaadcf58acb29c5, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 1404540613340210, guid: ee2cb268404949a4fbaadcf58acb29c5, type: 3}
       propertyPath: m_Name
       value: SM_Wep_Revolver_Snub_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1404540613340210, guid: ee2cb268404949a4fbaadcf58acb29c5, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1529751969934678, guid: ee2cb268404949a4fbaadcf58acb29c5, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1617271350299856, guid: ee2cb268404949a4fbaadcf58acb29c5, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1724484149059506, guid: ee2cb268404949a4fbaadcf58acb29c5, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1753153087580836, guid: ee2cb268404949a4fbaadcf58acb29c5, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1846022577206336, guid: ee2cb268404949a4fbaadcf58acb29c5, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879282623490636, guid: ee2cb268404949a4fbaadcf58acb29c5, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1936759813211128, guid: ee2cb268404949a4fbaadcf58acb29c5, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4119278303340458, guid: ee2cb268404949a4fbaadcf58acb29c5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9186,7 +9346,7 @@ GameObject:
   - component: {fileID: 64388874195001031}
   m_Layer: 0
   m_Name: SM_Prop_Container_01
-  m_TagString: Untagged
+  m_TagString: Metal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9208,7 +9368,7 @@ GameObject:
   - component: {fileID: 64388875425633571}
   m_Layer: 0
   m_Name: SM_Prop_Container_01 (1)
-  m_TagString: Untagged
+  m_TagString: Metal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15460,7 +15620,7 @@ GameObject:
   - component: {fileID: 148485107079534883}
   - component: {fileID: 196098773526196981}
   - component: {fileID: 196098773526196982}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Shotgun_01 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15478,7 +15638,7 @@ GameObject:
   - component: {fileID: 167310468109705515}
   - component: {fileID: 156394014109352505}
   - component: {fileID: 148470563227856383}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Shotgun_Stock_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15496,7 +15656,7 @@ GameObject:
   - component: {fileID: 165780008762709867}
   - component: {fileID: 156489158766369887}
   - component: {fileID: 148527374718821651}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Shotgun_Pump_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15514,7 +15674,7 @@ GameObject:
   - component: {fileID: 165820664452427769}
   - component: {fileID: 154305393813569583}
   - component: {fileID: 148149009481544095}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Shotgun_Slide_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15532,7 +15692,7 @@ GameObject:
   - component: {fileID: 165826222135951395}
   - component: {fileID: 155845933077338211}
   - component: {fileID: 148314484500008419}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Shotgun_StockPad_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15550,7 +15710,7 @@ GameObject:
   - component: {fileID: 167202256195734083}
   - component: {fileID: 155856939496470787}
   - component: {fileID: 146737347882882495}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Shotgun_Trigger_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16211,7 +16371,7 @@ GameObject:
   - component: {fileID: 331659471217130082}
   - component: {fileID: 299512859846950372}
   - component: {fileID: 345127193251347771}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ward 12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16256,7 +16416,7 @@ GameObject:
   - component: {fileID: 350745871414951760}
   - component: {fileID: 339606445871090648}
   - component: {fileID: 332197546196146734}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16274,7 +16434,7 @@ GameObject:
   - component: {fileID: 342383209921359940}
   - component: {fileID: 340923378596123340}
   - component: {fileID: 331639840486971544}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16292,7 +16452,7 @@ GameObject:
   - component: {fileID: 350945661786455846}
   - component: {fileID: 340438433651961968}
   - component: {fileID: 333119858715840918}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Slide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16541,9 +16701,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1524073966450882050, guid: 592cd6c1f53fd79468e1ecfff3bb8ba7, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 2990286378154291744, guid: 592cd6c1f53fd79468e1ecfff3bb8ba7, type: 3}
       propertyPath: m_Name
       value: KR-80S
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990286378154291744, guid: 592cd6c1f53fd79468e1ecfff3bb8ba7, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219137950664366003, guid: 592cd6c1f53fd79468e1ecfff3bb8ba7, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4172449222658464594, guid: 592cd6c1f53fd79468e1ecfff3bb8ba7, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351784041536854866, guid: 592cd6c1f53fd79468e1ecfff3bb8ba7, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5736109665591742574, guid: 592cd6c1f53fd79468e1ecfff3bb8ba7, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7465735151263541473, guid: 592cd6c1f53fd79468e1ecfff3bb8ba7, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8275450152308527818, guid: 592cd6c1f53fd79468e1ecfff3bb8ba7, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 9005669470153117358, guid: 592cd6c1f53fd79468e1ecfff3bb8ba7, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16663,7 +16859,7 @@ GameObject:
   - component: {fileID: 475542179258606404}
   - component: {fileID: 504134060100205146}
   - component: {fileID: 494770247495952390}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Bolt_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16681,7 +16877,7 @@ GameObject:
   - component: {fileID: 475568366752211766}
   - component: {fileID: 504115456477870332}
   - component: {fileID: 493767276420951958}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Mag_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16701,7 +16897,7 @@ GameObject:
   - component: {fileID: 494784037444363184}
   - component: {fileID: 463083301364228382}
   - component: {fileID: 503991267462301523}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16719,7 +16915,7 @@ GameObject:
   - component: {fileID: 475565742930400138}
   - component: {fileID: 504387696106894034}
   - component: {fileID: 494179995845502562}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Trigger_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17464,7 +17660,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1160818187148686001}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ejector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18005,7 +18201,7 @@ GameObject:
   - component: {fileID: 671013619236850915}
   - component: {fileID: 663442554633667467}
   - component: {fileID: 653921892663473999}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Bandit_Mag_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18023,7 +18219,7 @@ GameObject:
   - component: {fileID: 671429274788190317}
   - component: {fileID: 663619190173422533}
   - component: {fileID: 654408276657215035}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Bandit_Handle_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18041,7 +18237,7 @@ GameObject:
   - component: {fileID: 670578386000233247}
   - component: {fileID: 664204763276042559}
   - component: {fileID: 654070094065538657}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Bandit_Trigger_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18059,7 +18255,7 @@ GameObject:
   - component: {fileID: 670898636946279013}
   - component: {fileID: 663573614083023083}
   - component: {fileID: 653679030146369555}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Bandit_Bipod_Leg_R_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18077,7 +18273,7 @@ GameObject:
   - component: {fileID: 670939538149643335}
   - component: {fileID: 664310055287596463}
   - component: {fileID: 654383702864810231}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Bandit_Bipod_Leg_L_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18095,7 +18291,7 @@ GameObject:
   - component: {fileID: 671185393606872263}
   - component: {fileID: 663761201198260161}
   - component: {fileID: 654041199389375077}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Bandit_Top_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18113,7 +18309,7 @@ GameObject:
   - component: {fileID: 670529716342749443}
   - component: {fileID: 664014781165714573}
   - component: {fileID: 653355184484031831}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Bandit_Bipod_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18131,7 +18327,7 @@ GameObject:
   - component: {fileID: 670791378665327715}
   - component: {fileID: 664063997577380489}
   - component: {fileID: 653825075634506011}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Bandit_Belt_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18151,7 +18347,7 @@ GameObject:
   - component: {fileID: 654421824390509005}
   - component: {fileID: 695209832692339689}
   - component: {fileID: 695209832692339690}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Bandit_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18550,9 +18746,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1374746961795464167, guid: 55e190c0fd892dc44a158e1c7a7d3baa, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2371330232073399823, guid: 55e190c0fd892dc44a158e1c7a7d3baa, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3098653529520658645, guid: 55e190c0fd892dc44a158e1c7a7d3baa, type: 3}
       propertyPath: m_Name
       value: RD S88
+      objectReference: {fileID: 0}
+    - target: {fileID: 3098653529520658645, guid: 55e190c0fd892dc44a158e1c7a7d3baa, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3494500908103972418, guid: 55e190c0fd892dc44a158e1c7a7d3baa, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3516890016247839846, guid: 55e190c0fd892dc44a158e1c7a7d3baa, type: 3}
       propertyPath: m_LocalPosition.x
@@ -18776,7 +18988,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7603522554383872060}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Muzzle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24349,7 +24561,7 @@ GameObject:
   - component: {fileID: 1414768310832294682}
   - component: {fileID: 1430403050253103470}
   - component: {fileID: 1440936504278240864}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Handle_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24367,7 +24579,7 @@ GameObject:
   - component: {fileID: 1422093058547127462}
   - component: {fileID: 1429011593596927836}
   - component: {fileID: 1439047616393378348}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Slide_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24385,7 +24597,7 @@ GameObject:
   - component: {fileID: 1422067022751022888}
   - component: {fileID: 1430432522228066398}
   - component: {fileID: 1439140337780435046}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Top_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24403,7 +24615,7 @@ GameObject:
   - component: {fileID: 1415076943598956226}
   - component: {fileID: 1428797611162728734}
   - component: {fileID: 1439379944821983768}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Stock_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24421,7 +24633,7 @@ GameObject:
   - component: {fileID: 1422466364947663686}
   - component: {fileID: 1431008286329792142}
   - component: {fileID: 1439076644119298658}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Scope_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24441,7 +24653,7 @@ GameObject:
   - component: {fileID: 1438916679704217928}
   - component: {fileID: 1389470279959533370}
   - component: {fileID: 1438916679704217929}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24459,7 +24671,7 @@ GameObject:
   - component: {fileID: 1422525352435941970}
   - component: {fileID: 1430814203820625878}
   - component: {fileID: 1438956613841208006}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Trigger_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24477,7 +24689,7 @@ GameObject:
   - component: {fileID: 1414775946147609638}
   - component: {fileID: 1430904477486187720}
   - component: {fileID: 1441132194120350552}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Belt_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24495,7 +24707,7 @@ GameObject:
   - component: {fileID: 1422280002839273926}
   - component: {fileID: 1430782144245197384}
   - component: {fileID: 1441067936957099974}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_MachineGun_Mag_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30559,7 +30771,7 @@ GameObject:
   - component: {fileID: 1679037890502101169}
   - component: {fileID: 1673916390616709101}
   - component: {fileID: 1663665498664936739}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_SubMGun_Lite_Slide_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30577,7 +30789,7 @@ GameObject:
   - component: {fileID: 1680823522388311025}
   - component: {fileID: 1672981848538577827}
   - component: {fileID: 1662372463015038701}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_SubMGun_Lite_Mag_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30595,7 +30807,7 @@ GameObject:
   - component: {fileID: 1680763282922428737}
   - component: {fileID: 1673038772334932859}
   - component: {fileID: 1662085743352632665}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_SubMGun_Lite_Grip_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30615,7 +30827,7 @@ GameObject:
   - component: {fileID: 1662035191215945999}
   - component: {fileID: 1704603763656497561}
   - component: {fileID: 1704603763656497562}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Nord KP11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30633,7 +30845,7 @@ GameObject:
   - component: {fileID: 1678907197730857333}
   - component: {fileID: 1672514538039464619}
   - component: {fileID: 1663737603074004051}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_SubMGun_Lite_Trigger_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30651,7 +30863,7 @@ GameObject:
   - component: {fileID: 1679041360270963599}
   - component: {fileID: 1672994064654170105}
   - component: {fileID: 1661891573841729245}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_SubMGun_Lite_Stock_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30836,7 +31048,7 @@ GameObject:
   - component: {fileID: 8704682832189224047}
   - component: {fileID: 4382408314611697166}
   - component: {fileID: 8704682832189224048}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: KR-80S (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30903,7 +31115,7 @@ GameObject:
   - component: {fileID: 1731053755064811174}
   - component: {fileID: 1757424184687418348}
   - component: {fileID: 1749584531408780634}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Rifle_Assault_Slide_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30921,7 +31133,7 @@ GameObject:
   - component: {fileID: 1736705108310387874}
   - component: {fileID: 1759979237096236824}
   - component: {fileID: 1747674487407950310}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Rifle_Assault_Trigger_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30939,7 +31151,7 @@ GameObject:
   - component: {fileID: 1737165631407562500}
   - component: {fileID: 1756956279712531226}
   - component: {fileID: 1747440686006379274}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Rifle_Assault_Stock_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30957,7 +31169,7 @@ GameObject:
   - component: {fileID: 1731021461655590590}
   - component: {fileID: 1760060347747977316}
   - component: {fileID: 1749128716081386604}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Rifle_Assault_Mag_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30977,7 +31189,7 @@ GameObject:
   - component: {fileID: 1749156621069967290}
   - component: {fileID: 1797078246919266748}
   - component: {fileID: 1797078246919266749}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Rifle_Assault_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36718,7 +36930,7 @@ GameObject:
   - component: {fileID: 1802645936172289063}
   - component: {fileID: 1851229149348519257}
   - component: {fileID: 1851229149348519258}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_B_Rifle_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36736,7 +36948,7 @@ GameObject:
   - component: {fileID: 1821674579277561133}
   - component: {fileID: 1810480239762076845}
   - component: {fileID: 1802779015809281839}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_B_Rifle_02_Slide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36754,7 +36966,7 @@ GameObject:
   - component: {fileID: 1821179369704982413}
   - component: {fileID: 1811431318035038389}
   - component: {fileID: 1802030830809274663}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_B_Rifle_02_Mag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36772,7 +36984,7 @@ GameObject:
   - component: {fileID: 1826477827385545717}
   - component: {fileID: 1814543264526811359}
   - component: {fileID: 1802276614649362267}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_B_Rifle_02_Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36790,7 +37002,7 @@ GameObject:
   - component: {fileID: 1821436387172519931}
   - component: {fileID: 1810778556541071629}
   - component: {fileID: 1803125619715942725}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_B_Rifle_02_Sight_Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36808,7 +37020,7 @@ GameObject:
   - component: {fileID: 1821348787658220383}
   - component: {fileID: 1810889531501403681}
   - component: {fileID: 1802074248381446629}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_B_Rifle_02_Sight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37896,7 +38108,7 @@ GameObject:
   - component: {fileID: 2080189293706898803}
   - component: {fileID: 2069859208561693117}
   - component: {fileID: 2061350788944080013}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Mil_Bolt_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37914,7 +38126,7 @@ GameObject:
   - component: {fileID: 2080487957551773247}
   - component: {fileID: 2068857009961851973}
   - component: {fileID: 2061829195243742217}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Mil_Scope_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37932,7 +38144,7 @@ GameObject:
   - component: {fileID: 2072114800121849765}
   - component: {fileID: 2069090664579988041}
   - component: {fileID: 2062529733101749327}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Mil_Trigger_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37952,7 +38164,7 @@ GameObject:
   - component: {fileID: 2061198411988058615}
   - component: {fileID: 2029730480517422939}
   - component: {fileID: 2080631189039560222}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Mil_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37970,7 +38182,7 @@ GameObject:
   - component: {fileID: 2072135374967471865}
   - component: {fileID: 2068950535189588135}
   - component: {fileID: 2062036418018504495}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Mil_Stock_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38240,7 +38452,7 @@ GameObject:
   - component: {fileID: 5435826375749317344}
   - component: {fileID: 6652487163433901386}
   - component: {fileID: 1505159551442906532}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FlashHeadon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38963,7 +39175,7 @@ GameObject:
   - component: {fileID: 5639622770636097976}
   - component: {fileID: 2495557362013127710}
   - component: {fileID: 7792770141598987503}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49727,7 +49939,7 @@ GameObject:
   - component: {fileID: 3349285599056821692}
   - component: {fileID: 3318408648903648234}
   - component: {fileID: 3325513767040203746}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Lite_Mag_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49745,7 +49957,7 @@ GameObject:
   - component: {fileID: 3342907238344304954}
   - component: {fileID: 3315690376426830454}
   - component: {fileID: 3325469323174392370}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Lite_Slide_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49763,7 +49975,7 @@ GameObject:
   - component: {fileID: 3343088582917727852}
   - component: {fileID: 3318539735151448498}
   - component: {fileID: 3325751580260166712}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Lite_Scope_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49781,7 +49993,7 @@ GameObject:
   - component: {fileID: 3342982060557364486}
   - component: {fileID: 3315337529720658086}
   - component: {fileID: 3325538338562777242}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Lite_Flash_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49801,7 +50013,7 @@ GameObject:
   - component: {fileID: 3324129454540117580}
   - component: {fileID: 3355290549479838786}
   - component: {fileID: 3355290549479838787}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Lite_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49819,7 +50031,7 @@ GameObject:
   - component: {fileID: 3343305265608831362}
   - component: {fileID: 3318361968660464406}
   - component: {fileID: 3324794727516241722}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Lite_Trigger_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58182,6 +58394,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 832657119630039841, guid: a53a434f8d82443488339f65d6b45fcb, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5781005907472603983, guid: a53a434f8d82443488339f65d6b45fcb, type: 3}
       propertyPath: m_Name
       value: KR-74
@@ -63677,9 +63893,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 155282095102648618, guid: 2c6fb32f6d668af44b2f2aa8dcb26bac, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 287716830924797104, guid: 2c6fb32f6d668af44b2f2aa8dcb26bac, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2060669570849966461, guid: 2c6fb32f6d668af44b2f2aa8dcb26bac, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2611937437554766706, guid: 2c6fb32f6d668af44b2f2aa8dcb26bac, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4773073344478652045, guid: 2c6fb32f6d668af44b2f2aa8dcb26bac, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5181783632380301509, guid: 2c6fb32f6d668af44b2f2aa8dcb26bac, type: 3}
       propertyPath: m_Name
       value: Santori 93
+      objectReference: {fileID: 0}
+    - target: {fileID: 5181783632380301509, guid: 2c6fb32f6d668af44b2f2aa8dcb26bac, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5973894879901946832, guid: 2c6fb32f6d668af44b2f2aa8dcb26bac, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6018727096603677495, guid: 2c6fb32f6d668af44b2f2aa8dcb26bac, type: 3}
       propertyPath: m_LocalPosition.x
@@ -63720,6 +63964,14 @@ PrefabInstance:
     - target: {fileID: 6018727096603677495, guid: 2c6fb32f6d668af44b2f2aa8dcb26bac, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7217381557040903957, guid: 2c6fb32f6d668af44b2f2aa8dcb26bac, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539968745874911536, guid: 2c6fb32f6d668af44b2f2aa8dcb26bac, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -63850,7 +64102,7 @@ GameObject:
   - component: {fileID: 4725912008162759106}
   - component: {fileID: 4752290530891018634}
   - component: {fileID: 4742458585010404936}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Shotgun_Trigger_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63868,7 +64120,7 @@ GameObject:
   - component: {fileID: 4722773230434262306}
   - component: {fileID: 4752007794820035136}
   - component: {fileID: 4744384289651546516}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Shotgun_Slide_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63888,7 +64140,7 @@ GameObject:
   - component: {fileID: 4744499951578900516}
   - component: {fileID: 4711398956593658422}
   - component: {fileID: 4754802923365090479}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Shotgun_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64381,6 +64633,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ward 3
       objectReference: {fileID: 0}
+    - target: {fileID: 353897160841102565, guid: f7e066a2649e12347a819558b31854bc, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 418676640895027854, guid: f7e066a2649e12347a819558b31854bc, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 461945884808596822, guid: f7e066a2649e12347a819558b31854bc, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 1417656728100840636, guid: f7e066a2649e12347a819558b31854bc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.18
@@ -64420,6 +64684,30 @@ PrefabInstance:
     - target: {fileID: 1417656728100840636, guid: f7e066a2649e12347a819558b31854bc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2391462742002594829, guid: f7e066a2649e12347a819558b31854bc, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2492212340714397550, guid: f7e066a2649e12347a819558b31854bc, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6471792887774050792, guid: f7e066a2649e12347a819558b31854bc, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6741425912675339846, guid: f7e066a2649e12347a819558b31854bc, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7097709162506640137, guid: f7e066a2649e12347a819558b31854bc, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7820239198656597640, guid: f7e066a2649e12347a819558b31854bc, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -64520,7 +64808,7 @@ GameObject:
   - component: {fileID: 1587249738818055322}
   - component: {fileID: 4726654948316663174}
   - component: {fileID: 4528728081630442354}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66506,7 +66794,7 @@ GameObject:
   - component: {fileID: 5522355645686577498}
   - component: {fileID: 5537985989816861894}
   - component: {fileID: 5548105336225082632}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Stock_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66524,7 +66812,7 @@ GameObject:
   - component: {fileID: 5522346374437006984}
   - component: {fileID: 5538149742160259348}
   - component: {fileID: 5548163970686480690}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Mag_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66542,7 +66830,7 @@ GameObject:
   - component: {fileID: 5522501351608373912}
   - component: {fileID: 5536080295693341718}
   - component: {fileID: 5548291151650157862}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Scope_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66560,7 +66848,7 @@ GameObject:
   - component: {fileID: 5522287614325883898}
   - component: {fileID: 5538003110161783672}
   - component: {fileID: 5548268214035290176}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Trigger_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66580,7 +66868,7 @@ GameObject:
   - component: {fileID: 5548211085485373170}
   - component: {fileID: 5496850757038932358}
   - component: {fileID: 5548211085485373171}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_01 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66598,7 +66886,7 @@ GameObject:
   - component: {fileID: 5522427234813242864}
   - component: {fileID: 5537793762682934838}
   - component: {fileID: 5548008758799370598}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Slide_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67203,7 +67491,7 @@ GameObject:
   - component: {fileID: 5120763457576468021}
   - component: {fileID: 6802168597473413388}
   - component: {fileID: 7735717681680575371}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sight Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72285,6 +72573,10 @@ PrefabInstance:
     - target: {fileID: 5041331379073124125, guid: 4b6bca77f69e71747ad84c6e0eb466bd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8473035013373292959, guid: 4b6bca77f69e71747ad84c6e0eb466bd, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 9028087573219373988, guid: 4b6bca77f69e71747ad84c6e0eb466bd, type: 3}
       propertyPath: m_Name
@@ -78313,7 +78605,7 @@ GameObject:
   - component: {fileID: 6230001267706107677}
   - component: {fileID: 6197681256086566485}
   - component: {fileID: 6208699503389976179}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Rifle_Assault_Mag_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78331,7 +78623,7 @@ GameObject:
   - component: {fileID: 6229771318349575035}
   - component: {fileID: 6200838785713535883}
   - component: {fileID: 6208238039789134939}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Rifle_Assault_Flash_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78349,7 +78641,7 @@ GameObject:
   - component: {fileID: 6229906873790793591}
   - component: {fileID: 6200731777028121631}
   - component: {fileID: 6208239541689061291}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Rifle_Assault_Trigger_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78367,7 +78659,7 @@ GameObject:
   - component: {fileID: 6226855311698748167}
   - component: {fileID: 6200705707436872855}
   - component: {fileID: 6208459265632277747}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Rifle_Assault_Slide_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78387,7 +78679,7 @@ GameObject:
   - component: {fileID: 6208264520637404079}
   - component: {fileID: 6241025971813888567}
   - component: {fileID: 6241025971813888568}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Rifle_Assault_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78466,7 +78758,7 @@ GameObject:
   - component: {fileID: 6906500387716109372}
   - component: {fileID: 3758829490373751001}
   - component: {fileID: 6582258899516976006}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98648,9 +98940,45 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1479270830389585006, guid: 07d8edba148b9df48adbe4f42218bd47, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2466329435520708428, guid: 07d8edba148b9df48adbe4f42218bd47, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2598550294608836330, guid: 07d8edba148b9df48adbe4f42218bd47, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3913357363096573098, guid: 07d8edba148b9df48adbe4f42218bd47, type: 3}
       propertyPath: m_Name
       value: RD MINIMA
+      objectReference: {fileID: 0}
+    - target: {fileID: 3913357363096573098, guid: 07d8edba148b9df48adbe4f42218bd47, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325176495775019519, guid: 07d8edba148b9df48adbe4f42218bd47, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4333614456685585868, guid: 07d8edba148b9df48adbe4f42218bd47, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4821384757926713962, guid: 07d8edba148b9df48adbe4f42218bd47, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5168618062138909360, guid: 07d8edba148b9df48adbe4f42218bd47, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5407223154351947216, guid: 07d8edba148b9df48adbe4f42218bd47, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5729193389914896475, guid: 07d8edba148b9df48adbe4f42218bd47, type: 3}
       propertyPath: m_LocalPosition.x
@@ -98691,6 +99019,18 @@ PrefabInstance:
     - target: {fileID: 5729193389914896475, guid: 07d8edba148b9df48adbe4f42218bd47, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226142348735970918, guid: 07d8edba148b9df48adbe4f42218bd47, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8133752984134594026, guid: 07d8edba148b9df48adbe4f42218bd47, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8157114916440061421, guid: 07d8edba148b9df48adbe4f42218bd47, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -108209,7 +108549,7 @@ GameObject:
   - component: {fileID: 7316883396316589982}
   - component: {fileID: 7349093540770207224}
   - component: {fileID: 7336783855012083080}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Heavy_Bipod_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108227,7 +108567,7 @@ GameObject:
   - component: {fileID: 7316987118461156504}
   - component: {fileID: 7349041064228788046}
   - component: {fileID: 7336461250603056814}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Heavy_Scope_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108245,7 +108585,7 @@ GameObject:
   - component: {fileID: 7319696166096930092}
   - component: {fileID: 7346278708777590478}
   - component: {fileID: 7336791195741751280}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Heavy_Mag_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108265,7 +108605,7 @@ GameObject:
   - component: {fileID: 7338539229741744168}
   - component: {fileID: 7305925733752429788}
   - component: {fileID: 7349045438674930415}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Heavy_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108283,7 +108623,7 @@ GameObject:
   - component: {fileID: 7319793422866412824}
   - component: {fileID: 7346033944193115022}
   - component: {fileID: 7336924484101110996}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Heavy_Slide_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108301,7 +108641,7 @@ GameObject:
   - component: {fileID: 7319708550781990374}
   - component: {fileID: 7349256788790679342}
   - component: {fileID: 7336723304159587042}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Heavy_Trigger_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108319,7 +108659,7 @@ GameObject:
   - component: {fileID: 7319489058479678766}
   - component: {fileID: 7349257446228746840}
   - component: {fileID: 7338347538324241890}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Sniper_Heavy_Bipod_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109939,7 +110279,7 @@ GameObject:
   - component: {fileID: 7766551342461580449}
   - component: {fileID: 7759627760812702015}
   - component: {fileID: 7749697750177957599}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_B_Sniper_01_Sight_Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109957,7 +110297,7 @@ GameObject:
   - component: {fileID: 7770530214104924659}
   - component: {fileID: 7759354878569362847}
   - component: {fileID: 7749816763154293309}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_B_Sniper_01_Slide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109975,7 +110315,7 @@ GameObject:
   - component: {fileID: 7766736251044322353}
   - component: {fileID: 7755468415488549557}
   - component: {fileID: 7749668269893195209}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_B_Sniper_01_Mag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109993,7 +110333,7 @@ GameObject:
   - component: {fileID: 7770599535120047695}
   - component: {fileID: 7755364855541600583}
   - component: {fileID: 7750093231250821041}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_B_Sniper_01_Sight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110011,7 +110351,7 @@ GameObject:
   - component: {fileID: 7766944276124725477}
   - component: {fileID: 7759195099927778015}
   - component: {fileID: 7749511761627856983}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_B_Sniper_01_Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110031,7 +110371,7 @@ GameObject:
   - component: {fileID: 7748764876129114007}
   - component: {fileID: 7727261055917672201}
   - component: {fileID: 7772819509809599288}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_B_Sniper_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110456,9 +110796,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 771222284012568100, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 897262066082303617, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
       propertyPath: m_Name
       value: Nord KP7
+      objectReference: {fileID: 0}
+    - target: {fileID: 897262066082303617, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1438767932312332285, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1701218050629708458, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -110499,6 +110851,42 @@ PrefabInstance:
     - target: {fileID: 1701218050629708458, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3532798700236695516, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3772892890188053141, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767525226916074451, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5806328873456329145, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6817003412456722978, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7164798057181899360, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8093618960578305963, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8147355567733597115, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8366258505047798552, guid: 04b9c8c0492a5c04390f480f421a2a3a, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -110641,6 +111029,7 @@ MonoBehaviour:
   bulletImpact:
   - {fileID: 5643604064675710849, guid: 1826b8e48fc2421489a6db0426769663, type: 3}
   - {fileID: 2358101627313222812, guid: 9131b7a4b99fa534781d457085bc310e, type: 3}
+  - {fileID: 8390626686314494724, guid: 27141ffe20be5e048bfbac5060d0efaf, type: 3}
   - {fileID: 8390626686314494724, guid: 27141ffe20be5e048bfbac5060d0efaf, type: 3}
   cam: {fileID: 0}
   projectilePoint: {fileID: 0}
@@ -111046,7 +111435,7 @@ GameObject:
   - component: {fileID: 8121648536618631228}
   - component: {fileID: 8129888007089576634}
   - component: {fileID: 8138482191008638076}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_A_Rifle_03_Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111066,7 +111455,7 @@ GameObject:
   - component: {fileID: 8139172885612224326}
   - component: {fileID: 8088795998933675882}
   - component: {fileID: 8139172885612224327}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_A_Rifle_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111084,7 +111473,7 @@ GameObject:
   - component: {fileID: 8118584023569804068}
   - component: {fileID: 8129813930526273022}
   - component: {fileID: 8139760955697968732}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_A_Rifle_03_Slide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111102,7 +111491,7 @@ GameObject:
   - component: {fileID: 8118455467841333732}
   - component: {fileID: 8132868378403720132}
   - component: {fileID: 8140014920831601424}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_A_Rifle_03_Mag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111120,7 +111509,7 @@ GameObject:
   - component: {fileID: 8121515682757183044}
   - component: {fileID: 8129139023190879246}
   - component: {fileID: 8139192611792353740}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Preset_A_Rifle_03_Charge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113471,7 +113860,7 @@ GameObject:
   - component: {fileID: 5292805925542939993}
   - component: {fileID: 6704913465298924534}
   - component: {fileID: 8159288632199267201}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Slide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113660,6 +114049,7 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1655129448}
   - {fileID: 1514581291}
   - {fileID: 676723607}
   - {fileID: 7926998097612782907}

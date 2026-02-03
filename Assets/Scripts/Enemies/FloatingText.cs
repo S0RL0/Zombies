@@ -1,5 +1,5 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class FloatingText : MonoBehaviour
 {
@@ -12,9 +12,11 @@ public class FloatingText : MonoBehaviour
     private Vector3 moveDirection;
     private TMP_Text tmp;
     private Color startColor;
+    Transform player;
 
     void Start()
     {
+        player = FindFirstObjectByType<PlayerController>().transform;
         tmp = GetComponentInChildren<TMP_Text>();
         if (tmp == null)
         {
@@ -40,8 +42,8 @@ public class FloatingText : MonoBehaviour
         transform.position += moveDirection * moveSpeed * Time.deltaTime;
 
         // Face camera
-        if (Camera.main != null)
-            transform.LookAt(Camera.main.transform.position);
+        if (player != null)
+            transform.LookAt(player.position);
 
         // Fade out
         float alpha = Mathf.Lerp(1f, 0f, timer / lifetime);
@@ -63,7 +65,7 @@ public class FloatingText : MonoBehaviour
             tmp.color = Color.red;
             startColor = tmp.color;
         }
-            
+
 
         tmp.text = message;
     }

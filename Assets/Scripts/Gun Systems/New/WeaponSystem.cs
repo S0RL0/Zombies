@@ -236,14 +236,17 @@ public class WeaponSystem : MonoBehaviour
         // RayCast
         if (Physics.Raycast(cam.transform.position, direction, out rayHit, profiles[currentWeaponIndex].maxRange, enemyLayer))
         {
-            if (rayHit.collider.CompareTag("Enemy"))
+            Enemy enemy = rayHit.collider.GetComponentInParent<Enemy>();
+            if (enemy != null)
             {
-                if (rayHit.collider.GetComponent<Enemy>() != null)
-                    rayHit.collider.GetComponent<Enemy>().TakeDamage(profiles[currentWeaponIndex].damage);
-
-                if (rayHit.collider.GetComponent<Destructable>() != null)
-                    rayHit.collider.GetComponent<Destructable>().TakeDamage(profiles[currentWeaponIndex].damage);
+                if (rayHit.collider.name == "Head")
+                    enemy.TakeDamage(profiles[currentWeaponIndex].damage * profiles[currentWeaponIndex].headshotMultiplier);
+                else
+                    enemy.TakeDamage(profiles[currentWeaponIndex].damage);
             }
+
+            if (rayHit.collider.GetComponent<Destructable>() != null)
+                rayHit.collider.GetComponent<Destructable>().TakeDamage(profiles[currentWeaponIndex].damage);
 
             CalculateGizmo(cam.transform.position, rayHit.point);
         }
@@ -257,21 +260,34 @@ public class WeaponSystem : MonoBehaviour
         // Particle effects here
         weaponModels[currentWeaponIndex].GetComponent<Weapon>().fireFX();
 
-        if (bulletImpact[0] != null)
+        if (bulletImpact.Count > 0)
         {
+            string impactTag = rayHit.collider != null ? rayHit.collider.tag : "Untagged";
+            int impactIndex = 0;
+            switch (impactTag)
+            {
+                case "Stone":
+                    impactIndex = 0;
+                    break;
+                case "Metal":
+                    impactIndex = 1;
+                    break;
+                case "Wood":
+                    impactIndex = 2;
+                    break;
+                case "Enemy":
+                    impactIndex = 3;
+                    break;
+            }
             Quaternion rotation = Quaternion.LookRotation(rayHit.normal);
-            Instantiate(bulletImpact[0], rayHit.point, rotation);
+            Instantiate(bulletImpact[impactIndex], rayHit.point, rotation, rayHit.collider.transform);
         }
-
-
         // int fXVolume = AudioSettingsManager.Instance.FXVolume;
 
         GunshotInstance = RuntimeManager.CreateInstance(profiles[currentWeaponIndex].gunshotSFX);
         GunshotInstance.setVolume(0.2F);
         GunshotInstance.start();
         GunshotInstance.release();
-
-
 
         // Adjust ammo
         bulletsLeftInMag[currentWeaponIndex]--;

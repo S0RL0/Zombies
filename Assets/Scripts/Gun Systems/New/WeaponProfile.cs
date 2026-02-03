@@ -38,6 +38,8 @@ public class WeaponProfile : ScriptableObject
     [Header("Weapon Firing Stats")]
     [Tooltip("Damage per bullet.")]
     public int damage;
+    [Tooltip("Damage per bullet.")]
+    public float headshotMultiplier = 1.5f;
     [Tooltip("Rate of fire in Rounds per minute")]
     public float rateOfFire;
     [HideInInspector] public float timeBetweenRounds;
