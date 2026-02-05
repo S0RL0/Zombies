@@ -117,15 +117,35 @@ public class Enemy : MonoBehaviour, IDamageable
             reachedGoal = true;
         }
         if (reachedGoal && readyToAttack)
+        {
+            if (navMeshAgent)
+                StopMovement();
             currentState = EnemyState.Attack;
+        }
         else
+        {
             navMeshAgent.destination = target.position;
+        }
     }
 
     public virtual void Attack()
     {
         // start attack animation then wait, then apply damage to player if still in range
         if (!target) return;
+
+        // Rotate to face the target while attacking
+        Vector3 lookDir = target.position - transform.position;
+        lookDir.y = 0f;
+
+        if (lookDir.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(lookDir);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                rotationSpeed * Time.deltaTime
+            );
+        }
 
         attackTimer -= Time.deltaTime;
         if (attackTimer <= 0f)
@@ -145,11 +165,15 @@ public class Enemy : MonoBehaviour, IDamageable
                 attackTimer = attackDelay;
 
                 Invoke("AttackCooldown", attackCooldown);
+                if (navMeshAgent)
+                    ResumeMovement();
                 currentState = EnemyState.Chase;
             }
             else
             {
                 attackTimer = attackDelay;
+                if (navMeshAgent)
+                    ResumeMovement();
                 currentState = EnemyState.Chase;
                 return;
             }
@@ -159,7 +183,6 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void AttackCooldown()
     {
-        Debug.Log("Enemy is ready to attack again.");
         readyToAttack = true;
     }
 
@@ -213,6 +236,17 @@ public class Enemy : MonoBehaviour, IDamageable
         // Store transform so the enemy can follow a moving target
         this.target = target;
         this.obstacle = obstacle;
+    }
+
+    void StopMovement()
+    {
+        navMeshAgent.isStopped = true;
+        navMeshAgent.velocity = Vector3.zero;
+    }
+
+    void ResumeMovement()
+    {
+        navMeshAgent.isStopped = false;
     }
 
     protected enum EnemyState
