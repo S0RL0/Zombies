@@ -110,6 +110,17 @@ public class Enemy : MonoBehaviour, IDamageable
     }
     public virtual void Chase()
     {
+        Vector3 dir = navMeshAgent.velocity.normalized;
+        Vector3 forward = transform.forward;
+        Vector3 deltaDir = dir - forward;
+        Debug.Log("Enemy velocity: " + dir + "|Object forward: " + forward + "|Delta: " + deltaDir);
+        Animator animator = GetComponent<Animator>();
+        if (animator != null)
+        {
+            animator.SetFloat("x", deltaDir.x);
+            animator.SetFloat("z", 1 - deltaDir.z);
+        }
+
         if (!target) return;
         bool reachedGoal = false;
         if (Vector3.Distance(transform.position, target.position) < attackRange)
