@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using DG.Tweening;
+
 
 public enum InteractableType
 {
@@ -12,49 +14,48 @@ public enum InteractableType
     Dusting,
     Grass, 
     wallpaper,
+    Bin, 
 }
 public class InteractableObject : MonoBehaviour
 
 {
-    [Header("Needed")]
+    [Header("Type")]
 
     public InteractableType interactType;
 
     [Header("Ignore, These auto fill")]
-
     public float holdTime = 0f;
     public string UImessage ;
     float PickupSpeed = 0.05f;
     bool FinisedTrash = false;
-    public bool Fade;
     public bool Cleanable = true;
+    float cleanProgress;
+    public bool Fade;
+
+    [Header("Blood Decals")]
     public bool Wipeable = false; 
     public float wipeSpeed = 2f;
     public float wipeWidth = 3f;
     public float heightOffset = 0.0f;
-    float cleanProgress;
     public Material decalMaterial;
+    GameObject sponge; 
+
+    [Header("Wallpaper")]
     public bool Wallpaper = false;
-   
-
-
-    // public GameObject SpongePrefab; 
-
-
-    GameObject sponge;
-
-
-    public Animator doorAnimator;
-
-    public float fadeSpeed = 1f;
-
+    public PlayerInteract playerInteract;
+    public bool Bin;
+    public DOTweenAnimation binOpenAnim;
+    //public float fadeSpeed = 1f;
     DecalProjector decal;
-    float fade = 1f;
+    //float fade = 1f;
+
 
     public void Start()
     {
         SetText();
-        SetSpeed(); 
+        SetSpeed();
+        playerInteract = CleaningManager.Instance.playerInteract;
+        
     }
     public void SetText()
     {
@@ -91,6 +92,10 @@ public class InteractableObject : MonoBehaviour
 
             case InteractableType.wallpaper:
                 UImessage = "Hold E To Patch";
+                break;
+
+            case InteractableType.Bin:
+                UImessage = "Hold E To Dump Trash";
                 break;
 
 
@@ -138,6 +143,12 @@ public class InteractableObject : MonoBehaviour
                 holdTime = 1.5f;
                 Wallpaper = true;
                 break;
+
+            case InteractableType.Bin:
+                holdTime = 1.5f;
+                Bin = true;
+                Cleanable = false; 
+                break;
         }
 
 
@@ -150,7 +161,7 @@ public class InteractableObject : MonoBehaviour
                 break;
 
             case InteractableType.Door:
-                doorAnimator.SetTrigger("Open");
+                
                 break;
 
             case InteractableType.Window:
@@ -170,25 +181,28 @@ public class InteractableObject : MonoBehaviour
                 Destroy(effect, 2f);
 
                 Destroy(gameObject);
+                playerInteract.Cleaned();
+
                 break;
 
             case InteractableType.Grass:
                 Destroy(gameObject);
+                playerInteract.Cleaned();
+
+                break;
+
+
+            case InteractableType.Bin:
+                playerInteract.AmountHeld = 0;
+                playerInteract.UpdateSlider();
+                playerInteract.Full = false;
+                
+
                 break;
         }
     }
 
-    private void Update()
-    {
-        if (FinisedTrash)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, Camera.main.transform.position , PickupSpeed);
-            if (Vector3.Distance(transform.position, Camera.main.transform.position) < 0.001f)
-            {
-                Destroy(gameObject);
-            }
-        }
-    }
+   
 
     #region SpongeableDecals
     public void StartCleaning()
@@ -263,6 +277,8 @@ public class InteractableObject : MonoBehaviour
         {
             Destroy(sponge);
             Destroy(gameObject);
+            playerInteract.Cleaned();
+
         }
     }
     #endregion
@@ -276,6 +292,8 @@ public class InteractableObject : MonoBehaviour
 
     public void StopWallPaper()
     {
+        
+
         decalMaterial.SetFloat("_CutHeight", -0.5f);
     }
 
@@ -315,9 +333,29 @@ public class InteractableObject : MonoBehaviour
         {
             //Destroy(sponge);
             Destroy(gameObject);
+            playerInteract.Cleaned();
+
+
         }
     }
     #endregion
+
+
+  
+    private void Update()
+    {
+        if (FinisedTrash)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, Camera.main.transform.position, PickupSpeed);
+            if (Vector3.Distance(transform.position, Camera.main.transform.position) < 0.001f)
+            {
+
+                playerInteract.Cleaned();
+                Destroy(gameObject);
+
+            }
+        }
+    }
 
 }
 

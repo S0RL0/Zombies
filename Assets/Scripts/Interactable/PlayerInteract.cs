@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.Rendering.Universal;
+using DG.Tweening;
 
 public class PlayerInteract : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class PlayerInteract : MonoBehaviour
     public Slider progressBar;
     public GameObject TextHolder;
     public TextMeshProUGUI PressE;
+    public Slider TrashSlider;
+    public GameObject SorryFull;
+    public GameObject Empty; 
 
     [Header("Refs")]
     public LayerMask interactLayer;
@@ -20,9 +24,19 @@ public class PlayerInteract : MonoBehaviour
     float holdTimer;
     InteractableObject currentInteractable;
 
-   
+    [Header("Cleaning Stats")]
+    public int AmountHeld;
+    public int Maxamount;
+    public bool Full;
 
-   
+
+    private void Start()
+    {
+        // Will need changing when saves get implemented
+        Maxamount = 5;
+        Full = false;
+    }
+
 
     void OnEnable()
     {
@@ -34,7 +48,7 @@ public class PlayerInteract : MonoBehaviour
         interactAction.action.Disable();
     }
 
-    void Update()
+     void Update()
     {
         Ray ray = new Ray(transform.position, transform.forward);
 
@@ -51,36 +65,45 @@ public class PlayerInteract : MonoBehaviour
 
                 if (interactAction.action.IsPressed())
                 {
-                    
-
-                    // Generic
-                    TextHolder.SetActive(false);
-                    holdTimer += Time.deltaTime;
-                    progressBar.gameObject.SetActive(true);
-                    progressBar.value = holdTimer / interactable.holdTime;
-                    float progress = holdTimer / currentInteractable.holdTime;
-                    progressBar.value = progress;
-                    
-                    //Wipeable
-                    if (interactable.Wipeable)
+                    if (!Full)
                     {
-                        interactable.StartCleaning();     
-                        currentInteractable.GetComponent<InteractableObject>()?.UpdateCleaning(progress);
 
+                        // Generic
+                        TextHolder.SetActive(false);
+                        holdTimer += Time.deltaTime;
+                        progressBar.gameObject.SetActive(true);
+                        progressBar.value = holdTimer / interactable.holdTime;
+                        float progress = holdTimer / currentInteractable.holdTime;
+                        progressBar.value = progress;
+
+                        //Wipeable
+                        if (interactable.Wipeable)
+                        {
+                            interactable.StartCleaning();
+                            currentInteractable.GetComponent<InteractableObject>()?.UpdateCleaning(progress);
+
+                        }
+
+                        if (interactable.Wallpaper)
+                        {
+                            currentInteractable.GetComponent<InteractableObject>()?.UpdateWallPaper(progress);
+                        }
+
+
+
+                        if (holdTimer >= interactable.holdTime)
+                        {
+                            interactable.PerformAction();
+                            interactable.Cleanable = false;
+                            ResetInteraction();
+                        }
                     }
 
-                    if (interactable.Wallpaper)
+
+                    if (Full)
                     {
-                        currentInteractable.GetComponent<InteractableObject>()?.UpdateWallPaper(progress);
-                    }
-
-
-
-                    if (holdTimer >= interactable.holdTime)
-                    {
-                        interactable.PerformAction();
-                        interactable.Cleanable = false;
-                        ResetInteraction();
+                        TextHolder.SetActive(false);
+                        SorryFull.SetActive(true); 
                     }
                 }
                 else if (holdTimer > 0)
@@ -90,9 +113,52 @@ public class PlayerInteract : MonoBehaviour
 
                 return;
             }
+
+
+            if (hit.collider.TryGetComponent(out InteractableObject Bin) && interactable.Bin)
+            {
+                Debug.Log("Hit");
+
+                currentInteractable = Bin;
+                PressE.text = Bin.UImessage;
+                TextHolder.SetActive(true);
+                if (interactAction.action.IsPressed())
+                {
+                    if (AmountHeld > 0)
+                    {
+                        TextHolder.SetActive(false);
+                        holdTimer += Time.deltaTime;
+                        progressBar.gameObject.SetActive(true);
+                        progressBar.value = holdTimer / Bin.holdTime;
+                        float progress = holdTimer / currentInteractable.holdTime;
+                        progressBar.value = progress;
+
+
+                        if (holdTimer >= Bin.holdTime)
+                        {
+                            Bin.PerformAction();
+                            ResetInteraction();
+                        }
+                    }
+
+                    if (AmountHeld == 0)
+                    {
+                        Empty.SetActive(true);
+
+                    }
+                    
+                    
+                }
+                else if (holdTimer > 0)
+                {
+                    ResetInteraction();
+                    
+                }
+                return;
+            }
         }
 
-         ResetInteraction();
+        ResetInteraction();
     }
 
     void ResetInteraction()
@@ -101,6 +167,12 @@ public class PlayerInteract : MonoBehaviour
         progressBar.value = 0;
         progressBar.gameObject.SetActive(false);
         TextHolder.SetActive(false);
+        SorryFull.SetActive(false);
+        Empty.SetActive(false);
+        
+
+
+
 
         //Wipeable
         if (currentInteractable != null)
@@ -117,4 +189,29 @@ public class PlayerInteract : MonoBehaviour
         }
             
     }
+
+   public void Cleaned()
+    {
+
+        if (!Full)
+        {
+            AmountHeld = AmountHeld + 1;
+        }
+
+        if (AmountHeld == Maxamount)
+        {
+            Full = true; 
+        }
+
+        UpdateSlider(); 
+   }
+
+   public void UpdateSlider()
+    {
+        TrashSlider.maxValue = Maxamount; 
+        TrashSlider.value = AmountHeld ;
+
+    }
+
+
 }
