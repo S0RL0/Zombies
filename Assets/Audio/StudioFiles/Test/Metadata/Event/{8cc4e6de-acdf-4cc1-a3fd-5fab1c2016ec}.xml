@@ -129,5 +129,20 @@
 	</object>
 	<object class="MixerBusFader" id="{1a727e9b-17e3-448e-8ed1-cb3c4d157d1f}" />
 	<object class="MixerBusFader" id="{72d34679-eadd-4896-bb3b-823ccdb0ac01}" />
-	<object class="SFXReverbEffect" id="{7c9f9962-cb07-4b98-9a16-ff62e94384a0}" />
+	<object class="SFXReverbEffect" id="{7c9f9962-cb07-4b98-9a16-ff62e94384a0}">
+		<property name="dryLevel">
+			<value>8.5</value>
+		</property>
+		<relationship name="modulators">
+			<destination>{94993d98-4056-46ea-8f75-cdb31681597a}</destination>
+		</relationship>
+	</object>
+	<object class="RandomizerModulator" id="{94993d98-4056-46ea-8f75-cdb31681597a}">
+		<property name="nameOfPropertyBeingModulated">
+			<value>dryLevel</value>
+		</property>
+		<property name="amount">
+			<value>13</value>
+		</property>
+	</object>
 </objects>

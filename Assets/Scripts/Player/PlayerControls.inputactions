@@ -158,6 +158,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "InteractAction",
+                    "type": "Button",
+                    "id": "dff4c4c1-e83c-4af6-bd13-3be841dc90e4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -642,6 +651,56 @@
                     "processors": "",
                     "groups": ";Gamepad;Xbox Controller;PS4 Controller",
                     "action": "Scoreboard",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4d4231a4-35d3-45b2-a756-f8ee75d157af",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InteractAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cec5063b-a401-4a46-9dd0-0f5854acbbf2",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InteractAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "New action map",
+            "id": "e32a6ecb-66dc-4ea9-8a64-91a44b56721e",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "3faf0de9-9254-4a8b-be58-971a978cf5a0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9880c920-5b6c-4504-b792-fddd91d0eb33",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

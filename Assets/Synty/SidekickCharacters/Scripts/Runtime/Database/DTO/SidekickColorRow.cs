@@ -315,23 +315,6 @@ namespace Synty.SidekickCharacters.Database.DTO
         }
 
         /// <summary>
-        ///     Copies all values from the given Color Row to this one.
-        /// </summary>
-        /// <param name="toCopy">The Color Row to copy the values from</param>
-        public void CopyAllValues(SidekickColorRow toCopy)
-        {
-            ID = toCopy.ID;
-            MainColor = toCopy.MainColor;
-            Emission = toCopy.Emission;
-            Metallic = toCopy.Metallic;
-            Opacity = toCopy.Opacity;
-            Reflection = toCopy.Reflection;
-            Smoothness = toCopy.Smoothness;
-            ColorProperty = toCopy.ColorProperty;
-            ColorSet = toCopy.ColorSet;
-        }
-
-        /// <summary>
         ///     Saves this Color Set to the database with the current values.
         /// </summary>
         /// <param name="dbManager">The Database Manager to use.</param>

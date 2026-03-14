@@ -23,7 +23,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity.VisualScripting.YamlDotNet.Serialization;
-using Unity.VisualScripting.YamlDotNet.Core;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEditor.UIElements;
@@ -65,7 +64,6 @@ namespace Synty.SidekickCharacters
         private static readonly int _REFLECTION_MAP = Shader.PropertyToID("_ReflectionMap");
         private static readonly int _EMISSION_MAP = Shader.PropertyToID("_EmissionMap");
         private static readonly int _OPACITY_MAP = Shader.PropertyToID("_OpacityMap");
-        private static readonly int _COLOR_TEXTURE = Shader.PropertyToID("ColorTexture");
         private static Queue<Action> _callbackQueue = new Queue<Action>();
         private static bool _openWindowOnStart = true;
         private readonly List<SidekickColorRow> _visibleColorRows = new List<SidekickColorRow>();
@@ -829,21 +827,9 @@ namespace Synty.SidekickCharacters
 
             if (!string.IsNullOrEmpty(serializedCharacterString))
             {
-                try
-                {
-                    var deserializer = new DeserializerBuilder()
-                        .IgnoreUnmatchedProperties()
-                        .Build();
-                    SerializedCharacter serializedCharacter = deserializer.Deserialize<SerializedCharacter>(serializedCharacterString);
-                    LoadSerializedCharacter(serializedCharacter, _showAllColourProperties);
-                    // Debug.Log("[Sidekick] Auto-loaded character from previous session");
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogWarning($"[Sidekick] Failed to auto-load character: {ex.Message}");
-                    // Clear the bad autosave data
-                    EditorPrefs.DeleteKey(_AUTOSAVE_KEY);
-                }
+                Deserializer deserializer = new Deserializer();
+                SerializedCharacter serializedCharacter = deserializer.Deserialize<SerializedCharacter>(serializedCharacterString);
+                LoadSerializedCharacter(serializedCharacter, _showAllColourProperties);
             }
 
             _stateChange = PlayModeStateChange.ExitingEditMode;
@@ -900,19 +886,15 @@ namespace Synty.SidekickCharacters
                     {
                         try
                         {
-                            var deserializer = new DeserializerBuilder()
-                                .IgnoreUnmatchedProperties()
-                                .Build();
+                            Deserializer deserializer = new Deserializer();
                             SerializedCharacter serializedCharacter = deserializer.Deserialize<SerializedCharacter>(serializedCharacterString);
                             LoadSerializedCharacter(serializedCharacter, _showAllColourProperties);
-                            // Debug.Log("[Sidekick] Auto-loaded character on tool start");
                         }
                         catch (Exception ex)
                         {
-                            Debug.LogWarning($"[Sidekick] Unable to load saved character: {ex.Message}");
                             EditorUtility.DisplayDialog(
-                                "Auto-Load Failed",
-                                "Unable to load previously saved character.\nStarting with default character.",
+                                "Something Went Wrong",
+                                "Unable to load saved character.",
                                 "OK"
                             );
                             Debug.LogWarning(ex);
@@ -2294,41 +2276,41 @@ namespace Synty.SidekickCharacters
                             marginLeft = 155
                         }
                     };
-                    // Label metallicHeader = new Label("Metallic")
-                    // {
-                    //     style =
-                    //     {
-                    //         width = 66
-                    //     }
-                    // };
-                    // Label smoothnessHeader = new Label("Smoothness")
-                    // {
-                    //     style =
-                    //     {
-                    //         width = 66
-                    //     }
-                    // };
-                    // Label reflectionHeader = new Label("Reflection")
-                    // {
-                    //     style =
-                    //     {
-                    //         width = 66
-                    //     }
-                    // };
-                    // Label emissionHeader = new Label("Emission")
-                    // {
-                    //     style =
-                    //     {
-                    //         width = 66
-                    //     }
-                    // };
-                    // Label opacityHeader = new Label("Opacity")
-                    // {
-                    //     style =
-                    //     {
-                    //         width = 66
-                    //     }
-                    // };
+                    Label metallicHeader = new Label("Metallic")
+                    {
+                        style =
+                        {
+                            width = 66
+                        }
+                    };
+                    Label smoothnessHeader = new Label("Smoothness")
+                    {
+                        style =
+                        {
+                            width = 66
+                        }
+                    };
+                    Label reflectionHeader = new Label("Reflection")
+                    {
+                        style =
+                        {
+                            width = 66
+                        }
+                    };
+                    Label emissionHeader = new Label("Emission")
+                    {
+                        style =
+                        {
+                            width = 66
+                        }
+                    };
+                    Label opacityHeader = new Label("Opacity")
+                    {
+                        style =
+                        {
+                            width = 66
+                        }
+                    };
 
                     headerContainer.Add(colorHeader);
                     // headerContainer.Add(metallicHeader);
@@ -2371,7 +2353,7 @@ namespace Synty.SidekickCharacters
             else
             {
                 Material defaultMaterial = (Material) _materialField.value;
-                mainColor = (Texture2D) defaultMaterial.GetTexture(_COLOR_MAP);
+                mainColor = (Texture2D) defaultMaterial.mainTexture;
             }
 
             Texture2D metallic = AssetDatabase.LoadAssetAtPath<Texture2D>(_currentColorSet.SourceMetallicPath);
@@ -2450,12 +2432,12 @@ namespace Synty.SidekickCharacters
                     ColorSet = _currentColorSet,
                     ColorProperty = property,
                     // TODO remove null checks when we know we have textures
-                    NiceColor = mainColor?.GetPixel(property.U * 2, property.V * 2) ?? existingRow?.NiceColor ?? Color.grey,
-                    NiceMetallic = metallic?.GetPixel(property.U * 2, property.V * 2) ?? existingRow?.NiceMetallic ?? Color.grey,
-                    NiceSmoothness = smoothness?.GetPixel(property.U * 2, property.V * 2) ?? existingRow?.NiceSmoothness ?? Color.grey,
-                    NiceReflection = reflection?.GetPixel(property.U * 2, property.V * 2) ?? existingRow?.NiceReflection ?? Color.grey,
-                    NiceEmission = emission?.GetPixel(property.U * 2, property.V * 2) ?? existingRow?.NiceEmission ?? Color.grey,
-                    NiceOpacity = opacity?.GetPixel(property.U * 2, property.V * 2) ?? existingRow?.NiceOpacity ?? Color.grey
+                    NiceColor = mainColor?.GetPixel(property.U * 2, property.V * 2) ?? existingRow?.NiceColor ?? Color.red,
+                    // NiceMetallic = metallic?.GetPixel(property.U * 2, property.V * 2) ?? existingRow?.NiceMetallic ?? Color.red,
+                    // NiceSmoothness = smoothness?.GetPixel(property.U * 2, property.V * 2) ?? existingRow?.NiceSmoothness ?? Color.red,
+                    // NiceReflection = reflection?.GetPixel(property.U * 2, property.V * 2) ?? existingRow?.NiceReflection ?? Color.red,
+                    // NiceEmission = emission?.GetPixel(property.U * 2, property.V * 2) ?? existingRow?.NiceEmission ?? Color.red,
+                    // NiceOpacity = opacity?.GetPixel(property.U * 2, property.V * 2) ?? existingRow?.NiceOpacity ?? Color.red
                 };
 
                 newRow.Save(_dbManager);
@@ -4035,10 +4017,7 @@ namespace Synty.SidekickCharacters
                     nextButton.SetEnabled(true);
                     previousButton.SetEnabled(true);
                     randomButton.SetEnabled(true);
-                    // Create a proper ChangeEvent with the current selection value instead of null
-                    ChangeEvent<string> unlockEvent = ChangeEvent<string>.GetPooled(partSelection.value, partSelection.value);
-                    PartSelectionChangeEvent(unlockEvent, type, controls);
-                    unlockEvent.Dispose();
+                    PartSelectionChangeEvent(new ChangeEvent<string>(), type, controls);
                     lockImage.image = EditorGUIUtility.IconContent("LockIcon", "|Lock Part").image;
                     lockButton.style.backgroundColor = new Color(0.345098f, 0.345098f, 0.345098f);
                 }
@@ -4169,66 +4148,16 @@ namespace Synty.SidekickCharacters
         /// <param name="partSelection">The UI PopupField the change event is happening for.</param>
         private void PartSelectionChangeEvent(ChangeEvent<string> changeEvent, CharacterPartType type, PartTypeControls partSelection)
         {
-            // Don't process UI events while loading a character
-            if (_loadingCharacter)
-            {
-                // Debug.Log($"[Sidekick] Skipping PartSelectionChangeEvent for {type} during loading");
-                return;
-            }
-            
             try
             {
-                // Debug.Log($"[Sidekick] PartSelectionChangeEvent: {type} changed to {changeEvent.newValue}");
-                
-                // Null safety checks
-                if (changeEvent.newValue == null)
-                {
-                    // Check if this is expected (dropdown is disabled) or unexpected
-                    if (partSelection.PartDropdown.enabledSelf)
-                    {
-                        // Unexpected null on an enabled dropdown - this might be a bug
-                        Debug.LogWarning($"[Sidekick] PartSelectionChangeEvent: newValue is null for {type}");
-                    }
-                    else
-                    {
-                        // Expected null - the dropdown was intentionally disabled and cleared
-                        // Debug.Log($"[Sidekick] PartSelectionChangeEvent: {type} cleared (dropdown disabled)");
-                    }
-                    return;
-                }
-                
-                if (_sidekickRuntime == null)
-                {
-                    Debug.LogError("[Sidekick] PartSelectionChangeEvent: _sidekickRuntime is null!");
-                    return;
-                }
-                
-                if (_sidekickRuntime.MappedPartDictionary == null)
-                {
-                    Debug.LogError("[Sidekick] PartSelectionChangeEvent: MappedPartDictionary is null!");
-                    return;
-                }
-                
                 if (_currentTab == TabView.Parts
                     && _sidekickRuntime.MappedPartDictionary.ContainsKey(type)
                     && changeEvent.newValue != null
                     && _sidekickRuntime.MappedPartDictionary[type].TryGetValue(changeEvent.newValue, out SidekickPart selectedPart))
                 {
-                    // Debug.Log($"[Sidekick] Loading part model for {type}: {changeEvent.newValue}");
-                    
+
                     GameObject partModel = selectedPart.GetPartModel();
-                    if (partModel == null)
-                    {
-                        Debug.LogError($"[Sidekick] Part model is null for {changeEvent.newValue}");
-                        return;
-                    }
-                    
                     SkinnedMeshRenderer selectedMesh = partModel.GetComponentInChildren<SkinnedMeshRenderer>();
-                    if (selectedMesh == null)
-                    {
-                        Debug.LogWarning($"[Sidekick] No SkinnedMeshRenderer found for {changeEvent.newValue}");
-                    }
-                    
                     _partDictionary[type] = selectedMesh;
                     _currentCharacter[type] = selectedPart;
 
@@ -4246,6 +4175,7 @@ namespace Synty.SidekickCharacters
                             {
                                 wrapSelection.PartDropdown.SetEnabled(true);
                                 wrapSelection.RandomisePartDropdownValue();
+                                ;
                             }
                             else
                             {
@@ -4257,7 +4187,6 @@ namespace Synty.SidekickCharacters
                 }
                 else if (changeEvent.newValue == "None")
                 {
-                    // Debug.Log($"[Sidekick] Removing {type}");
                     _currentCharacter.Remove(type);
                     _partDictionary.Remove(type);
                     if (!_processingSpeciesChange)
@@ -4277,36 +4206,17 @@ namespace Synty.SidekickCharacters
                 }
                 else
                 {
-                    // Debug.Log($"[Sidekick] Part not found in dictionary: {changeEvent.newValue}");
                     _partDictionary.Remove(type);
                 }
 
-                if (!_applyingPreset && _previewToggle != null && _previewToggle.value)
+                if (!_applyingPreset && _previewToggle.value)
                 {
-                    // Debug.Log("[Sidekick] Regenerating character model");
-                    
-                    // Clean up old model if it exists
-                    if (_newModel != null)
-                    {
-                        try
-                        {
-                            DestroyImmediate(_newModel);
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.LogWarning($"[Sidekick] Error destroying model: {ex.Message}");
-                        }
-                        _newModel = null;
-                    }
+                    // if (_combineMeshes && _newModel != null)
+                    // {
+                    //     DestroyImmediate(_newModel);
+                    // }
 
                     _newModel = GenerateCharacter(false, true);
-                    
-                    if (_newModel == null)
-                    {
-                        Debug.LogError("[Sidekick] GenerateCharacter returned null!");
-                        return;
-                    }
-                    
                     bool switchAnimation = SetupAnimationControllers();
 
                     if (switchAnimation && (type == CharacterPartType.HandLeft || type == CharacterPartType.HandRight))
@@ -4315,16 +4225,14 @@ namespace Synty.SidekickCharacters
                     }
 
                     UpdatePartUVData();
-                    // Debug.Log("[Sidekick] Character model regenerated successfully");
                 }
 
                 partSelection.UpdateControls();
             }
             catch (Exception ex)
             {
-                Debug.LogError($"[Sidekick] PartSelectionChangeEvent exception for {type}: {ex.Message}");
-                Debug.LogError($"[Sidekick] Stack trace: {ex.StackTrace}");
-                EditorUtility.DisplayDialog("Failed loading part", "Failed to load the following part\n" + changeEvent.newValue + "\n\nError: " + ex.Message, "OK");
+                EditorUtility.DisplayDialog("Failed loading part", "Failed to load the following part\n" + changeEvent.newValue, "OK");
+                Debug.LogWarning(ex);
             }
         }
 
@@ -4376,13 +4284,6 @@ namespace Synty.SidekickCharacters
         /// </summary>
         private GameObject GenerateCharacter(bool combineMesh, bool processBoneMovement)
         {
-            // Debug.Log($"[Sidekick] GenerateCharacter called: combineMesh={combineMesh}, processBoneMovement={processBoneMovement}");
-            // Debug.Log($"[Sidekick] Current _newModel state: {(_newModel != null ? _newModel.name : "null")}");
-            
-            // Count existing "Combined Character" objects BEFORE generation
-            int existingCount = FindObjectsByType<GameObject>(FindObjectsSortMode.None).Count(go => go != null && go.name == _OUTPUT_MODEL_NAME);
-            // Debug.Log($"[Sidekick] Existing '{_OUTPUT_MODEL_NAME}' count BEFORE generation: {existingCount}");
-            
             List<SkinnedMeshRenderer> parts = new List<SkinnedMeshRenderer>();
             foreach (KeyValuePair<CharacterPartType, SidekickPart> entry in _currentCharacter)
             {
@@ -4417,28 +4318,14 @@ namespace Synty.SidekickCharacters
                 }
             }
 
-            // Debug.Log($"[Sidekick] GenerateCharacter: Collected {parts.Count} part meshes");
-            
             GameObject newModel = null;
             try
             {
-                // Debug.Log($"[Sidekick] Calling _sidekickRuntime.CreateCharacter with name '{_OUTPUT_MODEL_NAME}', passing existing model: {(_newModel != null ? _newModel.name : "null")}");
                 newModel = _sidekickRuntime.CreateCharacter( _OUTPUT_MODEL_NAME, parts, combineMesh, processBoneMovement, _newModel);
                 _currentAnimator = null;
-                
-                if (newModel != null)
-                {
-                    // Debug.Log($"[Sidekick] CreateCharacter returned model: {newModel.name} (InstanceID: {newModel.GetInstanceID()})");
-                }
-                else
-                {
-                    Debug.LogError("[Sidekick] CreateCharacter returned null!");
-                }
             }
             catch (Exception ex)
             {
-                Debug.LogError($"[Sidekick] Exception in CreateCharacter: {ex.Message}");
-                Debug.LogError($"[Sidekick] Stack trace: {ex.StackTrace}");
                 EditorUtility.DisplayDialog(
                     "Error creating character",
                     "Something went wrong when creating the character.\nPlease try again.",
@@ -4447,22 +4334,6 @@ namespace Synty.SidekickCharacters
                 Debug.LogWarning(ex);
             }
 
-            // Count existing "Combined Character" objects AFTER generation
-            int finalCount = FindObjectsByType<GameObject>(FindObjectsSortMode.None).Count(go => go != null && go.name == _OUTPUT_MODEL_NAME);
-            // Debug.Log($"[Sidekick] Existing '{_OUTPUT_MODEL_NAME}' count AFTER generation: {finalCount}");
-            
-            if (finalCount > 1)
-            {
-                Debug.LogWarning($"[Sidekick] WARNING: {finalCount} '{_OUTPUT_MODEL_NAME}' objects exist after generation! Expected 1.");
-                
-                // List all instances
-                var allInstances = FindObjectsByType<GameObject>(FindObjectsSortMode.None).Where(go => go != null && go.name == _OUTPUT_MODEL_NAME).ToList();
-                for (int i = 0; i < allInstances.Count; i++)
-                {
-                    Debug.LogWarning($"[Sidekick]   Instance {i+1}: {allInstances[i].name} (InstanceID: {allInstances[i].GetInstanceID()})");
-                }
-            }
-            
             return newModel;
         }
 
@@ -4501,34 +4372,15 @@ namespace Synty.SidekickCharacters
                 return;
             }
 
-            try
-            {
-                string filename = Path.GetFileNameWithoutExtension(savePath);
-                SerializedCharacter savedCharacter = CreateSerializedCharacter(filename);
+            string filename = Path.GetFileNameWithoutExtension(savePath);
+            SerializedCharacter savedCharacter = CreateSerializedCharacter(filename);
 
-                var serializer = new SerializerBuilder()
-                    .Build();
+            Serializer serializer = new Serializer();
 
-                // Use UTF8 encoding for better compatibility with Unity 6
-                File.WriteAllBytes(savePath, Encoding.UTF8.GetBytes(serializer.Serialize(savedCharacter)));
-                
-                // Debug.Log($"[Sidekick] Character saved successfully to: {Path.GetFileName(savePath)}");
-                
-                if (showSuccessMessage)
-                {
-                    EditorUtility.DisplayDialog("Save Successful", "Character successfully saved to " + Path.GetFileName(savePath), "OK");
-                }
-            }
-            catch (Exception ex)
+            File.WriteAllBytes(savePath, Encoding.ASCII.GetBytes(serializer.Serialize(savedCharacter)));
+            if (showSuccessMessage)
             {
-                Debug.LogError($"[Sidekick] Failed to save character: {ex.Message}");
-                Debug.LogError($"[Sidekick] Stack trace: {ex.StackTrace}");
-                
-                EditorUtility.DisplayDialog(
-                    "Save Failed",
-                    $"Failed to save character file.\n\nError: {ex.Message}",
-                    "OK"
-                );
+                EditorUtility.DisplayDialog("Save Successful", "Character successfully saved to " + Path.GetFileName(savePath), "OK");
             }
         }
 
@@ -4588,119 +4440,20 @@ namespace Synty.SidekickCharacters
             if (string.IsNullOrEmpty(filePath))
             {
                 EditorUtility.DisplayDialog("No File Chosen", "No file was chosen to load.", "OK");
-                _loadingCharacter = false;
                 return;
             }
 
             _bodyPartsTab.value = true;
             SwitchToTab(TabView.Parts);
 
-            try
-            {
-                // Debug.Log("[Sidekick] ====== STARTING CHARACTER LOAD ======");
-                
-                // STEP 1: Read and deserialize file
-                // Debug.Log("[Sidekick] Step 1: Reading file");
-                byte[] bytes = File.ReadAllBytes(filePath);
-                string data = Encoding.UTF8.GetString(bytes);
-                // Debug.Log($"[Sidekick] File read: {Path.GetFileName(filePath)} ({bytes.Length} bytes)");
+            byte[] bytes = File.ReadAllBytes(filePath);
+            string data = Encoding.ASCII.GetString(bytes);
 
-                // Debug.Log("[Sidekick] Step 2: Deserializing YAML");
-                var deserializer = new DeserializerBuilder()
-                    .IgnoreUnmatchedProperties()
-                    .Build();
-                
-                SerializedCharacter savedCharacter = deserializer.Deserialize<SerializedCharacter>(data);
-                // Debug.Log($"[Sidekick] Deserialized: {savedCharacter.Parts?.Count ?? 0} parts, {savedCharacter.ColorRows?.Count ?? 0} colors");
+            Deserializer deserializer = new Deserializer();
+            SerializedCharacter savedCharacter = deserializer.Deserialize<SerializedCharacter>(data);
 
-                // STEP 2: Basic cleanup BEFORE loading
-                // Debug.Log("[Sidekick] Step 3: Basic cleanup");
-                
-                // Clear color rows early to free memory
-                if (_allColorRows != null && _allColorRows.Count > 0)
-                {
-                    // Debug.Log($"[Sidekick] Clearing {_allColorRows.Count} existing color rows");
-                    _allColorRows.Clear();
-                }
-                
-                // Force garbage collection before loading
-                // Debug.Log("[Sidekick] Forcing resource cleanup");
-                Resources.UnloadUnusedAssets();
-                System.GC.Collect();
-                System.GC.WaitForPendingFinalizers();
-                System.GC.Collect();
-                
-                // Debug.Log("[Sidekick] Step 4: Loading serialized character (on next frame)");
-                
-                // Wait a frame for Unity to process cleanup, then load
-                // Note: Comprehensive model cleanup happens IN LoadSerializedCharacter right before generation
-                EditorApplication.delayCall += () =>
-                {
-                    try
-                    {
-                        // Debug.Log("[Sidekick] Step 4a: Executing delayed load");
-                        LoadSerializedCharacter(savedCharacter, showAllColors);
-                        
-                        // Debug.Log("[Sidekick] ====== CHARACTER LOAD COMPLETE ======");
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogError($"[Sidekick] Error in delayed load: {ex.Message}");
-                        Debug.LogError($"[Sidekick] Stack trace: {ex.StackTrace}");
-                        
-                        EditorUtility.DisplayDialog(
-                            "Load Failed During Character Generation",
-                            $"An error occurred while generating the character:\n\n{ex.Message}\n\nCheck Console for details.",
-                            "OK"
-                        );
-                    }
-                    finally
-                    {
-                        // Only clear loading flag after EVERYTHING is done
-                        _loadingCharacter = false;
-                        _showAllColourProperties = showAllColors;
-                        // Debug.Log("[Sidekick] Loading flag cleared, UI interactions now enabled");
-                    }
-                };
-                
-                // DON'T clear _loadingCharacter here - let the delayed call do it
-                return; // Exit early, delayed call will handle cleanup
-            }
-            catch (Exception ex) when (ex.GetType().Name == "YamlException")
-            {
-                // Handle YAML-specific errors with detailed information
-                Debug.LogError($"[Sidekick] YAML parsing error: {ex.Message}");
-                Debug.LogError($"[Sidekick] Exception details: {ex}");
-                
-                EditorUtility.DisplayDialog(
-                    "Character Load Failed - YAML Error",
-                    $"Failed to parse character file.\n\n" +
-                    $"Error: {ex.Message}\n\n" +
-                    $"The file may be corrupted or incompatible with this Unity version.\n" +
-                    $"Check the Console for more details.",
-                    "OK"
-                );
-                
-                _loadingCharacter = false;
-                _showAllColourProperties = showAllColors;
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"[Sidekick] Failed to load character: {ex.Message}");
-                Debug.LogError($"[Sidekick] Exception type: {ex.GetType().Name}");
-                Debug.LogError($"[Sidekick] Stack trace: {ex.StackTrace}");
-                
-                EditorUtility.DisplayDialog(
-                    "Character Load Failed",
-                    $"Failed to load character file.\n\n" +
-                    $"Error: {ex.Message}\n\n" +
-                    $"Check the Console for detailed error information.",
-                    "OK"
-                );
-                
-                _loadingCharacter = false;
-                _showAllColourProperties = showAllColors;
-            }
+            LoadSerializedCharacter(savedCharacter, showAllColors);
+            _loadingCharacter = false;
         }
 
         /// <summary>
@@ -4710,165 +4463,56 @@ namespace Synty.SidekickCharacters
         /// <param name="showAllColors">Whether to show all colors or not.</param>
         private void LoadSerializedCharacter(SerializedCharacter serializedCharacter, bool showAllColors)
         {
-            // Debug.Log("[Sidekick] LoadSerializedCharacter: Starting load process");
-            
-            try
+            SidekickSpecies species = SidekickSpecies.GetByID(_dbManager, serializedCharacter.Species);
+            _speciesField.value = species.Name;
+            ProcessSpeciesChange(species.Name);
+
+            bool hasErrors = false;
+            string errorMessage = "The following parts could not be found in your project:\n";
+            foreach (CharacterPartType currentType in Enum.GetValues(typeof(CharacterPartType)))
             {
-                // CRITICAL: Clean up ANY existing "Combined Character" in the scene FIRST
-                // This needs to happen right before we generate, not earlier
-                // Debug.Log("[Sidekick] LoadSerializedCharacter: Checking for existing models to clean up");
-                
-                // Clean up _newModel if we have a reference
-                if (_newModel != null)
+                PartTypeControls currentField = _partSelectionDictionary[currentType];
+                SerializedPart part = serializedCharacter.Parts.FirstOrDefault(p => p.PartType == currentType);
+                SidekickPart skPart = SidekickPart.SearchForByName(_dbManager, part?.Name);
+                if (skPart != null)
                 {
-                    // Debug.Log("[Sidekick] Destroying _newModel reference");
-                    try
-                    {
-                        if (_newModel.gameObject != null)
-                        {
-                            DestroyImmediate(_newModel);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogWarning($"[Sidekick] Error destroying _newModel: {ex.Message}");
-                    }
-                    _newModel = null;
-                }
-                
-                // Find ALL "Combined Character" objects in the scene and destroy them
-                GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
-                int cleanedUp = 0;
-                foreach (GameObject obj in allObjects)
-                {
-                    if (obj != null && obj.name == _OUTPUT_MODEL_NAME)
-                    {
-                        // Debug.Log($"[Sidekick] Found existing '{_OUTPUT_MODEL_NAME}' in scene, destroying it");
-                        try
-                        {
-                            DestroyImmediate(obj);
-                            cleanedUp++;
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.LogWarning($"[Sidekick] Error destroying existing model: {ex.Message}");
-                        }
-                    }
-                }
-                // Debug.Log($"[Sidekick] Cleaned up {cleanedUp} existing model(s)");
-                
-                // Debug.Log("[Sidekick] LoadSerializedCharacter: Setting species");
-                SidekickSpecies species = SidekickSpecies.GetByID(_dbManager, serializedCharacter.Species);
-                
-                // Update species WITHOUT triggering ProcessSpeciesChange (avoid recursion/callbacks)
-                _currentSpecies = species;
-                _sidekickRuntime.CurrentSpecies = _currentSpecies;
-                _speciesField.SetValueWithoutNotify(species.Name);
-                
-                // Debug.Log("[Sidekick] LoadSerializedCharacter: Loading parts");
-                bool hasErrors = false;
-                string errorMessage = "The following parts could not be found in your project:\n";
-                
-                // Load parts - we need to update internal state properly
-                foreach (CharacterPartType currentType in Enum.GetValues(typeof(CharacterPartType)))
-                {
-                    PartTypeControls currentField = _partSelectionDictionary[currentType];
-                    SerializedPart part = serializedCharacter.Parts.FirstOrDefault(p => p.PartType == currentType);
-                    SidekickPart skPart = SidekickPart.SearchForByName(_dbManager, part?.Name);
-                    
-                    string partNameToSet = skPart?.Name ?? "None";
-                    
-                    // Update internal character state
-                    if (skPart != null)
-                    {
-                        _currentCharacter[currentType] = skPart;
-                        
-                        // Also update _partDictionary if we can
-                        if (_sidekickRuntime.MappedPartDictionary.ContainsKey(currentType) && 
-                            _sidekickRuntime.MappedPartDictionary[currentType].TryGetValue(partNameToSet, out SidekickPart mappedPart))
-                        {
-                            GameObject partModel = mappedPart.GetPartModel();
-                            SkinnedMeshRenderer selectedMesh = partModel.GetComponentInChildren<SkinnedMeshRenderer>();
-                            _partDictionary[currentType] = selectedMesh;
-                        }
-                    }
-                    else
-                    {
-                        _currentCharacter.Remove(currentType);
-                        _partDictionary.Remove(currentType);
-                    }
-                    
-                    // Check if part exists in choices
-                    if (partNameToSet != "None" && !currentField.PartDropdown.choices.Contains(partNameToSet))
-                    {
-                        if (PartUtils.IsBaseSpeciesPart(partNameToSet))
-                        {
-                            partNameToSet = currentField.PartDropdown.choices.Find(n => n.Contains("BASE")) ?? "None";
-                        }
-                        else
-                        {
-                            hasErrors = true;
-                            errorMessage += partNameToSet + "\n";
-                            partNameToSet = "None";
-                        }
-                    }
-                    
-                    // Set the dropdown value WITHOUT triggering callbacks
-                    try
-                    {
-                        currentField.PartDropdown.SetValueWithoutNotify(partNameToSet);
-                        _partLockMap[currentField.PartDropdown] = false;
-                        // Debug.Log($"[Sidekick] Set {currentType} to {partNameToSet}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogWarning($"[Sidekick] Failed to set part {currentType}: {ex.Message}");
-                    }
-                }
-
-                if (hasErrors)
-                {
-                    EditorUtility.DisplayDialog(
-                        "Assets Missing",
-                        errorMessage,
-                        "OK"
-                    );
-                }
-
-                // Debug.Log("[Sidekick] LoadSerializedCharacter: Loading color set");
-                LoadColorSet(serializedCharacter);
-
-                if (serializedCharacter.BlendShapes != null)
-                {
-                    // Debug.Log("[Sidekick] LoadSerializedCharacter: Loading blend shapes");
-                    LoadBlendShapes(serializedCharacter);
-                }
-
-                _showAllColourProperties = showAllColors;
-                UpdateColorTabContent();
-
-                // Debug.Log("[Sidekick] LoadSerializedCharacter: Generating new character model");
-                _newModel = GenerateCharacter(_combineMeshes, true);
-                
-                if (_newModel != null)
-                {
-                    // Debug.Log($"[Sidekick] Successfully generated character model: {_newModel.name}");
+                    UpdateResult result = UpdatePartDropdown(currentField, skPart.Name, errorMessage, hasErrors);
+                    hasErrors = result.HasErrors;
+                    errorMessage = result.ErrorMessage;
                 }
                 else
                 {
-                    Debug.LogError("[Sidekick] GenerateCharacter returned null!");
+                    currentField.SetPartDropdownValue("None");
                 }
-                
-                UpdatePartUVData();
-                
-                // Debug.Log("[Sidekick] LoadSerializedCharacter: Load complete");
             }
-            catch (Exception ex)
+
+            if (hasErrors)
             {
-                Debug.LogError($"[Sidekick] LoadSerializedCharacter: Exception: {ex.Message}");
-                Debug.LogError($"[Sidekick] LoadSerializedCharacter: Stack trace: {ex.StackTrace}");
-                throw; // Re-throw to be caught by outer handler
+                EditorUtility.DisplayDialog(
+                    "Assets Missing",
+                    errorMessage,
+                    "OK"
+                );
             }
+
+
+            LoadColorSet(serializedCharacter);
+
+            if (serializedCharacter.BlendShapes != null)
+            {
+                LoadBlendShapes(serializedCharacter);
+            }
+
+            _showAllColourProperties = showAllColors;
+            UpdateColorTabContent();
+
+            if (_combineMeshes && _newModel != null)
+            {
+                DestroyImmediate(_newModel);
+            }
+
+            _newModel = GenerateCharacter(_combineMeshes, true);
+            UpdatePartUVData();
         }
 
         /// <summary>
@@ -4924,45 +4568,16 @@ namespace Synty.SidekickCharacters
         /// <param name="savedCharacter">The character to load the color set for.</param>
         private void LoadColorSet(SerializedCharacter savedCharacter)
         {
-            // Debug.Log($"[Sidekick] LoadColorSet: Loading {savedCharacter.ColorRows?.Count ?? 0} color rows");
-            
-            // Clean up existing color set to prevent memory leaks
-            if (_currentColorSet != null)
-            {
-                // Debug.Log("[Sidekick] LoadColorSet: Cleaning up existing color set");
-            }
-            
             _currentColorSet = savedCharacter.ColorSet.CreateSidekickColorSet(_dbManager);
             _colorSetsDropdown.value = "Custom";
 
             List<SidekickColorRow> newRows = new List<SidekickColorRow>();
-            List<SidekickColorRow> existingRows = _allColorRows;
-            
             foreach (SerializedColorRow row in savedCharacter.ColorRows)
             {
-                SidekickColorRow newRow = row.CreateSidekickColorRow(_dbManager, _currentColorSet);
-                if (newRows.All(r => r.ColorProperty.ID != newRow.ColorProperty.ID))
-                {
-                    newRows.Add(newRow);
-                }
+                newRows.Add(row.CreateSidekickColorRow(_dbManager, _currentColorSet));
             }
 
-            // Ensure any existing rows that are unchanged are counted as essentially new rows.
-            foreach (SidekickColorRow oldRow in existingRows.Where(r => newRows.All(row => row.ColorProperty.ID != r.ColorProperty.ID)).ToList())
-            {
-                oldRow.ID = -1;
-                oldRow.ColorSet = _currentColorSet;
-                newRows.Add(oldRow);
-            }
-
-            // Clear the old list to allow garbage collection
-            if (_allColorRows != null)
-            {
-                _allColorRows.Clear();
-            }
-            
             _allColorRows = newRows;
-            // Debug.Log($"[Sidekick] LoadColorSet: Color set loaded with {_allColorRows.Count} total rows");
             UpdateColorTabContent();
         }
 
@@ -4982,44 +4597,9 @@ namespace Synty.SidekickCharacters
         /// <param name="savedCharacter">The character to load the blend shapes for.</param>
         private void LoadBlendShapes(SerializedCharacter savedCharacter)
         {
-            // Debug.Log($"[Sidekick] LoadBlendShapes: Setting sliders without triggering callbacks");
-            
-            // Use SetValueWithoutNotify to avoid triggering callbacks that would call GenerateCharacter again
-            _bodyTypeSlider.SetValueWithoutNotify(savedCharacter.BlendShapes.BodyTypeValue);
-            _bodySizeSlider.SetValueWithoutNotify(savedCharacter.BlendShapes.BodySizeValue);
-            _musclesSlider.SetValueWithoutNotify(savedCharacter.BlendShapes.MuscleValue);
-            
-            // Update the internal values manually since we're not triggering callbacks
-            _bodyTypeBlendValue = savedCharacter.BlendShapes.BodyTypeValue;
-            _sidekickRuntime.BodyTypeBlendValue = savedCharacter.BlendShapes.BodyTypeValue;
-            
-            float bodySizeValue = savedCharacter.BlendShapes.BodySizeValue;
-            if (bodySizeValue > 0)
-            {
-                _bodySizeHeavyBlendValue = bodySizeValue;
-                _bodySizeSkinnyBlendValue = 0;
-                _sidekickRuntime.BodySizeHeavyBlendValue = bodySizeValue;
-                _sidekickRuntime.BodySizeSkinnyBlendValue = 0;
-            }
-            else if (bodySizeValue < 0)
-            {
-                _bodySizeSkinnyBlendValue = Math.Abs(bodySizeValue);
-                _bodySizeHeavyBlendValue = 0;
-                _sidekickRuntime.BodySizeSkinnyBlendValue = Math.Abs(bodySizeValue);
-                _sidekickRuntime.BodySizeHeavyBlendValue = 0;
-            }
-            else
-            {
-                _bodySizeSkinnyBlendValue = 0;
-                _bodySizeHeavyBlendValue = 0;
-                _sidekickRuntime.BodySizeSkinnyBlendValue = 0;
-                _sidekickRuntime.BodySizeHeavyBlendValue = 0;
-            }
-            
-            _musclesBlendValue = savedCharacter.BlendShapes.MuscleValue;
-            _sidekickRuntime.MusclesBlendValue = savedCharacter.BlendShapes.MuscleValue;
-            
-            // Debug.Log($"[Sidekick] LoadBlendShapes: Values set - BodyType:{savedCharacter.BlendShapes.BodyTypeValue}, BodySize:{savedCharacter.BlendShapes.BodySizeValue}, Muscle:{savedCharacter.BlendShapes.MuscleValue}");
+            _bodyTypeSlider.value = savedCharacter.BlendShapes.BodyTypeValue;
+            _bodySizeSlider.value = savedCharacter.BlendShapes.BodySizeValue;
+            _musclesSlider.value = savedCharacter.BlendShapes.MuscleValue;
         }
 
         /// <summary>

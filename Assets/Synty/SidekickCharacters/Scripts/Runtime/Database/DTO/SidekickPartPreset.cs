@@ -99,11 +99,11 @@ namespace Synty.SidekickCharacters.Database.DTO
         /// <param name="dbManager">The Database Manager to use.</param>
         /// <param name="name">The name of the preset to retrieve.</param>
         /// <returns>Returns a Part Presets in the database with the matching name if one exists; otherwise null.</returns>
-        public static SidekickPartPreset GetByName(DatabaseManager dbManager, string name, PartGroup group)
+        public static SidekickPartPreset GetByName(DatabaseManager dbManager, string name)
         {
             SidekickPartPreset partPreset = dbManager.GetCurrentDbConnection()
                 .Table<SidekickPartPreset>()
-                .FirstOrDefault(partPreset => partPreset.Name == name && partPreset.PartGroup == group);
+                .FirstOrDefault(partPreset => partPreset.Name == name);
 
             if (partPreset != null)
             {
