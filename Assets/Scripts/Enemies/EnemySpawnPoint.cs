@@ -13,18 +13,18 @@ public class EnemySpawnPoint : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= 10f)
         {
-            Spawn();
+            //Spawn();
             timer = 0f;
         }
 
 
     }
-    public void Spawn()
+    public GameObject Spawn()
     {
         if (enemyPrefab == null)
         {
             Debug.LogWarning("Enemy prefabs list is empty.");
-            return;
+            return null;
         }
         GameObject enemyInstance = Instantiate(enemyPrefab, transform.position, transform.rotation);
         Enemy enemyComponent = enemyInstance.GetComponent<Enemy>();
@@ -33,13 +33,14 @@ public class EnemySpawnPoint : MonoBehaviour
             if (obstacle == null)
             {
                 enemyComponent.init(target);
-                return;
             }
             enemyComponent.init(target, obstacle);
+            return enemyInstance;
         }
         else
         {
             Debug.LogWarning("Enemy component or target is missing.");
+            return null;
         }
     }
 }

@@ -23,7 +23,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public float attackRange = 1.5f;
     public float attackCooldown = 2f;
     public float attackDamage = 10f;
-    public float attackDelay = 0.5f;
+    public float attackDelay = 0.1f;
     private float attackTimer = 0.5f;
     private bool readyToAttack = true;
     public float rotationSpeed = 10f;
@@ -53,6 +53,12 @@ public class Enemy : MonoBehaviour, IDamageable
                     smr.gameObject.SetActive(false);
                 }
             }
+        }
+        Animator animator = GetComponent<Animator>();
+        if (animator != null)
+        {
+            float randomAnimStart = Random.Range(0.9f, 1.1f);
+            animator.SetFloat("Randomiser", randomAnimStart);
         }
     }
 
