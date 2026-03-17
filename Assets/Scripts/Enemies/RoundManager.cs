@@ -10,7 +10,7 @@ public class RoundManager : MonoBehaviour
     public int enemiesSpawned = 0;
     public int maxEnemiesAtOneTime = 48;
     public float spawnInterval = 5f;
-    public float timeBetweenRounds = 15f;
+    public float timeBetweenRounds = 5f;
     public float initialDelay = 5f;
     public int usableSpawnPointCount = 5;
     public float roundTimer = 0f;
@@ -42,12 +42,24 @@ public class RoundManager : MonoBehaviour
             roundTimer = 0f;
             Invoke("StartRound", timeBetweenRounds);
         }
+
+        foreach (GameObject enemy in enemies.ToList())
+        {
+            if (enemy == null)
+            {
+                enemies.Remove(enemy);
+            }
+        }
     }
 
     void StartRound()
     {
         // Reset round timer and icrement round number
         roundNumber++;
+        enemiesSpawned = 0;
+        spawnInterval = Mathf.Max(2f, 10f - 0.1f * roundNumber);
+        CancelInvoke("SpawnEnemies");
+
 
         // If spawn points are not found, log a warning and return
         if (spawnPoints == null || spawnPoints.Count == 0)
@@ -59,7 +71,6 @@ public class RoundManager : MonoBehaviour
         enemiesThisRound = Mathf.RoundToInt(0.08f * roundNumber * roundNumber + 1.5f * roundNumber + 5);
 
         //Envoke SpawnZombies() every 5 seconds until the number of enemies spawned is equal to the number of enemies for this round
-        Debug.Log("Round " + roundNumber + " starting with " + enemiesThisRound + " enemies.");
         InvokeRepeating("SpawnEnemies", 0f, spawnInterval);
 
     }
@@ -77,30 +88,31 @@ public class RoundManager : MonoBehaviour
         {
             closestSpawnPoints = spawnPoints;
         }
-        Debug.Log("Using " + closestSpawnPoints.Count + " spawn points for this round.");
 
         // Spawn zombies at the closest spawn points until all spawn points have been used
         foreach (GameObject spawnPoint in closestSpawnPoints)
         {
             if (enemiesSpawned >= maxEnemiesAtOneTime)
             {
-                Debug.Log("Maximum enemies at one time reached. Stopping spawn.");
                 return;
             }
             if (enemiesSpawned >= enemiesThisRound)
             {
-                Debug.Log("All enemies for this round spawned. Stopping spawn.");
-                CancelInvoke("SpawnZombies");
+                CancelInvoke("SpawnEnemies");
                 return;
             }
 
             EnemySpawnPoint spawnScript = spawnPoint.GetComponent<EnemySpawnPoint>();
             if (spawnScript != null)
             {
-                GameObject enemy = spawnScript.Spawn();
+                int s = (int)(2f + 0.5f * roundNumber);
+                float speed = Mathf.Min(s, 12);
+                int h = (int)(roundNumber * roundNumber + 2 * roundNumber + 40);
+                float health = Mathf.Min(h, 1000);
+                GameObject enemy = spawnScript.Spawn(speed, health);
+                Debug.Log("ROUND MANAGER SPAWNED ENEMY");
                 if (enemy != null)
                 {
-                    Debug.Log("Spawned enemy at " + spawnPoint.name);
                     enemies.Add(enemy);
                     enemiesSpawned++;
                 }

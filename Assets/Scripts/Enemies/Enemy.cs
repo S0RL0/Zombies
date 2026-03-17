@@ -61,6 +61,23 @@ public class Enemy : MonoBehaviour, IDamageable
             animator.SetFloat("Randomiser", randomAnimStart);
         }
     }
+    public virtual void init(Transform target)
+    {
+        this.target = target;
+    }
+
+    public virtual void init(Transform target, Transform obstacle)
+    {
+        // Store transform so the enemy can follow a moving target
+        this.target = target;
+        this.obstacle = obstacle;
+    }
+
+    public virtual void initStats(float speed, float health)
+    {
+        this.health = health;
+        this.speed = speed;
+    }
 
     public virtual void Update()
     {
@@ -105,6 +122,7 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             target = player.transform;
             navMeshAgent.enabled = true;
+            navMeshAgent.speed = speed;
             currentState = EnemyState.Chase;
         }
 
@@ -119,7 +137,6 @@ public class Enemy : MonoBehaviour, IDamageable
         Vector3 dir = navMeshAgent.velocity.normalized;
         Vector3 forward = transform.forward;
         Vector3 deltaDir = dir - forward;
-        Debug.Log("Enemy velocity: " + dir + "|Object forward: " + forward + "|Delta: " + deltaDir);
         Animator animator = GetComponent<Animator>();
         if (animator != null)
         {
@@ -243,17 +260,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     }
 
-    public virtual void init(Transform target)
-    {
-        this.target = target;
-    }
 
-    public virtual void init(Transform target, Transform obstacle)
-    {
-        // Store transform so the enemy can follow a moving target
-        this.target = target;
-        this.obstacle = obstacle;
-    }
 
     void StopMovement()
     {

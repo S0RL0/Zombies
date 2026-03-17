@@ -5,6 +5,7 @@ public class EnemySpawnPoint : MonoBehaviour
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private Transform target;
     [SerializeField] private Transform obstacle;
+    private RoundManager roundManager;
     private float timer = 0f;
 
     private void Update()
@@ -17,9 +18,8 @@ public class EnemySpawnPoint : MonoBehaviour
             timer = 0f;
         }
 
-
     }
-    public GameObject Spawn()
+    public GameObject Spawn(float speed, float health)
     {
         if (enemyPrefab == null)
         {
@@ -35,6 +35,7 @@ public class EnemySpawnPoint : MonoBehaviour
                 enemyComponent.init(target);
             }
             enemyComponent.init(target, obstacle);
+            enemyComponent.initStats(speed, health);
             return enemyInstance;
         }
         else
@@ -43,4 +44,6 @@ public class EnemySpawnPoint : MonoBehaviour
             return null;
         }
     }
+
+
 }

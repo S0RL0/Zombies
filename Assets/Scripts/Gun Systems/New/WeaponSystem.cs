@@ -280,7 +280,8 @@ public class WeaponSystem : MonoBehaviour
                     break;
             }
             Quaternion rotation = Quaternion.LookRotation(rayHit.normal);
-            Instantiate(bulletImpact[impactIndex], rayHit.point, rotation, rayHit.collider.transform);
+            if (rayHit.collider != null)
+                Instantiate(bulletImpact[impactIndex], rayHit.point, rotation, rayHit.collider.transform);
         }
         // int fXVolume = AudioSettingsManager.Instance.FXVolume;
 
