@@ -802,6 +802,38 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3dbe72e5e81f60649a9666bbfd96d8e4, type: 3}
+--- !u!1 &253775897
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 253775898}
+  m_Layer: 7
+  m_Name: CameraRotation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &253775898
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 253775897}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.6, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 787835646}
+  m_Father: {fileID: 7926998097612782907}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &261800694
 GameObject:
   m_ObjectHideFlags: 0
@@ -4306,6 +4338,38 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0448a57133ebdce4dad0610b16b906c8, type: 3}
+--- !u!1 &787835645
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 787835646}
+  m_Layer: 7
+  m_Name: CameraRecoil
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &787835646
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787835645}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1051338223}
+  m_Father: {fileID: 253775898}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &804130259
 GameObject:
   m_ObjectHideFlags: 0
@@ -5388,14 +5452,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1051338222}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.6, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 220431882}
   - {fileID: 1035725476}
-  m_Father: {fileID: 7926998097612782907}
+  m_Father: {fileID: 787835646}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1051338224
 MonoBehaviour:
@@ -7404,7 +7468,7 @@ MonoBehaviour:
   spawnInterval: 5
   timeBetweenRounds: 5
   initialDelay: 5
-  usableSpawnPointCount: 3
+  usableSpawnPointCount: 0
   roundTimer: 0
   spawnPoints: []
   closestSpawnPoints: []
@@ -112387,7 +112451,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1051338223}
+  - {fileID: 253775898}
   - {fileID: 6104259644464021158}
   - {fileID: 1441843147144158712}
   - {fileID: 8360099513512818936}
@@ -112485,6 +112549,7 @@ MonoBehaviour:
   isJumping: 0
   isSprinting: 0
   isCrouching: 0
+  lookMagnitude: 0
   money: 5000
 --- !u!114 &7926998097612782912
 MonoBehaviour:
@@ -112507,12 +112572,22 @@ MonoBehaviour:
   inventorySize: 2
   weaponPoint: {fileID: 1035725476}
   bulletsLeftInMag: 
+  recoilReturnCancelled: 0
+  recoilX: 2
+  recoilY: 2
+  recoilZ: 0
+  snappiness: 5
+  returnSpeed: 2
+  cancelRecoilReturnThreshold: 0.05
   bulletImpact:
   - {fileID: 5643604064675710849, guid: 1826b8e48fc2421489a6db0426769663, type: 3}
   - {fileID: 2358101627313222812, guid: 9131b7a4b99fa534781d457085bc310e, type: 3}
   - {fileID: 8390626686314494724, guid: 27141ffe20be5e048bfbac5060d0efaf, type: 3}
   - {fileID: 8390626686314494724, guid: 27141ffe20be5e048bfbac5060d0efaf, type: 3}
+  isFiring: 0
+  playerController: {fileID: 0}
   cam: {fileID: 0}
+  recoilTransform: {fileID: 0}
   projectilePoint: {fileID: 0}
   enemyLayer:
     serializedVersion: 2

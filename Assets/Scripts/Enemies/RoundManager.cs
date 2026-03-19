@@ -77,7 +77,6 @@ public class RoundManager : MonoBehaviour
 
     private void SpawnEnemies()
     {
-        Debug.Log("Spawning zombies... Enemies spawned: " + enemiesSpawned + "/" + enemiesThisRound);
         // Check if there are more than 5 spawn points available, if so use the 5 closest spawn points to the player
         if (spawnPoints.Count > usableSpawnPointCount)
         {
@@ -110,7 +109,6 @@ public class RoundManager : MonoBehaviour
                 int h = (int)(roundNumber * roundNumber + 2 * roundNumber + 40);
                 float health = Mathf.Min(h, 1000);
                 GameObject enemy = spawnScript.Spawn(speed, health);
-                Debug.Log("ROUND MANAGER SPAWNED ENEMY");
                 if (enemy != null)
                 {
                     enemies.Add(enemy);

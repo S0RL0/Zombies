@@ -25,27 +25,51 @@ public class WeaponSystem : MonoBehaviour
 
     #endregion
 
+    #region Recoil
+    [Header("Recoil and ADS")]
+    private Vector3 currentRotation;
+    private Vector3 targetRotation;
+    private Vector3 naturalRotation = Vector3.zero;
+    private bool isADS;
+    [SerializeField] private bool recoilReturnCancelled = false;
+
+    [SerializeField] private float recoilX = 2f;
+    [SerializeField] private float recoilY = 2f;
+    [SerializeField] private float recoilZ = 0.5f;
+
+    [SerializeField] private float snappiness = 5f;
+    [SerializeField] private float returnSpeed = 2f;
+    [SerializeField] private float cancelRecoilReturnThreshold = 0.05f;
+
+
+    #endregion
+
     #region Effects
     [Header("Effects")]
     public List<GameObject> bulletImpact;
     #endregion
 
-    #region Inputs and calculations
+    #region Inputs and internal variables
     // Input variables for input handler
     private bool fireKeyHeld = false;                // true while button is held
     private bool firePressedThisFrame = false;    // true only on the frame it was pressed
     private bool reloadPressedThisFrame = false;  // same for reload
 
+
     // Calculations
+    [SerializeField] private bool isFiring;             // true while firing (holding trigger for auto, or during burst)
     private bool readyToFire;          // true when able to shoot
     private bool reloading;
     private bool dryfire = true;
+
     #endregion
 
     #region References
     // Refernces
     [Header("References")]
+    public PlayerController playerController;
     public Camera cam;
+    public Transform recoilTransform;
     public Transform projectilePoint;
     public RaycastHit rayHit;
     public LayerMask enemyLayer;
@@ -90,7 +114,9 @@ public class WeaponSystem : MonoBehaviour
     #region Start
     private void Awake()
     {
+        playerController = GetComponent<PlayerController>();
         cam = GetComponentInChildren<Camera>();
+        recoilTransform = transform.Find("CameraRotation/CameraRecoil");
 
         // Create weapon models at start
         if (profiles.Count > 0)
@@ -144,17 +170,28 @@ public class WeaponSystem : MonoBehaviour
         {
             return;
         }
-        updateInput();
+        UpdateInput();
+
+        UpdateRecoil();
 
         updateUI();
 
         UpdateGizmo();
     }
 
-    private void updateInput()
+    private void UpdateInput()
     {
         // Decide if we should be shooting this frame
         bool shooting = profiles[currentWeaponIndex].allowTriggerHold ? fireKeyHeld : firePressedThisFrame;
+        isFiring = shooting && !reloading && bulletsLeftInMag[currentWeaponIndex] > 0;
+
+
+        if (!isFiring && recoilReturnCancelled)
+        {
+            //ResetRecoil();
+            // Reset override latch for next spray
+            //recoilReturnCancelled = false;
+        }
 
         // Handle reload
         if (reloadPressedThisFrame && bulletsLeftInMag[currentWeaponIndex] < profiles[currentWeaponIndex].magazineSize && !reloading)
@@ -190,10 +227,46 @@ public class WeaponSystem : MonoBehaviour
         reloadPressedThisFrame = false;
     }
 
+    private void UpdateRecoil()
+    {
+        // Override if player looks while firing
+        if (isFiring && !recoilReturnCancelled && playerController.lookMagnitude > cancelRecoilReturnThreshold)
+        {
+            recoilReturnCancelled = true;
+        }
+
+        Vector3 returnTarget = targetRotation;
+        recoilReturnCancelled = false;
+        // Always return Z (roll)
+        returnTarget.z = Mathf.Lerp(targetRotation.z, 0f, Time.deltaTime * returnSpeed);
+
+        // Only return X and Y if NOT overridden
+        if (!recoilReturnCancelled)
+        {
+            returnTarget.x = Mathf.Lerp(targetRotation.x, naturalRotation.x, Time.deltaTime * returnSpeed);
+            returnTarget.y = Mathf.Lerp(targetRotation.y, naturalRotation.y, Time.deltaTime * returnSpeed);
+        }
+
+        targetRotation = returnTarget;
+
+        currentRotation = Vector3.Slerp(currentRotation, targetRotation, Time.deltaTime * snappiness);
+        recoilTransform.localRotation = Quaternion.Euler(currentRotation);
+    }
+
+    private void RecoilFire()
+    {
+        if (isADS)
+            targetRotation += new Vector3(-recoilX * 0.5f, Random.Range(-recoilY * 0.5f, recoilY * 0.5f), Random.Range(-recoilZ * 0.5f, recoilZ * 0.5f));
+        else
+            targetRotation += new Vector3(-recoilX, Random.Range(-recoilY, recoilY), Random.Range(-recoilZ, recoilZ));
+    }
+    private void ResetRecoil()
+    {
+        naturalRotation = recoilTransform.localRotation.eulerAngles;
+    }
+
     IEnumerator Timer()
     {
-
-
         yield return new WaitForSeconds(1);
         dryfire = true;
     }
@@ -202,6 +275,9 @@ public class WeaponSystem : MonoBehaviour
     {
         fireKeyHeld = true;
         firePressedThisFrame = true;  // one-frame flag
+
+        //recoilReturnCancelled = false;
+        //ResetRecoil();
     }
 
     public void OnFireCanceled()
@@ -255,7 +331,11 @@ public class WeaponSystem : MonoBehaviour
             CalculateGizmo(cam.transform.position, cam.transform.position + (direction.normalized * profiles[currentWeaponIndex].maxRange));
         }
 
+        // Recoil
+        RecoilFire();
+
         // Camera Shake here
+
 
         // Particle effects here
         weaponModels[currentWeaponIndex].GetComponent<Weapon>().fireFX();
@@ -279,9 +359,12 @@ public class WeaponSystem : MonoBehaviour
                     impactIndex = 3;
                     break;
             }
-            Quaternion rotation = Quaternion.LookRotation(rayHit.normal);
-            if (rayHit.collider != null)
+
+            if (rayHit.collider != null && rayHit.normal != Vector3.zero)
+            {
+                Quaternion rotation = Quaternion.LookRotation(rayHit.normal);
                 Instantiate(bulletImpact[impactIndex], rayHit.point, rotation, rayHit.collider.transform);
+            }
         }
         // int fXVolume = AudioSettingsManager.Instance.FXVolume;
 
@@ -433,7 +516,6 @@ public class WeaponSystem : MonoBehaviour
         if (profiles.Count == 0) return;
 
         int previousIndex = currentWeaponIndex;
-        Debug.Log("previous weapon index: " + previousIndex + "profiles size: " + profiles.Count + "ammo size: " + bulletsLeftInMag.Count);
         if (previousIndex < profiles.Count)
             StartCoroutine(ReloadInventory(previousIndex, profiles[previousIndex].reloadTime));
 
@@ -473,7 +555,6 @@ public class WeaponSystem : MonoBehaviour
 
     public void PickupNewWeapon(WeaponProfile newWeapon, GameObject model, Weapon modelScript)
     {
-        Debug.Log("Before: Inventory size: " + inventorySize + " |current weapon count: " + weaponModels.Count);
         if (profiles.Count < inventorySize)
         {
 

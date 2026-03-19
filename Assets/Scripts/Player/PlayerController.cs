@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public bool isJumping;
     [HideInInspector] public bool isSprinting;
     [HideInInspector] public bool isCrouching;
+    [HideInInspector] public float lookMagnitude;
 
     // Logic variables
     private float gravity = -9.81f;
@@ -39,7 +40,7 @@ public class PlayerController : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         Camera _camera = GetComponentInChildren<Camera>();
-        cameraTransform = _camera.gameObject.transform;
+        cameraTransform = transform.Find("CameraRotation");
         weaponSystem = GetComponent<WeaponSystem>();
     }
 
@@ -110,6 +111,9 @@ public class PlayerController : MonoBehaviour
         // Inputs
         float horizontalLook = lookInput.x * lookSpeed * 0.01f;
         float verticalLook = lookInput.y * lookSpeed * 0.01f;
+
+        // Store magnitude for recoil script
+        lookMagnitude = Mathf.Abs(horizontalLook) + Mathf.Abs(verticalLook);
 
         // Vertical rotation
         verticalLookRotation -= verticalLook;
