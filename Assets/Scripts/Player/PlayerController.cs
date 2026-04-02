@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 recoilOrigin;        // Original rotation before recoil
     [SerializeField] private float recoilSnappiness = 10f; // How quickly the camera returns to original position after recoil
     [SerializeField] private float recoilOffsetVelocity;
+    enum RecoilResetMode { Start, Zero }
 
     // Movement variables
     private float gravity = -9.81f;
@@ -183,6 +184,8 @@ public class PlayerController : MonoBehaviour
     public void StopShooting()
     {
         isFiring = false;
+
+
     }
     #endregion
 
