@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    #region Variables
     [Header("References")]
     private CharacterController characterController;
     private WeaponSystem weaponSystem;
+    private Transform cameraTransform;
 
     [Header("Stats")]
     [SerializeField] private float lookSpeed = 20f;
@@ -19,23 +21,32 @@ public class PlayerController : MonoBehaviour
     // Input varibles
     [HideInInspector] public Vector2 moveInput;
     [HideInInspector] public Vector2 lookInput = Vector2.zero;
-    [HideInInspector] private Vector2 currentLook;
-    [HideInInspector] private Vector2 lookVelocity;
     [HideInInspector] public bool isJumping;
     [HideInInspector] public bool isSprinting;
     [HideInInspector] public bool isCrouching;
-    [HideInInspector] public float lookMagnitude;
+    [HideInInspector] public bool isFiring;
+    [HideInInspector] public bool wasFiring;
 
-    // Logic variables
+    // Camera variables
+    private Vector2 baseRotation;        // Player-controlled rotation (yaw, pitch)
+    private Vector2 recoilTarget;        // Target recoil offset when firing
+    private Vector2 recoilOffset;        // Current recoil offset
+    private Vector2 recoilVelocity;      // For smoothing recoil return
+    private Vector2 recoilOrigin;        // Original rotation before recoil
+    [SerializeField] private float recoilSnappiness = 10f; // How quickly the camera returns to original position after recoil
+    [SerializeField] private float recoilOffsetVelocity;
+
+    // Movement variables
     private float gravity = -9.81f;
     private Vector3 velocity;
     private bool isGrounded;
-    private Transform cameraTransform;
-    private float verticalLookRotation;
 
     // Economy System
     public int money = 0;
 
+    #endregion
+
+    #region Awake
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -43,11 +54,14 @@ public class PlayerController : MonoBehaviour
         cameraTransform = transform.Find("CameraRotation");
         weaponSystem = GetComponent<WeaponSystem>();
     }
+    #endregion
 
-
+    #region Update
     void Update()
     {
         Look();
+
+        Camera();
     }
 
     void FixedUpdate()
@@ -58,16 +72,11 @@ public class PlayerController : MonoBehaviour
         Jump();
 
     }
+    #endregion
 
-    public void ToggleCrouch(bool isCrouchButtonPressed)
-    {
-        if (isCrouchButtonPressed)
-        {
-            isCrouching = !isCrouching;
-            characterController.height = isCrouching ? crouchHeight : standingHeight;
-        }
-    }
+    #region Movement
 
+    #region Move
     private void Move()
     {
         // Calculate movement
@@ -75,7 +84,9 @@ public class PlayerController : MonoBehaviour
         float speed = isCrouching ? crouchSpeed : (isSprinting ? sprintSpeed : walkSpeed);
         characterController.Move(move * speed * Time.deltaTime);
     }
+    #endregion
 
+    #region Jump
     private void Jump()
     {
         // Un Crouch if crounched
@@ -102,28 +113,10 @@ public class PlayerController : MonoBehaviour
         {
             velocity.y = 0f;
         }
-
-
     }
+    #endregion
 
-    private void Look()
-    {
-        // Inputs
-        float horizontalLook = lookInput.x * lookSpeed * 0.01f;
-        float verticalLook = lookInput.y * lookSpeed * 0.01f;
-
-        // Store magnitude for recoil script
-        lookMagnitude = Mathf.Abs(horizontalLook) + Mathf.Abs(verticalLook);
-
-        // Vertical rotation
-        verticalLookRotation -= verticalLook;
-        verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
-
-        // Apply rotations
-        cameraTransform.localRotation = Quaternion.Euler(verticalLookRotation, 0f, 0f);
-        transform.Rotate(Vector3.up * horizontalLook);
-    }
-
+    #region Crouch
     public void Crouch()
     {
         isCrouching = !isCrouching;
@@ -131,7 +124,69 @@ public class PlayerController : MonoBehaviour
         characterController.height = currentHeight;
         cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, currentHeight, cameraTransform.localPosition.z);
     }
+    public void ToggleCrouch(bool isCrouchButtonPressed)
+    {
+        if (isCrouchButtonPressed)
+        {
+            isCrouching = !isCrouching;
+            characterController.height = isCrouching ? crouchHeight : standingHeight;
+        }
+    }
 
+    #endregion
+
+    #endregion
+
+    #region Camera
+    private void Look()
+    {
+        // Inputs
+        float horizontalLook = lookInput.x * lookSpeed * 0.01f;
+        float verticalLook = lookInput.y * lookSpeed * 0.01f;
+
+
+        // Base Rotation
+        baseRotation.x += horizontalLook;
+        baseRotation.y -= verticalLook;
+        baseRotation.y = Mathf.Clamp(baseRotation.y, -90f, 90f);
+    }
+
+    private void Camera()
+    {
+        recoilOffset = Vector2.Lerp(recoilOffset, recoilTarget, Time.deltaTime * recoilSnappiness);
+
+        if (!isFiring) ResetRecoil();
+
+        // Update camera rotation with recoil
+        Vector2 FinalRotation = baseRotation + recoilOffset;
+        FinalRotation.y = Mathf.Clamp(FinalRotation.y, -90f, 90f);
+        transform.rotation = Quaternion.Euler(0f, FinalRotation.x, 0f);
+        cameraTransform.localRotation = Quaternion.Euler(FinalRotation.y, 0f, 0f);
+    }
+
+    public void AddRecoil(Vector2 recoilAmount)
+    {
+        recoilTarget += recoilAmount;
+    }
+
+    public void ResetRecoil()
+    {
+        recoilTarget = Vector2.SmoothDamp(recoilOffset, Vector2.zero, ref recoilVelocity, 0.1f);
+    }
+
+    public void StartShooting()
+    {
+        recoilOrigin = baseRotation;
+        isFiring = true;
+    }
+
+    public void StopShooting()
+    {
+        isFiring = false;
+    }
+    #endregion
+
+    #region Interaction
     public void Interact()
     {
         RaycastHit hit;
@@ -183,7 +238,11 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    #endregion
 
+    #region Inventory
+
+    #region Weapons
     public bool HasWeapon(WeaponProfile weaponToCheck)
     {
         return weaponSystem.profiles.Contains(weaponToCheck);
@@ -202,6 +261,9 @@ public class PlayerController : MonoBehaviour
     {
         return weaponSystem.DropCurrentWeapon(false);
     }
+    #endregion
+
+    #region Money
     public int GetMoney()
     {
         return money;
@@ -211,4 +273,7 @@ public class PlayerController : MonoBehaviour
     {
         money += amount;
     }
+    #endregion
+
+    #endregion
 }

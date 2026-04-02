@@ -1,3 +1,4 @@
+#region Imports
 using DG.Tweening;
 using FMOD.Studio;
 using FMODUnity;
@@ -6,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
+#endregion
 
 public class WeaponSystem : MonoBehaviour
 {
@@ -57,7 +58,8 @@ public class WeaponSystem : MonoBehaviour
 
 
     // Calculations
-    [SerializeField] private bool isFiring;             // true while firing (holding trigger for auto, or during burst)
+    [SerializeField] private bool isFiring;
+    [SerializeField] private bool wasFiring;
     private bool readyToFire;          // true when able to shoot
     private bool reloading;
     private bool dryfire = true;
@@ -172,8 +174,6 @@ public class WeaponSystem : MonoBehaviour
         }
         UpdateInput();
 
-        UpdateRecoil();
-
         updateUI();
 
         UpdateGizmo();
@@ -185,13 +185,10 @@ public class WeaponSystem : MonoBehaviour
         bool shooting = profiles[currentWeaponIndex].allowTriggerHold ? fireKeyHeld : firePressedThisFrame;
         isFiring = shooting && !reloading && bulletsLeftInMag[currentWeaponIndex] > 0;
 
+        if (isFiring && !wasFiring) playerController.StartShooting(); //Started shooting this frame
+        if (!isFiring && wasFiring) playerController.StopShooting(); //Stopped shooting this frame
+        wasFiring = isFiring;
 
-        if (!isFiring && recoilReturnCancelled)
-        {
-            //ResetRecoil();
-            // Reset override latch for next spray
-            //recoilReturnCancelled = false;
-        }
 
         // Handle reload
         if (reloadPressedThisFrame && bulletsLeftInMag[currentWeaponIndex] < profiles[currentWeaponIndex].magazineSize && !reloading)
@@ -227,42 +224,13 @@ public class WeaponSystem : MonoBehaviour
         reloadPressedThisFrame = false;
     }
 
-    private void UpdateRecoil()
-    {
-        // Override if player looks while firing
-        if (isFiring && !recoilReturnCancelled && playerController.lookMagnitude > cancelRecoilReturnThreshold)
-        {
-            recoilReturnCancelled = true;
-        }
-
-        Vector3 returnTarget = targetRotation;
-        recoilReturnCancelled = false;
-        // Always return Z (roll)
-        returnTarget.z = Mathf.Lerp(targetRotation.z, 0f, Time.deltaTime * returnSpeed);
-
-        // Only return X and Y if NOT overridden
-        if (!recoilReturnCancelled)
-        {
-            returnTarget.x = Mathf.Lerp(targetRotation.x, naturalRotation.x, Time.deltaTime * returnSpeed);
-            returnTarget.y = Mathf.Lerp(targetRotation.y, naturalRotation.y, Time.deltaTime * returnSpeed);
-        }
-
-        targetRotation = returnTarget;
-
-        currentRotation = Vector3.Slerp(currentRotation, targetRotation, Time.deltaTime * snappiness);
-        recoilTransform.localRotation = Quaternion.Euler(currentRotation);
-    }
 
     private void RecoilFire()
     {
         if (isADS)
-            targetRotation += new Vector3(-recoilX * 0.5f, Random.Range(-recoilY * 0.5f, recoilY * 0.5f), Random.Range(-recoilZ * 0.5f, recoilZ * 0.5f));
+            playerController.AddRecoil(new Vector2(Random.Range(-recoilX, recoilX) * 0.5f, -recoilY * 0.5f));
         else
-            targetRotation += new Vector3(-recoilX, Random.Range(-recoilY, recoilY), Random.Range(-recoilZ, recoilZ));
-    }
-    private void ResetRecoil()
-    {
-        naturalRotation = recoilTransform.localRotation.eulerAngles;
+            playerController.AddRecoil(new Vector2(Random.Range(-recoilX, recoilX), -recoilY));
     }
 
     IEnumerator Timer()
