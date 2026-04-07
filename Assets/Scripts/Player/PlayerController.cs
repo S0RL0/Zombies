@@ -180,7 +180,6 @@ public class PlayerController : MonoBehaviour
 
     public void ResetRecoil()
     {
-        Debug.Log("Resetting recoil. Current recoil offset: " + recoilOffset + "| Current recoil target: " + recoilTarget);
         Vector2 target = Vector2.zero;
 
         switch (recoilRecoveryMode)
@@ -197,12 +196,13 @@ public class PlayerController : MonoBehaviour
                 BakeRecoilIntoBase();
                 return; // Do not apply any recoil recovery
         }
+        float resetTime = recoilRecoveryMode == RecoveryMode.ToZero ? 0.3f : 0.1f; // Faster reset for smaller offsets
 
         recoilTarget = Vector2.SmoothDamp(
             recoilTarget,
             target,
             ref recoilVelocity,
-            0.1f
+            resetTime
         );
     }
 
@@ -212,6 +212,7 @@ public class PlayerController : MonoBehaviour
 
         recoilOffset = Vector2.zero;
         recoilTarget = Vector2.zero;
+        recoilVelocity = Vector2.zero;
 
     }
 
@@ -242,22 +243,20 @@ public class PlayerController : MonoBehaviour
         if (recoilessDeviationMagnitude < recoveryThreshold)
         {
             // Case 1: burst / no control
-            Debug.Log("No control detected. Recoil will return to zero. Recoiless Deviation Magnitude: " + recoilessDeviationMagnitude);
+            //Debug.Log("No control detected. Recoil will return to zero. Recoiless Deviation Magnitude: " + recoilessDeviationMagnitude);
             recoilRecoveryMode = RecoveryMode.ToZero;
         }
         // Crosshair is close to original target, the player has good control
         else if (recoilDeviationMagnitude < recoveryThreshold * 2)
         {
             // Case 2: good control
-
-            Debug.Log("Good control detected. Recoil will return to origin. Recoil Deviation Magnitude: " + recoilDeviationMagnitude);
+            //Debug.Log("Good control detected. Recoil will return to origin. Recoil Deviation Magnitude: " + recoilDeviationMagnitude);
             recoilRecoveryMode = RecoveryMode.ToOrigin;
         }
         else
         {
             // Case 3: bad control
-
-            Debug.Log("Movement under aiming detected. Recoil will return vertically only. Recoiless Deviation Magnitude: " + recoilessDeviationMagnitude + "| Recoil Deviation Magnitude: " + recoilDeviationMagnitude);
+            //Debug.Log("Movement under aiming detected. Recoil will return vertically only. Recoiless Deviation Magnitude: " + recoilessDeviationMagnitude + "| Recoil Deviation Magnitude: " + recoilDeviationMagnitude);
             recoilRecoveryMode = RecoveryMode.None;
         }
     }
