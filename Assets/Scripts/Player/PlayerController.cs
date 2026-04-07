@@ -29,13 +29,19 @@ public class PlayerController : MonoBehaviour
 
     // Camera variables
     private Vector2 baseRotation;        // Player-controlled rotation (yaw, pitch)
+    private Vector2 finalRotation;       // baseRotation + recoil offset
     private Vector2 recoilTarget;        // Target recoil offset when firing
     private Vector2 recoilOffset;        // Current recoil offset
     private Vector2 recoilVelocity;      // For smoothing recoil return
     private Vector2 recoilOrigin;        // Original rotation before recoil
     [SerializeField] private float recoilSnappiness = 10f; // How quickly the camera returns to original position after recoil
     [SerializeField] private float recoilOffsetVelocity;
-    enum RecoilResetMode { Start, Zero }
+
+    // Recoil recovery evaluation thresholds
+    private float recoveryThreshold = 5f;
+
+    enum RecoveryMode { ToZero, ToOrigin, None }
+    private RecoveryMode recoilRecoveryMode;
 
     // Movement variables
     private float gravity = -9.81f;
@@ -156,13 +162,15 @@ public class PlayerController : MonoBehaviour
     {
         recoilOffset = Vector2.Lerp(recoilOffset, recoilTarget, Time.deltaTime * recoilSnappiness);
 
-        if (!isFiring) ResetRecoil();
+        if (!isFiring && recoilOffset.magnitude > 0.01f) ResetRecoil();
+
+        if (!isFiring && (recoilOffset - recoilTarget).magnitude < 0.01f && recoilOffset.magnitude != 0) BakeRecoilIntoBase();
 
         // Update camera rotation with recoil
-        Vector2 FinalRotation = baseRotation + recoilOffset;
-        FinalRotation.y = Mathf.Clamp(FinalRotation.y, -90f, 90f);
-        transform.rotation = Quaternion.Euler(0f, FinalRotation.x, 0f);
-        cameraTransform.localRotation = Quaternion.Euler(FinalRotation.y, 0f, 0f);
+        finalRotation = baseRotation + recoilOffset;
+        finalRotation.y = Mathf.Clamp(finalRotation.y, -90f, 90f);
+        transform.rotation = Quaternion.Euler(0f, finalRotation.x, 0f);
+        cameraTransform.localRotation = Quaternion.Euler(finalRotation.y, 0f, 0f);
     }
 
     public void AddRecoil(Vector2 recoilAmount)
@@ -172,11 +180,44 @@ public class PlayerController : MonoBehaviour
 
     public void ResetRecoil()
     {
-        recoilTarget = Vector2.SmoothDamp(recoilOffset, Vector2.zero, ref recoilVelocity, 0.1f);
+        Debug.Log("Resetting recoil. Current recoil offset: " + recoilOffset + "| Current recoil target: " + recoilTarget);
+        Vector2 target = Vector2.zero;
+
+        switch (recoilRecoveryMode)
+        {
+            case RecoveryMode.ToZero:
+                target = Vector2.zero;
+                break;
+
+            case RecoveryMode.ToOrigin:
+                target = recoilOrigin - baseRotation;
+                break;
+
+            case RecoveryMode.None:
+                BakeRecoilIntoBase();
+                return; // Do not apply any recoil recovery
+        }
+
+        recoilTarget = Vector2.SmoothDamp(
+            recoilTarget,
+            target,
+            ref recoilVelocity,
+            0.1f
+        );
+    }
+
+    void BakeRecoilIntoBase()
+    {
+        baseRotation += recoilOffset;
+
+        recoilOffset = Vector2.zero;
+        recoilTarget = Vector2.zero;
+
     }
 
     public void StartShooting()
     {
+        BakeRecoilIntoBase();
         recoilOrigin = baseRotation;
         isFiring = true;
     }
@@ -185,7 +226,40 @@ public class PlayerController : MonoBehaviour
     {
         isFiring = false;
 
+        EvaluateRecoilRecovery();
+    }
 
+    void EvaluateRecoilRecovery()
+    {
+        // Difference between where the player started firing and where they are now (excluding recoil)
+        Vector2 recoilessDeviation = baseRotation - recoilOrigin;
+        float recoilessDeviationMagnitude = recoilessDeviation.magnitude;
+
+        Vector2 recoilDeviation = finalRotation - recoilOrigin;
+        float recoilDeviationMagnitude = recoilDeviation.magnitude;
+
+        // Player has not moved the crosshair much since firing
+        if (recoilessDeviationMagnitude < recoveryThreshold)
+        {
+            // Case 1: burst / no control
+            Debug.Log("No control detected. Recoil will return to zero. Recoiless Deviation Magnitude: " + recoilessDeviationMagnitude);
+            recoilRecoveryMode = RecoveryMode.ToZero;
+        }
+        // Crosshair is close to original target, the player has good control
+        else if (recoilDeviationMagnitude < recoveryThreshold * 2)
+        {
+            // Case 2: good control
+
+            Debug.Log("Good control detected. Recoil will return to origin. Recoil Deviation Magnitude: " + recoilDeviationMagnitude);
+            recoilRecoveryMode = RecoveryMode.ToOrigin;
+        }
+        else
+        {
+            // Case 3: bad control
+
+            Debug.Log("Movement under aiming detected. Recoil will return vertically only. Recoiless Deviation Magnitude: " + recoilessDeviationMagnitude + "| Recoil Deviation Magnitude: " + recoilDeviationMagnitude);
+            recoilRecoveryMode = RecoveryMode.None;
+        }
     }
     #endregion
 
