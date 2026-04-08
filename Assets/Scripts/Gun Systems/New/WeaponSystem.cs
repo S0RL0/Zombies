@@ -28,15 +28,8 @@ public class WeaponSystem : MonoBehaviour
 
     #region Recoil
     [Header("Recoil and ADS")]
-    private Vector3 currentRotation;
-    private Vector3 targetRotation;
-    private Vector3 naturalRotation = Vector3.zero;
     private bool isADS;
     [SerializeField] private bool recoilReturnCancelled = false;
-
-    [SerializeField] private float recoilX = 2f;
-    [SerializeField] private float recoilY = 2f;
-    [SerializeField] private float recoilZ = 0.5f;
 
     [SerializeField] private float snappiness = 5f;
     [SerializeField] private float returnSpeed = 2f;
@@ -50,35 +43,36 @@ public class WeaponSystem : MonoBehaviour
     public List<GameObject> bulletImpact;
     #endregion
 
-    #region Inputs and internal variables
+    #region Inputs
     // Input variables for input handler
-    private bool fireKeyHeld = false;                // true while button is held
-    private bool firePressedThisFrame = false;    // true only on the frame it was pressed
-    private bool reloadPressedThisFrame = false;  // same for reload
+    private bool fireKeyHeld = false;
+    private bool firePressedThisFrame = false;
+    private bool reloadPressedThisFrame = false;
+    #endregion
 
-
+    #region Internal variables
     // Calculations
-    [SerializeField] private bool isFiring;
-    [SerializeField] private bool wasFiring;
-    private bool readyToFire;          // true when able to shoot
+    private bool isFiring;
+    private bool wasFiring;
+    private bool readyToFire;
     private bool reloading;
     private bool dryfire = true;
-
     #endregion
 
     #region References
     // Refernces
     [Header("References")]
-    public PlayerController playerController;
-    public Camera cam;
-    public Transform recoilTransform;
-    public Transform projectilePoint;
-    public RaycastHit rayHit;
-    public LayerMask enemyLayer;
+    private PlayerController playerController;
+    private Camera cam;
+    private Transform projectilePoint;
+    private RaycastHit rayHit;
+    [SerializeField] private LayerMask enemyLayer;
+    #endregion
 
+    #region Audio
+    // Audio
     private EventInstance Reloadintance;
-    [SerializeField] private EventReference ReloadEvent;
-
+    private EventReference ReloadEvent;
     private EventInstance GunshotInstance;
     private EventInstance DryInstance;
     #endregion
@@ -88,7 +82,6 @@ public class WeaponSystem : MonoBehaviour
     public static event Action<GameObject> onAmmoChanged;
     public static event Action<GameObject> onWeaponSwitched;
     public static event Action<GameObject> onInventoryChanged;
-
     #endregion
 
     #region Dev Tools
@@ -118,7 +111,6 @@ public class WeaponSystem : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
         cam = GetComponentInChildren<Camera>();
-        recoilTransform = transform.Find("CameraRotation/CameraRecoil");
 
         // Create weapon models at start
         if (profiles.Count > 0)
@@ -227,10 +219,31 @@ public class WeaponSystem : MonoBehaviour
 
     private void RecoilFire()
     {
+        float recoilX;
+        float recoilY;
         if (isADS)
-            playerController.AddRecoil(new Vector2(Random.Range(-recoilX, recoilX) * 0.5f, -recoilY * 0.5f));
+        {
+            recoilX = profiles[currentWeaponIndex].horizontalRecoilADS;
+            if (profiles[currentWeaponIndex].hasRandomizedHorizontalRecoil)
+                recoilX = Random.Range(-recoilX, recoilX);
+
+            recoilY = profiles[currentWeaponIndex].verticalRecoilADS;
+            if (profiles[currentWeaponIndex].hasRandomizedVerticalRecoil)
+                recoilY = Random.Range(0, 2 * recoilY);
+        }
         else
-            playerController.AddRecoil(new Vector2(Random.Range(-recoilX, recoilX), -recoilY));
+        {
+            recoilX = profiles[currentWeaponIndex].horizontalRecoil;
+            if (profiles[currentWeaponIndex].hasRandomizedHorizontalRecoil)
+                recoilX = Random.Range(-recoilX, recoilX);
+
+            recoilY = profiles[currentWeaponIndex].verticalRecoil;
+            if (profiles[currentWeaponIndex].hasRandomizedVerticalRecoil)
+                recoilY = Random.Range(0, 2 * recoilY);
+
+        }
+        Debug.Log("ADS: " + isADS);
+        playerController.AddRecoil(new Vector2(recoilX, -recoilY));
     }
 
     IEnumerator Timer()
@@ -543,8 +556,6 @@ public class WeaponSystem : MonoBehaviour
 
             // Trigger event
             onInventoryChanged?.Invoke(gameObject);
-            Debug.Log("added: Inventory size: " + inventorySize + " |current weapon count: " + weaponModels.Count);
-
         }
         else
         {

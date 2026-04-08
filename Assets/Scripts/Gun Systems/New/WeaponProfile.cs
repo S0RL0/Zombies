@@ -34,7 +34,7 @@ public class WeaponProfile : ScriptableObject
     public WeaponProfile upgradedProfile;
     #endregion
 
-    #region Weapon Stats    
+    #region Firing    
     [Header("Weapon Firing Stats")]
     [Tooltip("Damage per bullet.")]
     public int damage;
@@ -53,6 +53,23 @@ public class WeaponProfile : ScriptableObject
     public float maxRange = 50;
     [Tooltip("Damage over range cure.")]
     public AnimationCurve rangeCurve;
+    #endregion
+
+    #region Recoil
+    [Header("Weapon Firing Stats")]
+    [Tooltip("Randomisation for vertical recoil")]
+    public bool hasRandomizedVerticalRecoil = true;
+    [Tooltip("Randomisation for horizontal recoil")]
+    public bool hasRandomizedHorizontalRecoil = true;
+    [Tooltip("Vertical Recoil")]
+    public float verticalRecoil;
+    [Tooltip("Horizontal Recoil")]
+    public float horizontalRecoil;
+    [Tooltip("Vertical Recoil when ADS")]
+    public float verticalRecoilADS;
+    [Tooltip("Horizontal Recoil when ADS")]
+    public float horizontalRecoilADS;
+
     #endregion
 
     #region Reloading and Ammo

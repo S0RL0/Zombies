@@ -26,6 +26,7 @@ MonoBehaviour:
   prefab: {fileID: 5781005907472603983, guid: a53a434f8d82443488339f65d6b45fcb, type: 3}
   upgradedProfile: {fileID: 11400000, guid: f9adce9df0b314c4a861be39684a2efb, type: 2}
   damage: 28
+  headshotMultiplier: 1.5
   rateOfFire: 600
   timeBetweenRounds: 0.1
   shotsPerBurst: 1
@@ -38,6 +39,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  hasRandomizedVerticalRecoil: 1
+  hasRandomizedHorizontalRecoil: 1
+  verticalRecoil: 0.35
+  horizontalRecoil: 0.5
+  verticalRecoilADS: 0.2
+  horizontalRecoilADS: 0.35
   reloadType: 0
   reloadTime: 1.2
   roundInsertTime: 0
