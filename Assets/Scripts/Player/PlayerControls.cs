@@ -246,12 +246,21 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Interact Action"",
+                    ""name"": ""InteractAction"",
                     ""type"": ""Button"",
                     ""id"": ""dff4c4c1-e83c-4af6-bd13-3be841dc90e4"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleCleaning"",
+                    ""type"": ""Button"",
+                    ""id"": ""621504cf-2c30-4ada-891b-dd41381e35e9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 }
             ],
@@ -747,7 +756,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Interact Action"",
+                    ""action"": ""InteractAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -758,7 +767,29 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Interact Action"",
+                    ""action"": ""InteractAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""63f8cb4a-2ff7-4225-a0ad-615d49afaed3"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleCleaning"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c7c36776-aa43-447f-b0e9-b46e88082496"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleCleaning"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -874,7 +905,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_SwitchUp = m_Player.FindAction("SwitchUp", throwIfNotFound: true);
         m_Player_SwitchDown = m_Player.FindAction("SwitchDown", throwIfNotFound: true);
         m_Player_Scoreboard = m_Player.FindAction("Scoreboard", throwIfNotFound: true);
-        m_Player_InteractAction = m_Player.FindAction("Interact Action", throwIfNotFound: true);
+        m_Player_InteractAction = m_Player.FindAction("InteractAction", throwIfNotFound: true);
+        m_Player_ToggleCleaning = m_Player.FindAction("ToggleCleaning", throwIfNotFound: true);
         // New action map
         m_Newactionmap = asset.FindActionMap("New action map", throwIfNotFound: true);
         m_Newactionmap_Newaction = m_Newactionmap.FindAction("New action", throwIfNotFound: true);
@@ -977,6 +1009,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_SwitchDown;
     private readonly InputAction m_Player_Scoreboard;
     private readonly InputAction m_Player_InteractAction;
+    private readonly InputAction m_Player_ToggleCleaning;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1061,6 +1094,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @InteractAction => m_Wrapper.m_Player_InteractAction;
         /// <summary>
+        /// Provides access to the underlying input action "Player/ToggleCleaning".
+        /// </summary>
+        public InputAction @ToggleCleaning => m_Wrapper.m_Player_ToggleCleaning;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -1140,6 +1177,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @InteractAction.started += instance.OnInteractAction;
             @InteractAction.performed += instance.OnInteractAction;
             @InteractAction.canceled += instance.OnInteractAction;
+            @ToggleCleaning.started += instance.OnToggleCleaning;
+            @ToggleCleaning.performed += instance.OnToggleCleaning;
+            @ToggleCleaning.canceled += instance.OnToggleCleaning;
         }
 
         /// <summary>
@@ -1205,6 +1245,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @InteractAction.started -= instance.OnInteractAction;
             @InteractAction.performed -= instance.OnInteractAction;
             @InteractAction.canceled -= instance.OnInteractAction;
+            @ToggleCleaning.started -= instance.OnToggleCleaning;
+            @ToggleCleaning.performed -= instance.OnToggleCleaning;
+            @ToggleCleaning.canceled -= instance.OnToggleCleaning;
         }
 
         /// <summary>
@@ -1513,12 +1556,19 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnScoreboard(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Interact Action" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "InteractAction" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteractAction(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ToggleCleaning" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnToggleCleaning(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "New action map" which allows adding and removing callbacks.

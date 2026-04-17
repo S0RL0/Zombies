@@ -9653,7 +9653,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 1
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -13939,7 +13939,6 @@ GameObject:
   - component: {fileID: 1282371530}
   - component: {fileID: 1282371532}
   - component: {fileID: 1282371531}
-  - component: {fileID: 1282371533}
   m_Layer: 0
   m_Name: Point Light
   m_TagString: Untagged
@@ -14056,23 +14055,6 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
---- !u!114 &1282371533
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1282371529}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b819ceac39154fe468db5c5b994bf811, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LightFlicker
-  targetLight: {fileID: 1282371532}
-  minIntensity: 0
-  maxIntensity: 1
-  flickerSpeed: 0.2
-  useRandomSpeed: 1
 --- !u!1 &1285896573
 GameObject:
   m_ObjectHideFlags: 0

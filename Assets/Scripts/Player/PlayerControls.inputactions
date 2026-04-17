@@ -167,6 +167,15 @@
                     "processors": "",
                     "interactions": "Press",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleCleaning",
+                    "type": "Button",
+                    "id": "621504cf-2c30-4ada-891b-dd41381e35e9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -673,6 +682,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "InteractAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "63f8cb4a-2ff7-4225-a0ad-615d49afaed3",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleCleaning",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c7c36776-aa43-447f-b0e9-b46e88082496",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleCleaning",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

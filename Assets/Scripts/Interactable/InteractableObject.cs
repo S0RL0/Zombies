@@ -2,7 +2,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using DG.Tweening;
-
+using FMODUnity;
+using FMOD.Studio;
 
 public enum InteractableType
 {
@@ -43,11 +44,12 @@ public class InteractableObject : MonoBehaviour
     [Header("Wallpaper")]
     public bool Wallpaper = false;
     public PlayerInteract playerInteract;
-    public bool Bin;
-    public DOTweenAnimation binOpenAnim;
-    //public float fadeSpeed = 1f;
     DecalProjector decal;
-    //float fade = 1f;
+  
+
+    // event refs
+    private EventInstance SweepInstance;
+    private EventInstance SpongeInstance;
 
 
     public void Start()
@@ -94,9 +96,6 @@ public class InteractableObject : MonoBehaviour
                 UImessage = "Hold E To Patch";
                 break;
 
-            case InteractableType.Bin:
-                UImessage = "Hold E To Dump Trash";
-                break;
 
 
         }
@@ -144,11 +143,7 @@ public class InteractableObject : MonoBehaviour
                 Wallpaper = true;
                 break;
 
-            case InteractableType.Bin:
-                holdTime = 1.5f;
-                Bin = true;
-                Cleanable = false; 
-                break;
+            
         }
 
 
@@ -241,7 +236,7 @@ public class InteractableObject : MonoBehaviour
         float width = decal.size.x * 0.5f;
         float height = decal.size.y * 0.5f;
 
-        int rows = 3; // how many wipe passes
+        int rows = 6; // how many wipe passes
         float rowProgress = progress * rows;
 
         int currentRow = Mathf.FloorToInt(rowProgress);
@@ -354,6 +349,97 @@ public class InteractableObject : MonoBehaviour
                 Destroy(gameObject);
 
             }
+        }
+    }
+
+    public void playsound()
+    {
+
+        switch (interactType)
+        {
+            case InteractableType.Clean:
+
+                SpongeInstance = RuntimeManager.CreateInstance(CleaningManager.Instance.SpongeSound);
+                SpongeInstance.setVolume(CleaningManager.Instance.cleaning);
+                SpongeInstance.start();
+                SpongeInstance.release();
+                break;
+
+            case InteractableType.Door:
+
+                break;
+
+            case InteractableType.Window:
+                
+                break;
+
+            case InteractableType.Pickup:
+
+                break;
+
+            case InteractableType.TrashPickup:
+
+                break;
+
+            case InteractableType.Dusting:
+
+                SweepInstance = RuntimeManager.CreateInstance(CleaningManager.Instance.SweepSound);
+                SweepInstance.setVolume(CleaningManager.Instance.cleaning);
+                SweepInstance.start();
+                SweepInstance.release();
+
+                break;
+
+            case InteractableType.Grass:
+
+                break;
+
+
+            case InteractableType.Bin:
+                
+                break;
+        }
+
+    }
+
+    public void stopsound()
+    {
+        switch (interactType)
+        {
+            case InteractableType.Clean:
+                SpongeInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+                SpongeInstance.release();
+                break;
+
+            case InteractableType.Door:
+
+                break;
+
+            case InteractableType.Window:
+
+                break;
+
+            case InteractableType.Pickup:
+
+                break;
+
+            case InteractableType.TrashPickup:
+
+                break;
+
+            case InteractableType.Dusting:
+                SweepInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+                SweepInstance.release(); 
+                break;
+
+            case InteractableType.Grass:
+
+                break;
+
+
+            case InteractableType.Bin:
+
+                break;
         }
     }
 
