@@ -206,7 +206,7 @@ public class PlayerController : MonoBehaviour
         float Magnitude = Deviation.magnitude;
 
         float resetTime = 0.05f * Magnitude;
-
+        Debug.Log("Resetting recoil. Recovery Mode: " + recoilRecoveryMode + " | Deviation Magnitude: " + Magnitude + " | Reset Time: " + resetTime);
         recoilTarget = Vector2.SmoothDamp(
             recoilTarget,
             target,
