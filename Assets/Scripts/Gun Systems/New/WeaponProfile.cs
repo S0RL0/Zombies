@@ -92,6 +92,26 @@ public class WeaponProfile : ScriptableObject
 
     #endregion
 
+    #region Aim and Sway
+    [Header("Aim and Sway")]
+    [Tooltip("Position of the gun when at hip.")]
+    public Vector3 hipPosition = new Vector3(0.25f, -0.15f, 0.3f);
+    [Tooltip("Rotation of the gun when at hip.")]
+    public Vector3 hipRotation = new Vector3(5f, 10f, 0f);
+
+    [Tooltip("Position of the gun when aiming.")]
+    public Vector3 adsPosition = new Vector3(0f, -0.085f, 0.3f);
+    [Tooltip("Rotation of the gun when aiming.")]
+    public Vector3 adsRotation = new Vector3(0f, 0f, 0f);
+
+    [Header("FOV")]
+    [Tooltip("Field of view normally.")]
+    public float hipFOV = 90f;
+    [Tooltip("Field of view when aiming.")]
+    public float adsFOV = 50f;
+    #endregion
+
+
     #region Projectile Stats
     [Header("Projection Stats")]
     [Tooltip("Prefab of projectile game object.")]

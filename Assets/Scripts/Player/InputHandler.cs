@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
@@ -33,6 +33,8 @@ public class InputHandler : MonoBehaviour
         playerControls.Player.Sprint.canceled += ctx => playerController.isSprinting = ctx.ReadValueAsButton();
         playerControls.Player.Crouch.performed += ctx => ToggleCrouch(ctx.ReadValueAsButton());
         playerControls.Player.Interact.performed += HandleInteract;
+        playerControls.Player.Aim.performed += ctx => weaponSystem.ToggleAim(true);
+        playerControls.Player.Aim.canceled += ctx => weaponSystem.ToggleAim(false);
         if (weaponSystem != null)
         {
             // Fire
@@ -60,6 +62,11 @@ public class InputHandler : MonoBehaviour
         }
 
 
+    }
+
+    private void OnDisable()
+    {
+        playerControls.Player.Disable(); // ← This is what stops the leak
     }
 
     void HandleMove(InputAction.CallbackContext context)

@@ -11,6 +11,7 @@ using Random = UnityEngine.Random;
 
 public class WeaponSystem : MonoBehaviour
 {
+    #region Variables
     #region Weapon System
     [Header("Weapon System")]
     public List<WeaponProfile> profiles;
@@ -28,12 +29,23 @@ public class WeaponSystem : MonoBehaviour
 
     #region Recoil
     [Header("Recoil and ADS")]
-    private bool isADS;
-    [SerializeField] private bool recoilReturnCancelled = false;
-
     [SerializeField] private float snappiness = 5f;
     [SerializeField] private float returnSpeed = 2f;
     [SerializeField] private float cancelRecoilReturnThreshold = 0.05f;
+    #endregion
+
+    #region Aim
+    [Header("Aiming")]
+    public bool isAiming;
+
+    [Header("Settings")]
+    public float adsDuration = 0.15f;
+    public Ease adsEase = Ease.OutQuart;
+
+    [Header("Tweens")]
+    private Tween moveTween;
+    private Tween rotationTween;
+    private Tween fovTween;
 
 
     #endregion
@@ -105,7 +117,9 @@ public class WeaponSystem : MonoBehaviour
 
     private List<ShotGizmo> shotGizmos = new List<ShotGizmo>();
     #endregion
+    #endregion
 
+    #region Functions
     #region Start
     private void Awake()
     {
@@ -160,10 +174,8 @@ public class WeaponSystem : MonoBehaviour
     #region Update
     private void Update()
     {
-        if (profiles.Count == 0)
-        {
-            return;
-        }
+        if (profiles.Count == 0) return;
+
         UpdateInput();
 
         updateUI();
@@ -208,7 +220,6 @@ public class WeaponSystem : MonoBehaviour
             DryInstance.release();
             dryfire = false;
             StartCoroutine(Timer());
-
         }
 
         // Reset one-frame flags
@@ -216,12 +227,11 @@ public class WeaponSystem : MonoBehaviour
         reloadPressedThisFrame = false;
     }
 
-
     private void RecoilFire()
     {
         float recoilX;
         float recoilY;
-        if (isADS)
+        if (isAiming)
         {
             recoilX = profiles[currentWeaponIndex].horizontalRecoilADS;
             if (profiles[currentWeaponIndex].hasRandomizedHorizontalRecoil)
@@ -242,7 +252,6 @@ public class WeaponSystem : MonoBehaviour
                 recoilY = Random.Range(0, 2 * recoilY);
 
         }
-        Debug.Log("ADS: " + isADS);
         playerController.AddRecoil(new Vector2(recoilX, -recoilY));
     }
 
@@ -256,9 +265,6 @@ public class WeaponSystem : MonoBehaviour
     {
         fireKeyHeld = true;
         firePressedThisFrame = true;  // one-frame flag
-
-        //recoilReturnCancelled = false;
-        //ResetRecoil();
     }
 
     public void OnFireCanceled()
@@ -491,6 +497,40 @@ public class WeaponSystem : MonoBehaviour
     }
     #endregion
 
+    #region Aiming
+    public void ToggleAim(bool active)
+    {
+        isAiming = active;
+        if (isAiming)
+            AimIn();
+        else
+            AimOut();
+    }
+
+    private void AimIn()
+    {
+
+        moveTween?.Kill();
+        rotationTween?.Kill();
+        fovTween?.Kill();
+
+        moveTween = weaponPoint.DOLocalMove(profiles[currentWeaponIndex].adsPosition, adsDuration).SetEase(adsEase);
+        rotationTween = weaponPoint.DOLocalRotate(profiles[currentWeaponIndex].adsRotation, adsDuration).SetEase(adsEase);
+        fovTween = DOTween.To(() => cam.fieldOfView, x => cam.fieldOfView = x, profiles[currentWeaponIndex].adsFOV, adsDuration).SetEase(adsEase);
+    }
+
+    private void AimOut()
+    {
+        moveTween?.Kill();
+        rotationTween?.Kill();
+        fovTween?.Kill();
+
+        moveTween = weaponPoint.DOLocalMove(profiles[currentWeaponIndex].hipPosition, adsDuration).SetEase(adsEase);
+        rotationTween = weaponPoint.DOLocalRotate(profiles[currentWeaponIndex].hipRotation, adsDuration).SetEase(adsEase);
+        fovTween = DOTween.To(() => cam.fieldOfView, x => cam.fieldOfView = x, profiles[currentWeaponIndex].hipFOV, adsDuration).SetEase(adsEase);
+    }
+    #endregion
+
     #region Inventories and Weapon Switching
     private void SwitchToNextWeapon()
     {
@@ -718,5 +758,6 @@ public class WeaponSystem : MonoBehaviour
             Gizmos.DrawSphere(g.end, 0.06f);
         }
     }
+    #endregion
     #endregion
 }
